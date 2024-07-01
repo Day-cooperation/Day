@@ -4,6 +4,7 @@ import { ButtonProps as NextButtonProps } from '@nextui-org/react';
 type ButtonProps = NextButtonProps & {
   type?: 'button' | 'submit' | 'reset';
   children?: React.ReactNode;
+  text?: string;
   sizes?: 'xl' | 'lg' | 'md' | 'sm';
   variant?: 'solid' | 'bordered';
   disabled?: boolean;

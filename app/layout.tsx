@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <QueryClientProvider client={queryClient}>
-      <html lang="ko">
+      <html lang='ko'>
         <body className={`${pretendard.variable} font-pretendard`}>{children}</body>
       </html>
     </QueryClientProvider>

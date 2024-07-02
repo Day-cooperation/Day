@@ -29,11 +29,7 @@ export default function Selector({ size, items, onChange }: BaseInputProps) {
       placeholder='목표를 선택해 주세요.'
       onChange={onChange}
     >
-      {Object.entries(items)?.map((item) => (
-        <SelectItem key={item[0]}>
-          {item[0]}
-        </SelectItem>
-      ))}
+      {Object.entries(items)?.map((item) => <SelectItem key={item[0]}>{item[0]}</SelectItem>)}
     </Select>
   );
 }

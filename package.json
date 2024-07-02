@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "prettier-lint": "prettier --check '**/*.{js,jsx,ts,tsx,json,css,scss}'"
+    "prettier-lint": "prettier --check '**/*.{js,jsx,ts,tsx,json,css,scss}'",
+    "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.2",

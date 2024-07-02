@@ -22,7 +22,7 @@ export default function Selector({ size, items }: BaseInputProps) {
       aria-label='select subject'
       classNames={{
         popoverContent: 'text-black bg-slate-50',
-        trigger: `${size === 'large' ? 'w-[612px]' : 'w-[343px]'} bg-slate-50 ${style}`,
+        trigger: `${size === 'large' ? 'w-[612px]' : 'w-[343px]'} ${style}`,
       }}
       selectorIcon={<AwworDown />}
       placeholder='목표를 선택해 주세요.'

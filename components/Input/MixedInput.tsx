@@ -16,7 +16,7 @@ type BaseInputProps = {
 };
 
 // 기본 text와 password를 받는 Component
-export default function TextAndPasswordInput({ size, type, errorMessage, props }: BaseInputProps) {
+export default function MixedInput({ size, type, errorMessage, props }: BaseInputProps) {
   const [passwordVisiblity, setPasswordVisiblity] = useState(false);
 
   function visiblityChange() {

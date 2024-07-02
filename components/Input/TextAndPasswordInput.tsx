@@ -1,3 +1,5 @@
+'use client';
+
 import { EyeFilledIcon } from '@/assets/svgs/EyeFilledIcon';
 import { EyeSlashFilledIcon } from '@/assets/svgs/EyeSlashFilledIcon';
 import { Input, InputProps } from '@nextui-org/react';

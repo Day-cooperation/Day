@@ -1,10 +1,8 @@
 'use client';
 
 import { AwworDown } from '@/assets/svgs/ArrowDown';
-import { EyeFilledIcon } from '@/assets/svgs/EyeFilledIcon';
-import { EyeSlashFilledIcon } from '@/assets/svgs/EyeSlashFilledIcon';
-import { Input, InputProps, Select, SelectItem } from '@nextui-org/react';
-import { ChangeEventHandler, useState } from 'react';
+import { Select, SelectItem } from '@nextui-org/react';
+import { ChangeEventHandler } from 'react';
 
 type Size = 'large' | 'small';
 

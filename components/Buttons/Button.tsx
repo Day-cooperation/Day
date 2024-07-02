@@ -42,13 +42,13 @@ export default function Button({
   }
   const variantValue =
     variant === 'solid'
-      ? 'bg-blue-500 data-[hover=true]:bg-blue-600 data-[hover=true]:!opacity-100 text-white data-[pressed=true]:bg-blue-800 data-[disabled=true]:bg-slate-400 data-[disabled=true]:opacity-100'
-      : 'bg-white text-blue-500 data-[hover=true]:!opacity-100 data-[hover=true]:border-blue-600 data-[hover=true]:text-blue-600 data-[pressed=true]:border-blue-800 data-[pressed=true]:text-blue-800 data-[disabled=true]:text-slate-400 data-[disabled=true]:opacity-100 data-[disabled=true]:border-slate-400 border-blue-500';
+      ? 'bg-blue-500 data-[hover=true]:bg-blue-600  text-white data-[pressed=true]:bg-blue-800 data-[disabled=true]:bg-slate-400 '
+      : 'bg-white text-blue-500 data-[hover=true]:border-blue-600 data-[hover=true]:text-blue-600 data-[pressed=true]:border-blue-800 data-[pressed=true]:text-blue-800 data-[disabled=true]:text-slate-400 data-[disabled=true]:border-slate-400 border-blue-500';
   return (
     <NextButton
       type={type}
       variant={variant}
-      className={`${sizeValue} py-3 text-white  ${variantValue} border-1 data-[pressed=true]:scale-100`}
+      className={`${sizeValue} py-3 text-white data-[hover=true]:!opacity-100 ${variantValue} data-[disabled=true]:opacity-100 border-1 data-[pressed=true]:scale-100`}
       radius='md'
       disableRipple
       disableAnimation

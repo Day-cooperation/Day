@@ -25,7 +25,7 @@ export default function MixedInput({ size, type, errorMessage, props }: BaseInpu
 
   return (
     <Input
-      type={type === 'password' ? (passwordVisiblity ? 'text' : 'password') : 'text'}
+      type={type === 'password' && !passwordVisiblity ? 'password' : 'text'}
       classNames={{
         mainWrapper: size === 'large' ? 'w-[612px]' : 'w-[343px]',
         inputWrapper:

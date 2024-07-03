@@ -50,9 +50,9 @@ export default function ListTodo({ todos, onButtonClick }: ListTodoProps) {
             >
               <div className='flex justify-between items-stretch'>
                 <div className='flex flex-col items-start justify-center'>
-                  <span className='group-data-[selected=true]:line-through'>{item.title}</span>
+                  <span className='group-data-[selected=true]:line-through text-sm text-slate-800'>{item.title}</span>
                   {item.goal && (
-                    <span className='flex justify-center items-center gap-1.5 !no-underline'>
+                    <span className='flex justify-center items-center gap-1.5 !no-underline text-sm text-slate-700'>
                       <Goal className='w-6 h-6 ' />
                       {item.goal.title}
                     </span>
@@ -81,7 +81,7 @@ export default function ListTodo({ todos, onButtonClick }: ListTodoProps) {
                     <NoteWrite className='w-6 h-6' />
                   </button>
                   <Popover isOpen={isPopupOpen} radius='none' classNames={{ content: ['rounded-xl border-0 p-0'] }}>
-                    <PopoverTrigger>
+                    <PopoverTrigger className='focus-visible:outline-none'>
                       <button
                         className='hidden group-hover:block'
                         onClick={() => {
@@ -98,14 +98,17 @@ export default function ListTodo({ todos, onButtonClick }: ListTodoProps) {
                     <PopoverContent>
                       <div className='flex flex-col text-sm text-slate-700' ref={popoverRef}>
                         <button
-                          className='px-4 pt-2 pb-1.5'
+                          className='px-4 pt-2 pb-1.5 rounded-lg focus-visible:outline-none hover:bg-slate-200'
                           onClick={() => {
                             handleClick('edit', item.id, close);
                           }}
                         >
                           수정하기
                         </button>
-                        <button className='px-4 pt-1.5 pb-2' onClick={() => handleClick('delete', item.id, close)}>
+                        <button
+                          className='px-4 pt-1.5 rounded-lg pb-2 focus-visible:outline-none hover:bg-slate-200'
+                          onClick={() => handleClick('delete', item.id, close)}
+                        >
                           삭제하기
                         </button>
                       </div>

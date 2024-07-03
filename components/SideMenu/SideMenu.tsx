@@ -118,7 +118,7 @@ export default function SideMenu() {
               </ListboxItem>
             ))}
           </Listbox>
-            <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/0 to-white/100' />
+          <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/0 to-white/100' />
         </div>
         <div className='hidden md:block'>
           <Button size='lg'>

@@ -10,6 +10,8 @@ import home from '@/assets/svgs/home.svg';
 import flag from '@/assets/svgs/flag.svg';
 import logoIcon from '@/assets/svgs/logo-icon.svg';
 import Button from '../Buttons/Button';
+import Hamburger from '@/assets/svgs/Hamburger.svg';
+
 import { useState } from 'react';
 
 const mock = {
@@ -41,6 +43,7 @@ const mock = {
 };
 export default function SideMenu() {
   const [isOpen, setIsOpen] = useState(true);
+  const [currentTab, setCurrentTab] = useState('DashBoard');
 
   return isOpen ? (
     <div className={`fixed w-screen h-screen md:w-[280px] bg-white duration-150 ${isOpen ? '' : 'hidden'}`}>
@@ -58,7 +61,7 @@ export default function SideMenu() {
 
         <div className='flex gap-3 md:pb-6'>
           <Profile className='h-8 w-8 md:h-16 md:w-16 shrink-0' />
-          <div className='flex md:flex-col md:gap-2 w-full justify-between mobile:items-end'>
+          <div className='flex md:flex-col md:gap-2 w-full justify-between items-end'>
             <div className='flex flex-col'>
               <span className='text-slate-800 text-xs md:text-sm font-semibold'>{mock.user.name}</span>
               <span className='text-slate-600 text-xs md:text-sm font-medium'>{mock.user.email}</span>
@@ -83,7 +86,14 @@ export default function SideMenu() {
           <div className='h-6 w-6 flex items-center justify-center'>
             <Image src={home} alt='home-icon' />
           </div>
-          <button>대시보드</button>
+          <button
+            onClick={() => {
+              setCurrentTab('대시보드');
+              setIsOpen(!isOpen);
+            }}
+          >
+            대시보드
+          </button>
         </div>
         <div className='md:hidden'>
           <Button variant='solid' sizes='sm'>
@@ -113,7 +123,14 @@ export default function SideMenu() {
         <div className='relative h-[calc(100vh-283px)] md:h-[calc(100vh-440px)] overflow-y-auto md:mb-6 mb-[-48px]'>
           <Listbox>
             {mock.goal.map((item) => (
-              <ListboxItem key={item} startContent='·'>
+              <ListboxItem
+                key={item}
+                startContent='·'
+                onClick={() => {
+                  setCurrentTab('목표');
+                  setIsOpen(!isOpen);
+                }}
+              >
                 {item}
               </ListboxItem>
             ))}
@@ -131,13 +148,21 @@ export default function SideMenu() {
       </div>
     </div>
   ) : (
-    <div className='w-[60px] duration-150 bg-white p-[15px]'>
-      <div className='flex flex-col justify-between items-center gap-4'>
-        <Image src={logoIcon} alt='logo' />
-        <button type='button' onClick={() => setIsOpen(!isOpen)}>
-          <Image src={sideFoldButton} alt='side-fold-button' className='rotate-180 hover:scale-105 duration-150' />
-        </button>
+    <>
+      <div className='hidden md:block w-[60px] duration-150 bg-white p-[15px]'>
+        <div className='flex flex-col justify-between items-center gap-4'>
+          <Image src={logoIcon} alt='logo' />
+          <button type='button' onClick={() => setIsOpen(!isOpen)}>
+            <Image src={sideFoldButton} alt='side-fold-button' className='rotate-180 hover:scale-105 duration-150' />
+          </button>
+        </div>
       </div>
-    </div>
+      <div className='h-12 bg-white md:hidden flex items-center gap-4 px-4'>
+        <button type='button' onClick={() => setIsOpen(!isOpen)}>
+          <Image src={Hamburger} alt='hanburger-icon' width={12} height={8} className='mx-[6px] my-2' />
+        </button>
+        <h2 className='text-slate-900 font-semibold'>{currentTab}</h2>
+      </div>
+    </>
   );
 }

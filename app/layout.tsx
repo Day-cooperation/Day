@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body className={`${pretendard.variable} font-pretendard bg-slate-100`}>
-        <NextUIProvider className='flex'>
+        <NextUIProvider className=' md:flex'>
           <SideMenu />
           {children}
         </NextUIProvider>

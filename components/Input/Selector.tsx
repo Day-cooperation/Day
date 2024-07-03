@@ -1,6 +1,6 @@
 'use client';
 
-import { AwworDown } from '@/assets/svgs/ArrowDown';
+import { ArrowDown } from '@/assets/svgs/ArrowDown';
 import { Select, SelectItem } from '@nextui-org/react';
 import { ChangeEventHandler } from 'react';
 
@@ -23,7 +23,7 @@ export default function Selector({ size, items, onChange }: BaseInputProps) {
         popoverContent: 'text-black bg-slate-50',
         trigger: `${size === 'large' ? 'w-[612px]' : 'w-[343px]'} ${style}`,
       }}
-      selectorIcon={<AwworDown />}
+      selectorIcon={<ArrowDown />}
       placeholder='목표를 선택해 주세요.'
       onChange={onChange}
     >

@@ -10,9 +10,9 @@ export const LogoIcon = (props: SVGProps<SVGSVGElement>) => (
     <path
       d='M4.9729 10.8788L6.83777 13.0545L10.5675 8.70312'
       stroke='#F8FAFC'
-      stroke-width='1.49189'
-      stroke-linecap='round'
-      stroke-linejoin='round'
+      strokeWidth='1.49189'
+      strokeLinecap='round'
+      strokeLinejoin='round'
     />
   </svg>
 );

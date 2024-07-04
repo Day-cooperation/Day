@@ -85,7 +85,7 @@ const goalList: Goal[] = [
 export default function SideMenu() {
   const [isOpen, setIsOpen] = useState(true);
   const [currentTab, setCurrentTab] = useState('DashBoard');
-  const opacityRef = useRef<HTMLDivElement>(null);
+  const sideRef = useRef<HTMLDivElement>(null);
   const toggleSideMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -96,21 +96,24 @@ export default function SideMenu() {
   };
 
   const handleOutSideClick = (event: Event) => {
-    if (event.target === opacityRef.current) toggleSideMenu();
+    if (isOpen && !sideRef.current?.contains(event.target as Node)) {
+      console.log(isOpen && !sideRef.current?.contains(event.target as Node));
+      toggleSideMenu();
+    }
   };
 
   useEffect(() => {
-    document.addEventListener('click', handleOutSideClick);
-    return document.removeEventListener('click', handleGoalClick);
-  });
+    document.addEventListener('mousedown', handleOutSideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleGoalClick);
+    };
+  }, [sideRef]);
   return isOpen ? (
     <>
+      <div className='hidden z-10 md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black'></div>
       <div
-        ref={opacityRef}
-        className='hidden md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black'
-      ></div>
-      <div
-        className={`fixed w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isOpen ? '' : 'hidden'}`}
+        ref={sideRef}
+        className={`fixed z-10 w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isOpen ? '' : 'hidden'}`}
       >
         <div className='p-6 border-b'>
           <div className='flex justify-between mb-4 md:mb-[13px]'>

@@ -96,7 +96,7 @@ export default function SideMenu() {
           </button>
         </div>
         <div className='md:hidden'>
-          <Button variant='solid' sizes='sm'>
+          <Button variant='solid' size='sm'>
             <div className='flex items-center justify-center'>
               <Image src={plus} alt='plus' width={16} height={16} />
               <span className='text-sm font-semibold'>새 할 일</span>
@@ -112,7 +112,7 @@ export default function SideMenu() {
             <h2>목표</h2>
           </div>
           <div className='md:hidden'>
-            <Button sizes='sm'>
+            <Button size='sm'>
               <div className='flex items-center justify-center'>
                 <Image src={plusBlue} alt='plus' width={16} height={16} />
                 <span className='text-sm font-semibold'>새 목표</span>

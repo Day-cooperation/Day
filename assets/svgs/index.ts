@@ -18,3 +18,4 @@ export * from './Plus';
 export * from './SideFoldButton';
 export * from './Rectangles';
 export * from './IcArrowDown';
+export * from './ArrowRight';

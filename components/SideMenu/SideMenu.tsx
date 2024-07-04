@@ -1,6 +1,5 @@
 'use client';
 
-import { Listbox, ListboxItem } from '@nextui-org/react';
 import Image from 'next/image';
 import logo from '@/assets/svgs/logo.svg';
 import sideFoldButton from '@/assets/svgs/sideFoldButton.svg';
@@ -14,27 +13,101 @@ import Button from '../Buttons/Button';
 import Hamburger from '@/assets/svgs/Hamburger.svg';
 
 import { useState } from 'react';
-
-const mock = {
-  user: { profileUrl: '', name: '코딩잇', email: 'coding@coding.com' },
-  goal: [
-    '자바스크립트로 리액트 만들기',
-    'UI/UX 강의 듣기',
-    '자바스크립트로 리액트 만들기2',
-    '자바스크립트로 리액트 만들기3',
-    '자바스크립트로 리액트 만들기4',
-    '자바스크립트로 리액트 만들기5',
-    '자바스크립트로 리액트 만들기6',
-    '자바스크립트로 리액트 만들기7',
-    '자바스크립트로 리액트 만들기8',
-  ],
+import TabSideMenu from './TabSideMenu';
+import { Goal } from '@/types/Goal';
+type User = {
+  id: number;
+  email: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
 };
+
+const user: User = {
+  id: 1,
+  email: 'coding@coding.com',
+  name: '코딩잇',
+  createdAt: 'date',
+  updatedAt: 'date',
+};
+
+const goalList: Goal[] = [
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Learn TypeScript',
+    id: 1,
+    userId: 1,
+    teamId: 'teamA',
+  },
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Complete React Project',
+    id: 2,
+    userId: 1,
+    teamId: 'teamA',
+  },
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Read a book on UI/UX',
+    id: 3,
+    userId: 2,
+    teamId: 'teamB',
+  },
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Improve CSS skills',
+    id: 4,
+    userId: 3,
+    teamId: 'teamC',
+  },
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Build a portfolio',
+    id: 5,
+    userId: 4,
+    teamId: 'teamD',
+  },
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Learn Next.js',
+    id: 6,
+    userId: 1,
+    teamId: 'teamA',
+  },
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Write blog posts',
+    id: 7,
+    userId: 2,
+    teamId: 'teamB',
+  },
+  {
+    updatedAt: '2024-07-04T05:06:21.673Z',
+    createdAt: '2024-07-04T05:06:21.673Z',
+    title: 'Contribute to open source',
+    id: 8,
+    userId: 3,
+    teamId: 'teamC',
+  },
+];
+
 export default function SideMenu() {
   const [isOpen, setIsOpen] = useState(true);
   const [currentTab, setCurrentTab] = useState('DashBoard');
 
+  const handleGoalClick = () => {
+    setIsOpen(!isOpen);
+    setCurrentTab('목표');
+  };
   return isOpen ? (
-    <div className={`fixed w-screen h-screen md:w-[280px] bg-white duration-150 ${isOpen ? '' : 'hidden'} `}>
+    <div className={`fixed w-screen h-screen md:w-[280px] bg-white duration-150 ${isOpen ? '' : 'hidden'}`}>
       <div className='p-6 border-b'>
         <div className='flex justify-between mb-4 md:mb-[13px]'>
           <Image src={logo} alt='logo' />
@@ -51,8 +124,8 @@ export default function SideMenu() {
           <Profile className='h-8 w-8 md:h-16 md:w-16 shrink-0' />
           <div className='flex md:flex-col md:gap-2 w-full justify-between items-end md:items-start'>
             <div className='flex flex-col'>
-              <span className='text-slate-800 text-xs md:text-sm font-semibold'>{mock.user.name}</span>
-              <span className='text-slate-600 text-xs md:text-sm font-medium'>{mock.user.email}</span>
+              <span className='text-slate-800 text-xs md:text-sm font-semibold'>{user.name}</span>
+              <span className='text-slate-600 text-xs md:text-sm font-medium'>{user.email}</span>
             </div>
             <button type='button' className='text-slate-400 text-xs font-normal md:text-left'>
               로그아웃
@@ -84,7 +157,7 @@ export default function SideMenu() {
           </button>
         </div>
         <div className='md:hidden'>
-          <Button variant='solid' size='sm'>
+          <Button variant='solid' sizes='sm'>
             <div className='flex items-center justify-center'>
               <Image src={plus} alt='plus' width={16} height={16} />
               <span className='text-sm font-semibold'>새 할 일</span>
@@ -100,7 +173,7 @@ export default function SideMenu() {
             <h2>목표</h2>
           </div>
           <div className='md:hidden'>
-            <Button size='sm'>
+            <Button sizes='sm'>
               <div className='flex items-center justify-center'>
                 <Image src={plusBlue} alt='plus' width={16} height={16} />
                 <span className='text-sm font-semibold'>새 목표</span>
@@ -108,23 +181,7 @@ export default function SideMenu() {
             </Button>
           </div>
         </div>
-        <div className='relative h-[calc(10vh-283px)] md:h-[calc(100vh-440px)] overflow-y-auto md:mb-6 mb-[-48px]'>
-          <Listbox>
-            {mock.goal.map((item) => (
-              <ListboxItem
-                key={item}
-                startContent='·'
-                onClick={() => {
-                  setCurrentTab('목표');
-                  setIsOpen(!isOpen);
-                }}
-              >
-                {item}
-              </ListboxItem>
-            ))}
-          </Listbox>
-          <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/0 to-white/100' />
-        </div>
+        <TabSideMenu goalList={goalList} handleGoalClick={handleGoalClick} />
         <div className='hidden md:block'>
           <Button size='lg'>
             <div className='flex items-center font-semibold'>
@@ -137,7 +194,7 @@ export default function SideMenu() {
     </div>
   ) : (
     <>
-      <div className='fixed hidden md:block w-[60px] duration-150 h-screen bg-white p-[15px]'>
+      <div className='hidden md:block w-[60px] duration-150 bg-white p-[15px]'>
         <div className='flex flex-col justify-between items-center gap-4'>
           <Image src={logoIcon} alt='logo' />
           <button type='button' onClick={() => setIsOpen(!isOpen)}>

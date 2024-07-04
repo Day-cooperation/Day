@@ -22,3 +22,5 @@ export type Goal = {
   id: number;
   title: string;
 };
+
+export type ListTodoButtons = 'file' | 'link' | 'note write' | 'done' | 'note' | 'edit' | 'delete' | 'note read';

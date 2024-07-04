@@ -1,11 +1,10 @@
 'use client';
 
-import { Todo } from '@/types/Todo';
-import { Checkbox, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
+import { Todo, ListTodoButtons } from '@/types/Todo';
+import { Checkbox } from '@nextui-org/react';
+import { useState, useRef } from 'react';
 import { Kebab, Goal, File, Link, Note, NoteWrite } from '@/assets/svgs';
-import { useEffect, useRef, useState } from 'react';
-
-type ListTodoButtons = 'file' | 'link' | 'note write' | 'done' | 'note' | 'edit' | 'delete';
+import Popover from '../Popover/Popover';
 
 type ListTodoProps = {
   todos: Todo[];
@@ -23,16 +22,6 @@ export default function ListTodo({ todos, goalHidden = false, viewLength = 0, on
   const handleClick = (buttonType: ListTodoButtons, id: number) => {
     onButtonClick(buttonType, id);
   };
-
-  useEffect(() => {
-    const outsideClick = (e: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
-        setOpenPopupTodoId(null);
-      }
-    };
-    document.addEventListener('mousedown', outsideClick);
-    return () => document.removeEventListener('mousedown', outsideClick);
-  }, [openPopupTodoId]);
 
   return (
     <div className='mt-3'>
@@ -87,46 +76,24 @@ export default function ListTodo({ todos, goalHidden = false, viewLength = 0, on
                     <NoteWrite className='w-6 h-6' />
                   </button>
                   <Popover
-                    isOpen={openPopupTodoId === item.id}
-                    radius='none'
-                    classNames={{ content: ['rounded-xl border-0 p-0'] }}
+                    openPopupId={openPopupTodoId}
+                    handlePopupClick={handleClick}
+                    setOpenPopupId={setOpenPopupTodoId}
+                    item={item}
+                    goal
                   >
-                    <PopoverTrigger className='focus-visible:outline-none'>
-                      <button
-                        className='hidden group-hover:block'
-                        onClick={() => {
-                          if (openPopupTodoId) {
-                            setOpenPopupTodoId(null);
-                          } else {
-                            setOpenPopupTodoId(item.id);
-                          }
-                        }}
-                      >
-                        <Kebab className='w-6 h-6' />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <div className='flex flex-col text-sm text-slate-700' ref={popoverRef}>
-                        <button
-                          className='px-4 pt-2 pb-1.5 rounded-lg focus-visible:outline-none hover:bg-slate-200'
-                          onClick={() => {
-                            handleClick('edit', item.id);
-                            setOpenPopupTodoId(null);
-                          }}
-                        >
-                          수정하기
-                        </button>
-                        <button
-                          className='px-4 pt-1.5 rounded-lg pb-2 focus-visible:outline-none hover:bg-slate-200'
-                          onClick={() => {
-                            handleClick('delete', item.id);
-                            setOpenPopupTodoId(null);
-                          }}
-                        >
-                          삭제하기
-                        </button>
-                      </div>
-                    </PopoverContent>
+                    <button
+                      className='hidden group-hover:block'
+                      onClick={() => {
+                        if (openPopupTodoId) {
+                          setOpenPopupTodoId(null);
+                        } else {
+                          setOpenPopupTodoId(item.id);
+                        }
+                      }}
+                    >
+                      <Kebab className='w-6 h-6' />
+                    </button>
                   </Popover>
                 </div>
               </div>

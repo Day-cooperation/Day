@@ -1,7 +1,7 @@
 import { Kebab } from '@/assets/svgs';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { Popover as NextPopover, PopoverTrigger, PopoverContent } from '@nextui-org/react';
-import { Dispatch, ReactNode, useEffect, useRef } from 'react';
+import { Dispatch, useEffect, useRef } from 'react';
 
 type PopoverProps = {
   item: Todo;

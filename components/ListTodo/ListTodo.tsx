@@ -1,10 +1,10 @@
 'use client';
 
-import { ListTodoButtons, Todo } from '@/types/Todo';
-import { Checkbox } from '@nextui-org/react';
-import { Kebab, Goal } from '@/assets/svgs';
-import { useRef, useState } from 'react';
 import TodoListButtons from './TodoListButtons';
+import { Todo, ListTodoButtons } from '@/types/Todo';
+import { Checkbox } from '@nextui-org/react';
+import { useState } from 'react';
+import { Goal } from '@/assets/svgs';
 import Popover from '../Popover/Popover';
 
 type ListTodoProps = {
@@ -16,7 +16,6 @@ type ListTodoProps = {
 
 export default function ListTodo({ todos, showGoal = true, displayTodoCount = 0, onButtonClick }: ListTodoProps) {
   const [openPopupTodoId, setOpenPopupTodoId] = useState<number | null>(null);
-  const popoverRef = useRef<HTMLDivElement | null>(null);
   const todoList = displayTodoCount ? todos.slice(0, displayTodoCount) : todos.slice(0);
   //최신순으로 정렬
   todos.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());

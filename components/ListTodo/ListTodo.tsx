@@ -5,38 +5,36 @@ import { Checkbox, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/r
 import { Kebab, Goal, File, Link, Note, NoteWrite } from '@/assets/svgs';
 import { useEffect, useRef, useState } from 'react';
 
+type ListTodoButtons = 'file' | 'link' | 'note write' | 'done' | 'note' | 'edit' | 'delete';
+
 type ListTodoProps = {
   todos: Todo[];
-  onButtonClick: (buttonType: string, id: number) => void;
+  onButtonClick: (buttonType: ListTodoButtons, id: number) => void;
 };
 
 export default function ListTodo({ todos, onButtonClick }: ListTodoProps) {
-  const [popupOpen, setPopupOpen] = useState<number | null>(null);
+  const [openPopupTodoId, setOpenPopupTodoId] = useState<number | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
   //최신순으로 정렬
   todos.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  const handleClick = (buttonType: string, id: number, close?: () => void) => {
+  const handleClick = (buttonType: ListTodoButtons, id: number) => {
     onButtonClick(buttonType, id);
-    if (close) {
-      setPopupOpen(null);
-    }
   };
 
   useEffect(() => {
     const outsideClick = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
-        setPopupOpen(null);
+        setOpenPopupTodoId(null);
       }
     };
     document.addEventListener('mousedown', outsideClick);
     return () => document.removeEventListener('mousedown', outsideClick);
-  }, [popupOpen]);
+  }, [openPopupTodoId]);
 
   return (
     <div className='min-w-max'>
       <div className='flex flex-col justify-center items-start gap-5 py-3.5 px-5'>
         {todos.map((item) => {
-          const isPopupOpen = popupOpen === item.id;
           return (
             <Checkbox
               classNames={{
@@ -80,15 +78,19 @@ export default function ListTodo({ todos, onButtonClick }: ListTodoProps) {
                   >
                     <NoteWrite className='w-6 h-6' />
                   </button>
-                  <Popover isOpen={isPopupOpen} radius='none' classNames={{ content: ['rounded-xl border-0 p-0'] }}>
+                  <Popover
+                    isOpen={openPopupTodoId === item.id}
+                    radius='none'
+                    classNames={{ content: ['rounded-xl border-0 p-0'] }}
+                  >
                     <PopoverTrigger className='focus-visible:outline-none'>
                       <button
                         className='hidden group-hover:block'
                         onClick={() => {
-                          if (popupOpen) {
-                            setPopupOpen(null);
+                          if (openPopupTodoId) {
+                            setOpenPopupTodoId(null);
                           } else {
-                            setPopupOpen(item.id);
+                            setOpenPopupTodoId(item.id);
                           }
                         }}
                       >
@@ -100,14 +102,18 @@ export default function ListTodo({ todos, onButtonClick }: ListTodoProps) {
                         <button
                           className='px-4 pt-2 pb-1.5 rounded-lg focus-visible:outline-none hover:bg-slate-200'
                           onClick={() => {
-                            handleClick('edit', item.id, close);
+                            handleClick('edit', item.id);
+                            setOpenPopupTodoId(null);
                           }}
                         >
                           수정하기
                         </button>
                         <button
                           className='px-4 pt-1.5 rounded-lg pb-2 focus-visible:outline-none hover:bg-slate-200'
-                          onClick={() => handleClick('delete', item.id, close)}
+                          onClick={() => {
+                            handleClick('delete', item.id);
+                            setOpenPopupTodoId(null);
+                          }}
                         >
                           삭제하기
                         </button>

@@ -1,27 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import logo from '@/assets/svgs/logo.svg';
-import sideFoldButton from '@/assets/svgs/sideFoldButton.svg';
-import { Profile } from '@/assets/svgs/Profile';
-import plus from '@/assets/svgs/plus.svg';
-import plusBlue from '@/assets/svgs/plus-blue.svg';
-import home from '@/assets/svgs/home.svg';
-import flag from '@/assets/svgs/flag.svg';
-import logoIcon from '@/assets/svgs/logo-icon.svg';
-import Button from '../Buttons/Button';
-import Hamburger from '@/assets/svgs/Hamburger.svg';
+import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, PlusBlue, Flag } from '@/assets/svgs/index';
 
 import { useState } from 'react';
 import TabSideMenu from './TabSideMenu';
-import { Goal } from '@/types/Goal';
-type User = {
-  id: number;
-  email: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import type { Goal } from '@/types/Goal';
+import type { User } from '@/types/User';
+import Button from '../Buttons/Button';
 
 const user: User = {
   id: 1,
@@ -110,13 +96,13 @@ export default function SideMenu() {
     <div className={`fixed w-screen h-screen md:w-[280px] bg-white duration-150 ${isOpen ? '' : 'hidden'}`}>
       <div className='p-6 border-b'>
         <div className='flex justify-between mb-4 md:mb-[13px]'>
-          <Image src={logo} alt='logo' />
+          <Logo />
           <button
             type='button'
             onClick={() => setIsOpen(!isOpen)}
             className='hidden md:block hover:scale-105 duration-150'
           >
-            <Image src={sideFoldButton} alt='side-fold-button' />
+            <SideFoldButton />
           </button>
         </div>
 
@@ -134,9 +120,9 @@ export default function SideMenu() {
         </div>
 
         <div className='hidden md:block'>
-          <Button variant='solid' size='lg'>
+          <Button variant='solid' size='xl' className='h-[48px]'>
             <div className='flex items-center'>
-              <Image src={plus} alt='plus' />
+              <Plus />
               <span className='text-base font-semibold'>새 할 일</span>
             </div>
           </Button>
@@ -145,7 +131,7 @@ export default function SideMenu() {
       <div className='px-6 border-b flex items-center justify-between'>
         <div className='py-[18px] flex gap-2'>
           <div className='h-6 w-6 flex items-center justify-center'>
-            <Image src={home} alt='home-icon' />
+            <Home />
           </div>
           <button
             onClick={() => {
@@ -157,9 +143,9 @@ export default function SideMenu() {
           </button>
         </div>
         <div className='md:hidden'>
-          <Button variant='solid' sizes='sm'>
+          <Button variant='solid' size='sm'>
             <div className='flex items-center justify-center'>
-              <Image src={plus} alt='plus' width={16} height={16} />
+              <Plus />
               <span className='text-sm font-semibold'>새 할 일</span>
             </div>
           </Button>
@@ -169,13 +155,13 @@ export default function SideMenu() {
       <div className='px-6 flex flex-col'>
         <div className='flex justify-between items-center py-3 md:py-[18px]'>
           <div className='flex gap-2 '>
-            <Image src={flag} alt='home-icon' />
+            <Flag />
             <h2>목표</h2>
           </div>
           <div className='md:hidden'>
-            <Button sizes='sm'>
+            <Button size='sm'>
               <div className='flex items-center justify-center'>
-                <Image src={plusBlue} alt='plus' width={16} height={16} />
+                <PlusBlue />
                 <span className='text-sm font-semibold'>새 목표</span>
               </div>
             </Button>
@@ -183,9 +169,9 @@ export default function SideMenu() {
         </div>
         <TabSideMenu goalList={goalList} handleGoalClick={handleGoalClick} />
         <div className='hidden md:block'>
-          <Button size='lg'>
+          <Button size='xl' className='h-[48px]'>
             <div className='flex items-center font-semibold'>
-              <Image src={plusBlue} alt='plus' />
+              <PlusBlue />
               <span className='text-base'>새 목표</span>
             </div>
           </Button>
@@ -194,17 +180,17 @@ export default function SideMenu() {
     </div>
   ) : (
     <>
-      <div className='hidden md:block w-[60px] duration-150 bg-white p-[15px]'>
+      <div className='hidden md:block w-[60px] duration-150 bg-white p-[15px] h-screen'>
         <div className='flex flex-col justify-between items-center gap-4'>
-          <Image src={logoIcon} alt='logo' />
+          <LogoIcon />
           <button type='button' onClick={() => setIsOpen(!isOpen)}>
-            <Image src={sideFoldButton} alt='side-fold-button' className='rotate-180 hover:scale-105 duration-150' />
+            <SideFoldButton className='rotate-180' />
           </button>
         </div>
       </div>
       <div className='h-12 bg-white md:hidden flex items-center gap-4 px-4'>
         <button type='button' onClick={() => setIsOpen(!isOpen)}>
-          <Image src={Hamburger} alt='hanburger-icon' width={12} height={8} className='mx-[6px] my-2' />
+          <Hamburger />
         </button>
         <h2 className='text-slate-900 font-semibold'>{currentTab}</h2>
       </div>

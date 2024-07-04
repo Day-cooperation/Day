@@ -23,7 +23,7 @@ const CustomButton = extendVariants(NextButton, {
       bordered:
         'bg-white text-blue-500 data-[hover=true]:border-blue-600 data-[hover=true]:text-blue-600 data-[pressed=true]:border-blue-800 data-[pressed=true]:text-blue-800 border-blue-500 font-semibold',
     },
-    base: ['py-3 text-white data-[hover=true]:opacity-100 border-1 data-[pressed=true]:scale-100 font-semibold'],
+    base: ['py-3 text-white data-[hover=true]:opacity-100 border-1 data-[pressed=true]:scale-100'],
     isDisabled: {
       true: 'opacity-100 text-white font-semibold bg-slate-400 border-slate-400 pointer-events-auto cursor-not-allowed',
     },

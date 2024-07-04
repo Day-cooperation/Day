@@ -24,7 +24,11 @@ export default function Popover({ item, children, openPopupId, handlePopupClick,
     return () => document.removeEventListener('mousedown', outsideClick);
   }, [openPopupId]);
   return (
-    <NextPopover isOpen={openPopupId === item.id} radius='none' classNames={{ content: ['rounded-xl border-0 p-0'] }}>
+    <NextPopover
+      isOpen={goal ? typeof openPopupId === 'number' : openPopupId === item.id}
+      radius='none'
+      classNames={{ content: ['rounded-xl border-0 p-0'] }}
+    >
       <PopoverTrigger className='focus-visible:outline-none'>{children}</PopoverTrigger>
       <PopoverContent>
         <div className='flex flex-col text-sm text-slate-700' ref={popoverRef}>

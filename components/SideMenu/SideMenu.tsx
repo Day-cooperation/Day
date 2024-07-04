@@ -115,11 +115,7 @@ export default function SideMenu() {
         <div className='p-6 border-b'>
           <div className='flex justify-between mb-4 md:mb-[13px]'>
             <Logo />
-            <button
-              type='button'
-              onClick={toggleSideMenu}
-              className='hidden md:block hover:scale-105 duration-150'
-            >
+            <button type='button' onClick={toggleSideMenu} className='hidden md:block hover:scale-105 duration-150'>
               <SideFoldButton />
             </button>
           </div>

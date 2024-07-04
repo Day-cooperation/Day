@@ -16,7 +16,7 @@ export default function TabSideMenu({ goalList, handleGoalClick }: TabSideMenu) 
           </ListboxItem>
         ))}
       </Listbox>
-      <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/0 to-white/100' />
+      <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/0 to-white/100 pointer-events-none' />
     </div>
   );
 }

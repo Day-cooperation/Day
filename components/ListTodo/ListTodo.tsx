@@ -1,6 +1,6 @@
 'use client';
 
-import { Todo } from '@/types/ListTodo/Todos';
+import { Todo } from '@/types/Todo';
 import { Checkbox, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
 import { Kebab, Goal, File, Link, Note, NoteWrite } from '@/assets/svgs';
 import { useEffect, useRef, useState } from 'react';

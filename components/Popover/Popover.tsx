@@ -1,4 +1,4 @@
-import { ListTodoButtons, Todo } from '@/types/ListTodo/Todos';
+import { ListTodoButtons, Todo } from '@/types/Todo';
 import { Popover as NextPopover, PopoverTrigger, PopoverContent } from '@nextui-org/react';
 import { Dispatch, ReactNode, useEffect, useRef } from 'react';
 

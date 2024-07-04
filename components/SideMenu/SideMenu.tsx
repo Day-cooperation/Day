@@ -1,5 +1,6 @@
 'use client';
-import { Listbox, ListboxItem, RadioGroup, Radio } from '@nextui-org/react';
+
+import { Listbox, ListboxItem } from '@nextui-org/react';
 import Image from 'next/image';
 import logo from '@/assets/svgs/logo.svg';
 import sideFoldButton from '@/assets/svgs/sideFoldButton.svg';
@@ -19,26 +20,13 @@ const mock = {
   goal: [
     '자바스크립트로 리액트 만들기',
     'UI/UX 강의 듣기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
-    '자바스크립트로 리액트 만들기',
+    '자바스크립트로 리액트 만들기2',
+    '자바스크립트로 리액트 만들기3',
+    '자바스크립트로 리액트 만들기4',
+    '자바스크립트로 리액트 만들기5',
+    '자바스크립트로 리액트 만들기6',
+    '자바스크립트로 리액트 만들기7',
+    '자바스크립트로 리액트 만들기8',
   ],
 };
 export default function SideMenu() {
@@ -46,7 +34,7 @@ export default function SideMenu() {
   const [currentTab, setCurrentTab] = useState('DashBoard');
 
   return isOpen ? (
-    <div className={`fixed w-screen h-screen md:w-[280px] bg-white duration-150 ${isOpen ? '' : 'hidden'}`}>
+    <div className={`fixed w-screen h-screen md:w-[280px] bg-white duration-150 ${isOpen ? '' : 'hidden'} `}>
       <div className='p-6 border-b'>
         <div className='flex justify-between mb-4 md:mb-[13px]'>
           <Image src={logo} alt='logo' />
@@ -61,7 +49,7 @@ export default function SideMenu() {
 
         <div className='flex gap-3 md:pb-6'>
           <Profile className='h-8 w-8 md:h-16 md:w-16 shrink-0' />
-          <div className='flex md:flex-col md:gap-2 w-full justify-between items-end'>
+          <div className='flex md:flex-col md:gap-2 w-full justify-between items-end md:items-start'>
             <div className='flex flex-col'>
               <span className='text-slate-800 text-xs md:text-sm font-semibold'>{mock.user.name}</span>
               <span className='text-slate-600 text-xs md:text-sm font-medium'>{mock.user.email}</span>
@@ -120,7 +108,7 @@ export default function SideMenu() {
             </Button>
           </div>
         </div>
-        <div className='relative h-[calc(100vh-283px)] md:h-[calc(100vh-440px)] overflow-y-auto md:mb-6 mb-[-48px]'>
+        <div className='relative h-[calc(10vh-283px)] md:h-[calc(100vh-440px)] overflow-y-auto md:mb-6 mb-[-48px]'>
           <Listbox>
             {mock.goal.map((item) => (
               <ListboxItem
@@ -149,7 +137,7 @@ export default function SideMenu() {
     </div>
   ) : (
     <>
-      <div className='hidden md:block w-[60px] duration-150 bg-white p-[15px]'>
+      <div className='fixed hidden md:block w-[60px] duration-150 h-screen bg-white p-[15px]'>
         <div className='flex flex-col justify-between items-center gap-4'>
           <Image src={logoIcon} alt='logo' />
           <button type='button' onClick={() => setIsOpen(!isOpen)}>

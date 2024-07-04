@@ -9,8 +9,8 @@ export const Kebab = (props: SVGProps<SVGSVGElement>) => (
       transform='rotate(-90 11.941 11.9999)'
       fill='#94A3B8'
       stroke='#94A3B8'
-      stroke-width='1.16667'
-      stroke-linecap='round'
+      strokeWidth='1.16667'
+      strokeLinecap='round'
     />
     <circle
       cx='11.941'
@@ -19,8 +19,8 @@ export const Kebab = (props: SVGProps<SVGSVGElement>) => (
       transform='rotate(-90 11.941 15.9667)'
       fill='#94A3B8'
       stroke='#94A3B8'
-      stroke-width='1.16667'
-      stroke-linecap='round'
+      strokeWidth='1.16667'
+      strokeLinecap='round'
     />
     <circle
       cx='11.941'
@@ -29,8 +29,8 @@ export const Kebab = (props: SVGProps<SVGSVGElement>) => (
       transform='rotate(-90 11.941 8.03335)'
       fill='#94A3B8'
       stroke='#94A3B8'
-      stroke-width='1.16667'
-      stroke-linecap='round'
+      strokeWidth='1.16667'
+      strokeLinecap='round'
     />
   </svg>
 );

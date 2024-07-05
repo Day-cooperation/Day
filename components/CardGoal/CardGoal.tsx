@@ -3,7 +3,6 @@
 import { Todo } from '@/types/Todo';
 import ListTodo from '../ListTodo/ListTodo';
 import { useEffect, useState } from 'react';
-import { Button, Progress } from '@nextui-org/react';
 import { IcArrowDown, Plus } from '@/assets/svgs';
 import ProgressBar from '../ProgressBar/ProgressBar';
 

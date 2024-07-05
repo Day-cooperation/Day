@@ -20,7 +20,7 @@ export default function RecentlyTodo({ todoList }: { todoList: Todo[] }) {
         </button>
       </div>
       <div className='w-full h-[154px] overflow-y-auto'>
-        <ListTodo todos={todoList} onButtonClick={(type, id) => {}}></ListTodo>
+        <ListTodo showGoal todos={todoList} onButtonClick={(type, id) => {}}></ListTodo>
       </div>
       <div className='absolute bottom-4 h-[51px] w-[calc(100%-48PX)] bg-gradient-to-b from-white/0 to-white/100 pointer-events-none' />
     </div>

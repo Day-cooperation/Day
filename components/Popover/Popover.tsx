@@ -1,3 +1,5 @@
+'use client';
+
 import { Kebab } from '@/assets/svgs';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { Popover as NextPopover, PopoverTrigger, PopoverContent } from '@nextui-org/react';

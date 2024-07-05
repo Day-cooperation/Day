@@ -1,4 +1,4 @@
-import { baseStyles, extendVariants, Button as NextButton } from '@nextui-org/react';
+import { extendVariants, Button as NextButton } from '@nextui-org/react';
 import { ButtonProps as NextButtonProps } from '@nextui-org/react';
 
 type ButtonProps = Omit<NextButtonProps, 'size'> & {

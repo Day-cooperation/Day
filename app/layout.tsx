@@ -17,7 +17,7 @@ export default function RootLayout({
     <html lang='ko'>
       <body className={`${pretendard.variable} font-pretendard bg-slate-100`}>
         <NextUIProvider>
-          <SideMenu />
+          {/* <SideMenu /> */}
           {children}
         </NextUIProvider>
       </body>

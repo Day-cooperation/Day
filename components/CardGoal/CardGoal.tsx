@@ -40,6 +40,7 @@ export default function CardGoal({ list }: CardGoalProps) {
           {incompleteList.length !== 0 ? (
             <ListTodo
               todos={incompleteList}
+              goalHidden
               viewLength={5}
               onButtonClick={(buttonType, id) => {
                 if (buttonType === 'done') {

@@ -1,22 +1,23 @@
 'use client';
 
-import { Todo, ListTodoButtons } from '@/types/Todo';
+import { ListTodoButtons, Todo } from '@/types/Todo';
 import { Checkbox } from '@nextui-org/react';
-import { useState, useRef } from 'react';
-import { Kebab, Goal, File, Link, Note, NoteWrite } from '@/assets/svgs';
+import { Kebab, Goal } from '@/assets/svgs';
+import { useRef, useState } from 'react';
+import TodoListButtons from './TodoListButtons';
 import Popover from '../Popover/Popover';
 
 type ListTodoProps = {
   todos: Todo[];
   onButtonClick: (buttonType: ListTodoButtons, id: number) => void;
-  goalHidden?: boolean;
-  viewLength?: number;
+  showGoal: boolean;
+  displayTodoCount?: number;
 };
 
-export default function ListTodo({ todos, goalHidden = false, viewLength = 0, onButtonClick }: ListTodoProps) {
+export default function ListTodo({ todos, showGoal = true, displayTodoCount = 0, onButtonClick }: ListTodoProps) {
   const [openPopupTodoId, setOpenPopupTodoId] = useState<number | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
-  const todoList = viewLength ? todos.slice(0, viewLength) : todos.slice(0);
+  const todoList = displayTodoCount ? todos.slice(0, displayTodoCount) : todos.slice(0);
   //최신순으로 정렬
   todos.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   const handleClick = (buttonType: ListTodoButtons, id: number) => {
@@ -24,29 +25,29 @@ export default function ListTodo({ todos, goalHidden = false, viewLength = 0, on
   };
 
   return (
-    <div className='mt-3'>
+    <div className='-mt-0.5'>
       <div className='flex flex-col justify-center items-start gap-[10px]'>
         {todoList.map((item) => {
           return (
             <Checkbox
               classNames={{
                 base: ['flex max-w-full w-full justify-between items-start group p-0 m-0'],
-                label: ['w-full'],
-                wrapper: ['w-[18px] h-[18px]'],
+                label: ['w-full pl-2 min-w-0'],
+                wrapper: ['w-[18px] h-[18px] m-0'],
               }}
               defaultSelected={item.done}
               onChange={() => handleClick('done', item.id)}
               key={item.id}
             >
-              <div className='flex justify-between items-stretch truncate'>
+              <div className='flex justify-between items-stretch'>
                 <div
-                  data-goalhidden={goalHidden}
-                  className='data-[goalHidden=false]:flex-col data-[goalHidden=false]:items-start flex items-center justify-start truncate'
+                  data-showgoal={showGoal}
+                  className='data-[showgoal=true]:flex-col data-[showgoal=true]:items-start flex items-center justify-start truncate'
                 >
-                  <span className='group-data-[selected=true]:line-through text-sm text-slate-800 py-0.5'>
+                  <span className='group-data-[selected=true]:line-through text-sm text-slate-800 py-0.5 truncate flex-shrink'>
                     {item.title}
                   </span>
-                  {item.goal && !goalHidden && (
+                  {item.goal && showGoal && (
                     <span className='flex justify-center items-center gap-1.5 !no-underline text-sm text-slate-700'>
                       <Goal className='w-6 h-6 ' />
                       {item.goal.title}
@@ -54,27 +55,7 @@ export default function ListTodo({ todos, goalHidden = false, viewLength = 0, on
                   )}
                 </div>
                 <div className='flex justify-center items-center gap-1'>
-                  {item.fileUrl && (
-                    <button onClick={() => handleClick('file', item.id)}>
-                      <File className='w-6 h-6' />
-                    </button>
-                  )}
-                  {item.linkUrl && (
-                    <button onClick={() => handleClick('link', item.id)}>
-                      <Link className='w-6 h-6' />
-                    </button>
-                  )}
-                  {item.noteId && (
-                    <button onClick={() => handleClick('note', item.id)}>
-                      <Note className='w-6 h-6' />
-                    </button>
-                  )}
-                  <button
-                    className='h-0 overflow-hidden group-hover:h-6'
-                    onClick={() => handleClick('note write', item.id)}
-                  >
-                    <NoteWrite className='w-6 h-6' />
-                  </button>
+                  <TodoListButtons item={item} handleClick={handleClick} />
                   <Popover
                     openPopupId={openPopupTodoId}
                     handlePopupClick={handleClick}

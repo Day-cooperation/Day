@@ -1,6 +1,5 @@
 import { Todo } from '@/types/Todo';
 import ListTodo from '../ListTodo/ListTodo';
-import { Dispatch } from 'react';
 
 type ListTodoProgressProps = {
   itemList: Todo[];

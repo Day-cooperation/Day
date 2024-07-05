@@ -1,3 +1,4 @@
+'use client';
 import { RefObject, useEffect } from 'react';
 import Button from '../Buttons/Button';
 import { Cancel } from '@/assets/svgs';

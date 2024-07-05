@@ -62,20 +62,7 @@ export default function ListTodo({ todos, showGoal = true, displayTodoCount = 0,
                     setOpenPopupId={setOpenPopupTodoId}
                     item={item}
                     goal
-                  >
-                    <button
-                      className='hidden group-hover:block'
-                      onClick={() => {
-                        if (openPopupTodoId) {
-                          setOpenPopupTodoId(null);
-                        } else {
-                          setOpenPopupTodoId(item.id);
-                        }
-                      }}
-                    >
-                      <Kebab className='w-6 h-6' />
-                    </button>
-                  </Popover>
+                  />
                 </div>
               </div>
             </Checkbox>

@@ -5,10 +5,10 @@ export type Todos = {
 };
 
 export type Todo = {
-  noteId: number;
-  done?: boolean;
-  linkUrl?: string;
-  fileUrl?: string;
+  noteId: number | null;
+  done: boolean;
+  linkUrl?: string | null;
+  fileUrl?: string | null;
   title: string;
   id: number;
   goal?: Goal;

@@ -1,3 +1,5 @@
+'use client';
+
 import { File, Link, Note, NoteWrite } from '@/assets/svgs';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 

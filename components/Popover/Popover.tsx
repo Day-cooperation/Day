@@ -1,17 +1,17 @@
+import { Kebab } from '@/assets/svgs';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { Popover as NextPopover, PopoverTrigger, PopoverContent } from '@nextui-org/react';
 import { Dispatch, ReactNode, useEffect, useRef } from 'react';
 
 type PopoverProps = {
   item: Todo;
-  children: ReactNode;
   openPopupId: number | null;
   handlePopupClick: (buttonType: ListTodoButtons, id: number) => void;
   setOpenPopupId: Dispatch<number | null>;
   goal?: boolean;
 };
 
-export default function Popover({ item, children, openPopupId, handlePopupClick, setOpenPopupId, goal }: PopoverProps) {
+export default function Popover({ item, openPopupId, handlePopupClick, setOpenPopupId, goal }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -29,7 +29,20 @@ export default function Popover({ item, children, openPopupId, handlePopupClick,
       radius='none'
       classNames={{ content: ['rounded-xl border-0 p-0'] }}
     >
-      <PopoverTrigger className='focus-visible:outline-none'>{children}</PopoverTrigger>
+      <PopoverTrigger className='focus-visible:outline-none'>
+        <button
+          className='hidden group-hover:block'
+          onClick={() => {
+            if (openPopupId) {
+              setOpenPopupId(null);
+            } else {
+              setOpenPopupId(item.id);
+            }
+          }}
+        >
+          <Kebab className='w-6 h-6' />
+        </button>
+      </PopoverTrigger>
       <PopoverContent>
         <div className='flex flex-col text-sm text-slate-700' ref={popoverRef}>
           {goal && (

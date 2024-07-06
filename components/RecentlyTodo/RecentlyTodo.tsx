@@ -1,5 +1,3 @@
-'use client';
-
 import { ArrowRight, Rectangles } from '@/assets/svgs';
 import ListTodo from '../ListTodo/ListTodo';
 import { Todo } from '@/types/Todo';

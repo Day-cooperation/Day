@@ -13,7 +13,6 @@ export * from './Flag';
 export * from './Home';
 export * from './LogoIcon';
 export * from './Logo';
-export * from './PlusBlue';
 export * from './Plus';
 export * from './SideFoldButton';
 export * from './Rectangles';

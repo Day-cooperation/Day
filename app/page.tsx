@@ -1,4 +1,4 @@
-import RecentlyTodo from '@/components/RecentlyTodo/RecentlyTodo';
+import Filter from '@/components/Filter/Filter';
 import { Todo } from '@/types/Todo';
 const mockTodosData: Todo[] = [
   {
@@ -59,10 +59,7 @@ const mockTodosData: Todo[] = [
     createdAt: '2024-07-03T09:06:21.673Z',
   },
 ];
+
 export default function Home() {
-  return (
-    <main className='flex min-h-screen flex-col items-center justify-between p-24'>
-      <RecentlyTodo todoList={mockTodosData} />
-    </main>
-  );
+  return <main className='flex min-h-screen flex-col items-center justify-between p-24'></main>;
 }

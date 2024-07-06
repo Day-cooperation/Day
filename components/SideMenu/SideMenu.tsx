@@ -1,5 +1,5 @@
 'use client';
-import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, PlusBlue, Flag } from '@/assets/svgs/index';
+import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, Flag } from '@/assets/svgs/index';
 
 import { useEffect, useRef, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
@@ -97,7 +97,6 @@ export default function SideMenu() {
 
   const handleOutSideClick = (event: Event) => {
     if (isOpen && !sideRef.current?.contains(event.target as Node)) {
-      console.log(isOpen && !sideRef.current?.contains(event.target as Node));
       toggleSideMenu();
     }
   };
@@ -181,7 +180,7 @@ export default function SideMenu() {
             <div className='md:hidden'>
               <Button size='sm'>
                 <div className='flex items-center justify-center'>
-                  <PlusBlue />
+                  <Plus strokeColor='blue' />
                   <span className='text-sm font-semibold'>새 목표</span>
                 </div>
               </Button>
@@ -193,7 +192,7 @@ export default function SideMenu() {
           <div className='hidden md:block'>
             <Button size='xl' className='h-[48px]'>
               <div className='flex items-center font-semibold'>
-                <PlusBlue />
+                <Plus strokeColor='blue' />
                 <span className='text-base'>새 목표</span>
               </div>
             </Button>

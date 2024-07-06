@@ -25,3 +25,12 @@
 button:focus-visible {
   outline: 0 none;
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+  background: inherit;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background: var(--slate-200, #e2e8f0);
+}

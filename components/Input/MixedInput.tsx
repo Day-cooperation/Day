@@ -3,20 +3,23 @@
 import { EyeFilledIcon } from '@/assets/svgs/EyeFilledIcon';
 import { EyeSlashFilledIcon } from '@/assets/svgs/EyeSlashFilledIcon';
 import { Input, InputProps } from '@nextui-org/react';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 type InputType = 'text' | 'href' | 'password';
-type Size = 'large' | 'small';
+type Size = 'full' | 'large' | 'small';
 
 type BaseInputProps = {
   size: Size;
+  name: string;
   type: InputType;
   errorMessage?: string;
-  props: InputProps;
+  value: string;
+  handleChange: (e: ChangeEvent<HTMLInputElement>, name: string) => void;
+  props?: InputProps;
 };
 
 // 기본 text와 password를 받는 Component
-export default function MixedInput({ size, type, errorMessage, props }: BaseInputProps) {
+export default function MixedInput({ size, name, type, errorMessage, value, handleChange, props }: BaseInputProps) {
   const [passwordVisiblity, setPasswordVisiblity] = useState(false);
 
   function visiblityChange() {
@@ -27,7 +30,7 @@ export default function MixedInput({ size, type, errorMessage, props }: BaseInpu
     <Input
       type={type === 'password' && !passwordVisiblity ? 'password' : 'text'}
       classNames={{
-        mainWrapper: size === 'large' ? 'w-[612px]' : 'w-[343px]',
+        mainWrapper: size === 'large' ? 'w-[612px]' : size === 'full' ? 'w-full' : 'w-[343px]',
         inputWrapper:
           'group-data-[has-helper=true]:border-danger-50 bg-slate-50 border border-transparent data-[hover=true]:bg-slate-50 data-[hover=true]:border-blue-300 data-[focus=true]:border-blue-500 group-data-[focus=true]:bg-slate-50 group-data-[has-helper=true]:!bg-slate-50',
         errorMessage: 'text-red-700',
@@ -46,6 +49,9 @@ export default function MixedInput({ size, type, errorMessage, props }: BaseInpu
       }
       errorMessage={errorMessage}
       isInvalid={errorMessage ? true : false}
+      name={name}
+      value={value}
+      onChange={(e) => handleChange(e, name)}
       {...props}
     />
   );

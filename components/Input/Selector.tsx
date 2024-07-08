@@ -2,32 +2,52 @@
 
 import { ArrowDown } from '@/assets/svgs/ArrowDown';
 import { Select, SelectItem } from '@nextui-org/react';
-import { ChangeEventHandler } from 'react';
+import { ChangeEvent } from 'react';
 
-type Size = 'large' | 'small';
+type Size = 'full' | 'large' | 'small';
+
+type Goal = {
+  id: number;
+  teamId: string;
+  userId: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
 
 type BaseInputProps = {
   size: Size;
-  items: {};
-  onChange: ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  placeholder?: string;
+  items: Goal[];
+  name: string;
+  value: string;
+  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 };
 
 const style =
   'bg-slate-50 border border-transparent data-[hover=true]:bg-slate-50 data-[hover=true]:border-blue-300 data-[focus=true]:border-blue-500 group-data-[focus=true]:bg-slate-50 group-data-[has-helper=true]:!bg-slate-50';
 
-export default function Selector({ size, items, onChange }: BaseInputProps) {
+export default function Selector({ size, label, placeholder, items, name, onChange, value }: BaseInputProps) {
   return (
     <Select
       aria-label='select subject'
       classNames={{
-        popoverContent: 'text-black bg-slate-50',
-        trigger: `${size === 'large' ? 'w-[612px]' : 'w-[343px]'} ${style}`,
+        popoverContent: 'text-black bg-slate-50 z-[1000]',
+        trigger: `${size === 'large' ? 'w-[612px]' : size === 'full' ? 'w-full' : 'w-[343px]'}, ${style}`,
+        label: '!text-slate-400',
       }}
       selectorIcon={<ArrowDown />}
-      placeholder='목표를 선택해 주세요.'
+      placeholder={placeholder}
+      selectedKeys={[value]}
+      name={name}
+      label={label}
+      labelPlacement='outside'
       onChange={onChange}
     >
-      {Object.entries(items)?.map((item) => <SelectItem key={item[0]}>{item[0]}</SelectItem>)}
+      {items.map((item) => (
+        <SelectItem key={item.title}>{item.title}</SelectItem>
+      ))}
     </Select>
   );
 }

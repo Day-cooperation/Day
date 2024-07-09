@@ -10,7 +10,7 @@ interface GetRequest {
 }
 
 // get 요청
-export const get = async ({ url, params }: GetRequest) => {
+export const getRequest = async ({ url, params }: GetRequest) => {
   try {
     const response = await instance.get(url, { params });
     return response;
@@ -25,9 +25,9 @@ interface PostRequest {
 }
 
 // post 요청
-export const post = async ({ url, data }: PostRequest) => {
+export const postRequest = async ({ url, data }: PostRequest) => {
   try {
-    const response = await instance.get(url, data);
+    const response = await instance.post(url, data);
     return response;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);
@@ -41,7 +41,7 @@ interface PatchRequest {
 }
 
 // patch 요청
-export const patch = async ({ url, params, data }: PatchRequest) => {
+export const patchRequest = async ({ url, params, data }: PatchRequest) => {
   try {
     const response = await instance.patch(url, data, { params });
     return response;
@@ -58,7 +58,7 @@ interface DeleteRequest {
 // delete
 export const deleteRequest = async ({ url, params }: DeleteRequest) => {
   try {
-    const response = await instance.patch(url, { params });
+    const response = await instance.delete(url, { params });
     return response;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);

@@ -1,7 +1,6 @@
 import { NextUIProvider } from '@nextui-org/react';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
-import SideMenu from '@/components/SideMenu/SideMenu';
 
 const pretendard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
@@ -16,10 +15,7 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body className={`${pretendard.variable} font-pretendard bg-slate-100`}>
-        <NextUIProvider>
-          <SideMenu />
-          {children}
-        </NextUIProvider>
+        <NextUIProvider>{children}</NextUIProvider>
       </body>
     </html>
   );

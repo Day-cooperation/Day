@@ -47,7 +47,6 @@ instance.interceptors.response.use(
 
     const refreshToken = Cookies.get(REFRESH_TOKEN);
 
-    // 에러 응답 로그
     console.log('error.response?.message: ', error.response);
 
     // 액세스 토큰 만료 시

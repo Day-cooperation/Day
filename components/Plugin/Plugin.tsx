@@ -37,7 +37,7 @@ const mock = [
 type PluginInput = {
   url: string;
   todo: string;
-  goal: string;
+  goal: number;
 };
 
 type PluginProps = {
@@ -46,7 +46,7 @@ type PluginProps = {
   onClose: () => void;
 };
 export default function Plugin({ onCreateClick, isOpen, onClose }: PluginProps) {
-  const [inputData, setInputData] = useState<PluginInput>({ url: '', todo: '', goal: '' });
+  const [inputData, setInputData] = useState<PluginInput>({ url: '', todo: '', goal: 0 });
   const [isError, setIsError] = useState<Partial<PluginInput>>({});
 
   const validateInput = (): boolean => {
@@ -69,10 +69,10 @@ export default function Plugin({ onCreateClick, isOpen, onClose }: PluginProps) 
     if (!validateInput()) return;
     onCreateClick(inputData);
     onClose();
-    setInputData({ url: '', todo: '', goal: '' });
+    setInputData({ url: '', todo: '', goal: 0 });
   };
   const handleChangeSelected = (e: ChangeEvent<HTMLSelectElement>) => {
-    setInputData((prev) => ({ ...prev, goal: e.target.value }));
+    setInputData((prev) => ({ ...prev, goal: Number(e.target.value) }));
   };
 
   return (

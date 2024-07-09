@@ -13,7 +13,7 @@ export const instance = axios.create({
 
 // 요청 인터셉터
 instance.interceptors.request.use(
-  async function (config) {
+  async (config) => {
     let accessToken;
     if (isServer) {
       const { cookies } = await import('next/headers');
@@ -24,17 +24,17 @@ instance.interceptors.request.use(
     }
     return config;
   },
-  function (error) {
+  (error) => {
     return Promise.reject(error);
   }
 );
 
 // 응답 인터셉터
 instance.interceptors.response.use(
-  function (response) {
+  (response) => {
     return response;
   },
-  async function (error) {
+  async (error) => {
     const originalRequest = error.config;
 
     // 이미 재시도한 요청인지 확인

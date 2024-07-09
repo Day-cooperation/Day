@@ -1,4 +1,3 @@
-import Filter from '@/components/Filter/Filter';
 import { Todo } from '@/types/Todo';
 const mockTodosData: Todo[] = [
   {

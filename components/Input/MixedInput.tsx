@@ -13,8 +13,8 @@ type BaseInputProps = {
   name: string;
   type: InputType;
   errorMessage?: string;
-  value: string;
-  handleChange: (e: ChangeEvent<HTMLInputElement>, name: string) => void;
+  value?: string | (readonly string[] & string);
+  handleChange?: (e: ChangeEvent<HTMLInputElement>, name: string) => void;
   props?: InputProps;
 };
 
@@ -51,7 +51,7 @@ export default function MixedInput({ size, name, type, errorMessage, value, hand
       isInvalid={errorMessage ? true : false}
       name={name}
       value={value}
-      onChange={(e) => handleChange(e, name)}
+      onChange={handleChange ? (e) => handleChange(e, name) : undefined}
       {...props}
     />
   );

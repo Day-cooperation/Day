@@ -24,3 +24,11 @@ export type Goal = {
 };
 
 export type ListTodoButtons = 'file' | 'link' | 'note write' | 'done' | 'note' | 'edit' | 'delete' | 'note read';
+
+export type NewTodo = {
+  title: string;
+  fileUrl: string;
+  linkUrl: string;
+  goalId: number;
+  done: boolean;
+};

@@ -69,7 +69,7 @@ export default function ConfirmPopup({
             <span>{confirmText}</span>
             <span>{description}</span>
           </div>
-          <div data-confirm={confirm} className='flex gap-2 justify-end justify-center'>
+          <div data-confirm={confirm} className='flex gap-2 justify-center'>
             {confirm && (
               <Button
                 onClick={() => {

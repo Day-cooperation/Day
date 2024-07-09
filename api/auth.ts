@@ -1,5 +1,4 @@
 import { instance } from './axios';
-import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
 interface Signin {
@@ -8,16 +7,12 @@ interface Signin {
 }
 
 export const signin = async (data: Signin) => {
-  try {
-    const response = await instance.post('auth/login', data);
-    if (response.data.accessToken && typeof document !== 'undefined') {
-      Cookies.set('accessToken', response.data.accessToken);
-      Cookies.set('refreshToken', response.data.refreshToken);
-    }
-    return response;
-  } catch (e) {
-    if (e instanceof AxiosError) console.error(e.message);
+  const response = await instance.post('auth/login', data);
+  if (response.data.accessToken && typeof document !== 'undefined') {
+    Cookies.set('accessToken', response.data.accessToken);
+    Cookies.set('refreshToken', response.data.refreshToken);
   }
+  return response;
 };
 
 interface Signup {
@@ -27,14 +22,10 @@ interface Signup {
 }
 
 export const signup = async (data: Signup) => {
-  try {
-    const response = await instance.post('auth/user', data);
-    if (response.data.accessToken && typeof document !== 'undefined') {
-      Cookies.set('accessToken', response.data.accessToken);
-      Cookies.set('refreshToken', response.data.refreshToken);
-    }
-    return response;
-  } catch (e) {
-    if (e instanceof AxiosError) console.error(e.message);
+  const response = await instance.post('user', data);
+  if (response.data.accessToken && typeof document !== 'undefined') {
+    Cookies.set('accessToken', response.data.accessToken);
+    Cookies.set('refreshToken', response.data.refreshToken);
   }
+  return response;
 };

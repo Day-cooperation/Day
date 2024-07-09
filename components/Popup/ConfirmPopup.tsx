@@ -1,6 +1,6 @@
 'use client';
 
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import Button from '../Buttons/Button';
 import { Cancel } from '@/assets/svgs';
 
@@ -9,7 +9,8 @@ type ConfirmPopupProps = {
   confirmText: string;
   description?: string;
   confirm?: boolean;
-  onConfirmClick: (confirm: string) => void;
+  onConfirmClick: (confirm: 'ok' | 'cancel', type: string) => void;
+  type: string;
 };
 
 export default function ConfirmPopup({
@@ -18,7 +19,9 @@ export default function ConfirmPopup({
   description,
   confirm = false,
   onConfirmClick,
+  type = 'popup',
 }: ConfirmPopupProps) {
+  const divRef = useRef<HTMLDivElement | null>(null);
   const handlePopupClose = () => {
     if (!dialogRef.current) return;
     dialogRef.current.close();
@@ -26,52 +29,51 @@ export default function ConfirmPopup({
 
   useEffect(() => {
     const outSideClick = (e: MouseEvent) => {
-      if (!dialogRef.current) return;
-      if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
-        dialogRef.current.close();
+      if (dialogRef.current?.open && !divRef.current?.contains(e.target as Node)) {
+        onConfirmClick('cancel', type);
+        handlePopupClose();
       }
     };
     const handleCloseEvent = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onConfirmClick('cancel');
+        onConfirmClick('cancel', type);
       }
     };
-
-    document.addEventListener('mousedown', outSideClick);
-    if (dialogRef.current) {
-      dialogRef.current.addEventListener('keydown', handleCloseEvent);
+    if (dialogRef.current?.open) {
+      document.addEventListener('click', outSideClick);
+      document.addEventListener('keydown', handleCloseEvent);
     }
     return () => {
-      document.removeEventListener('mousedown', outSideClick);
-      if (dialogRef.current) {
-        dialogRef.current.removeEventListener('keydown', handleCloseEvent);
+      if (dialogRef.current?.open) {
+        document.removeEventListener('click', outSideClick);
+        document.removeEventListener('keydown', handleCloseEvent);
       }
     };
   }, [dialogRef, onConfirmClick]);
 
   return (
     <dialog className='rounded-lg z-100' ref={dialogRef}>
-      <div className=' flex w-[402px] p-6'>
+      <div className=' flex w-[402px] p-6' ref={divRef}>
         <div className='w-full flex flex-col justify-between gap-6'>
           <div className='flex justify-end'>
             <button
               onClick={() => {
-                onConfirmClick('cancel');
+                onConfirmClick('cancel', type);
                 handlePopupClose();
               }}
             >
-              <Cancel className='w-[13px] h-[13px]' />
+              <Cancel className='w-[24px] h-[24px] pt-[5px] pb-[6px] px-[5.5px]' />
             </button>
           </div>
           <div className='flex flex-col items-center text-slate-800'>
             <span>{confirmText}</span>
             <span>{description}</span>
           </div>
-          <div data-confirm={confirm} className='flex gap-2 justify-end data-[confirm=true]:justify-center'>
+          <div data-confirm={confirm} className='flex gap-2 justify-end justify-center'>
             {confirm && (
               <Button
                 onClick={() => {
-                  onConfirmClick('cancel');
+                  onConfirmClick('cancel', type);
                   handlePopupClose();
                 }}
                 size='sm'
@@ -81,7 +83,7 @@ export default function ConfirmPopup({
             )}
             <Button
               onClick={() => {
-                onConfirmClick('ok');
+                onConfirmClick('ok', type);
                 handlePopupClose();
               }}
               size='sm'

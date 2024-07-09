@@ -7,7 +7,7 @@ import { ChangeEvent } from 'react';
 type Size = 'full' | 'large' | 'small';
 
 type Goal = {
-  id: number;
+  id: number | string;
   teamId: string;
   userId: number;
   title: string;
@@ -17,11 +17,11 @@ type Goal = {
 
 type BaseInputProps = {
   size: Size;
-  label: string;
+  label?: string;
   placeholder?: string;
   items: Goal[];
   name: string;
-  value: string;
+  value: number;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 };
 
@@ -39,14 +39,14 @@ export default function Selector({ size, label, placeholder, items, name, onChan
       }}
       selectorIcon={<ArrowDown />}
       placeholder={placeholder}
-      selectedKeys={[value]}
+      selectedKeys={value === 0 ? [''] : [String(value)]}
       name={name}
       label={label}
       labelPlacement='outside'
       onChange={onChange}
     >
       {items.map((item) => (
-        <SelectItem key={item.title}>{item.title}</SelectItem>
+        <SelectItem key={item.id}>{item.title}</SelectItem>
       ))}
     </Select>
   );

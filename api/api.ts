@@ -1,8 +1,8 @@
 import { AxiosError } from 'axios';
 import { instance } from './axios';
 
-type BASIC_URL = 'goals' | 'notes' | 'todos';
-type GET_URL = BASIC_URL | 'todos/progress' | 'user';
+type BASIC_URL = 'goals' | 'notes' | 'todos' | string;
+type GET_URL = BASIC_URL | 'todos/progress' | 'user' | 'todos';
 
 interface GetRequest {
   url: GET_URL | string;
@@ -11,12 +11,8 @@ interface GetRequest {
 
 // get 요청
 export const getRequest = async ({ url, params }: GetRequest) => {
-  try {
-    const response = await instance.get(url, { params });
-    return response;
-  } catch (e) {
-    if (e instanceof AxiosError) console.error(e.message);
-  }
+  const response = await instance.get(url, { params });
+  return response;
 };
 
 interface PostRequest {
@@ -61,10 +57,6 @@ interface DeleteRequest {
 
 // delete
 export const deleteRequest = async ({ url, params }: DeleteRequest) => {
-  try {
-    const response = await instance.delete(url, { params });
-    return response;
-  } catch (e) {
-    if (e instanceof AxiosError) console.error(e.message);
-  }
+  const response = await instance.delete(url, { params });
+  return response;
 };

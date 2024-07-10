@@ -1,4 +1,3 @@
-'use client';
 import '@/styles/globals.css';
 import SideMenu from '@/components/SideMenu/SideMenu';
 import Providers from '@/utils/Providers';

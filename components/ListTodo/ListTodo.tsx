@@ -14,7 +14,7 @@ type ListTodoProps = {
   displayTodoCount?: number;
 };
 
-export default function ListTodo({ todos, showGoal = true, displayTodoCount = 0, onButtonClick }: ListTodoProps) {
+export default function ListTodo({ todos = [], showGoal = true, displayTodoCount = 0, onButtonClick }: ListTodoProps) {
   const [openPopupTodoId, setOpenPopupTodoId] = useState<number | null>(null);
   const todoList = displayTodoCount ? todos.slice(0, displayTodoCount) : todos.slice(0);
 

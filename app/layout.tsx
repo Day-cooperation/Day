@@ -1,4 +1,4 @@
-import { NextUIProvider } from '@nextui-org/react';
+import Providers from '@/utils/Providers';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
 
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body className={`${pretendard.variable} font-pretendard bg-slate-100`}>
-        <NextUIProvider>{children}</NextUIProvider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

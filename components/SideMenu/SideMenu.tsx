@@ -30,7 +30,7 @@ export default function SideMenu() {
   const router = useRouter();
 
   const toggleSideMenu = () => {
-    setIsOpen((prev) => !prev);
+    setIsOpen(!isOpen);
   };
 
   const handleGoalClick = (id: number) => {

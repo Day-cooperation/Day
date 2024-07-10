@@ -13,9 +13,7 @@ export default function TodoList() {
   const [todoState, setTodoState] = useState('All');
   const { data: todoList, isPending } = useQuery({
     queryKey: ['get-todos'],
-    queryFn: () => {
-      getRequest({ url: 'todos' });
-    },
+    queryFn: () => getRequest({ url: 'todos' }),
   });
   const mutation = useMutation({
     mutationFn: ({ id, done }: { id: number; done: boolean }) =>

@@ -21,7 +21,7 @@ export default function Goal() {
 
   const { goalId } = useParams();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
-  
+
   const { data: goalResponse } = useQuery({
     queryKey: ['goal', goalId],
     queryFn: () => getRequest({ url: `goals/${goalId}` }),

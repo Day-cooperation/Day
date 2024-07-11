@@ -46,13 +46,14 @@ export default function Signin() {
     },
   });
 
-  const onSubmit: SubmitHandler<SigninInput> = (data) => {
+  const onSubmit: SubmitHandler<SigninInput> = (data, e) => {
+    e?.preventDefault();
     mutation.mutate(data);
   };
 
   return (
     <>
-      <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
+      <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)} method='post'>
         <label className='mb-6 font-semibold'>
           아이디
           <MixedInput

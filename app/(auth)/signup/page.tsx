@@ -38,7 +38,8 @@ export default function Signup() {
     },
   });
 
-  const onSubmit: SubmitHandler<SignupInput> = (data) => {
+  const onSubmit: SubmitHandler<SignupInput> = (data, e) => {
+    e?.preventDefault();
     delete data.passwordConfirm;
     mutation.mutate(data);
   };
@@ -50,7 +51,7 @@ export default function Signup() {
 
   return (
     <>
-      <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)}>
+      <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)} method='post'>
         <label className='mb-6 font-semibold'>
           이름
           <MixedInput

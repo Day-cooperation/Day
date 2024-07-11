@@ -11,8 +11,8 @@ import { Goal } from '@/types/Goal';
 import Modal from '../Modal/Modal';
 
 export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goal[] }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const queryClient = useQueryClient();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'create' | 'edit'>('create');
   const { data, isLoading, error } = useQuery({
     queryKey: ['todoList', goal.id],
@@ -33,7 +33,6 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
   const [isMore, setIsMore] = useState(false);
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    // 성공했을때 querykey 초기화 시켜줘야하나??
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todoList', goal.id] });
       queryClient.invalidateQueries({ queryKey: ['goalProgress', goal.id] });

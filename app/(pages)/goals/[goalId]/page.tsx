@@ -3,6 +3,7 @@
 import { deleteRequest, getRequest, patchRequest } from '@/api/api';
 import { ArrowRight, Flag, Kebab, Plus } from '@/assets/svgs';
 import { NoteAndPen } from '@/assets/svgs/NoteAndPen';
+import MixedInput from '@/components/Input/MixedInput';
 import ListTodo from '@/components/ListTodo/ListTodo';
 import Modal from '@/components/Modal/Modal';
 import Popover from '@/components/Popover/Popover';
@@ -11,11 +12,12 @@ import { ListTodoButtons, Todo } from '@/types/Todo';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 
 export default function Goal() {
   const route = useRouter();
   const queryClient = useQueryClient();
+  const [isGoalTitleEdit, setIsGoalTitleEdit] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'create' | 'edit'>('create');
 
@@ -26,6 +28,7 @@ export default function Goal() {
     queryKey: ['goal', goalId],
     queryFn: () => getRequest({ url: `goals/${goalId}` }),
   });
+  const [goalTitle, setGoalTitle] = useState(goalResponse?.data.title);
   const { data: todoListResponse } = useQuery({
     queryKey: ['todoList', goalId],
     queryFn: () => getRequest({ url: 'todos', params: { goalId } }),
@@ -61,6 +64,11 @@ export default function Goal() {
     },
   });
 
+  const { mutate: updateGoalMutate } = useMutation({
+    mutationFn: (input: string) => patchRequest({ url: `goals/${goalId}`, data: { title: input } }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['goal', goalId] }),
+  });
+
   const handleButtonClick = (type: ListTodoButtons, id: number) => {
     const selecteItem = todoListResponse?.data.todos.filter((todo: Todo) => todo.id === id)[0];
     if (type === 'done') {
@@ -74,10 +82,22 @@ export default function Goal() {
     }
   };
 
+  const handleKeydownInput = (e: KeyboardEvent<HTMLInputElement> | KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setGoalTitle(goalTitle);
+      setIsGoalTitleEdit(false);
+    }
+    if (e.key === 'Enter') {
+      updateGoalMutate(goalTitle);
+      setGoalTitle(goalTitle);
+
+      setIsGoalTitleEdit(false);
+    }
+  };
+
   const handlePopupClick = (type: ListTodoButtons, id: number) => {
     if (type === 'edit') {
-      setModalType('edit');
-      setIsModalOpen(!isModalOpen);
+      setIsGoalTitleEdit(true);
     }
 
     if (type === 'delete') {
@@ -108,7 +128,18 @@ export default function Goal() {
                   <div className='p-2 bg-black rounded-[15px]'>
                     <Flag fill='white' />
                   </div>
-                  <span className='text-slate-800 text-lg font-semibold'>{goalResponse?.data.title}</span>
+                  {isGoalTitleEdit ? (
+                    <MixedInput
+                      size='full'
+                      name='goal'
+                      type='text'
+                      value={goalTitle}
+                      handleChange={(e) => setGoalTitle(e.target.value)}
+                      handleKeyDown={handleKeydownInput}
+                    />
+                  ) : (
+                    <span className='text-slate-800 text-lg font-semibold'>{goalResponse?.data.title}</span>
+                  )}
                 </div>
               </div>
               <Popover

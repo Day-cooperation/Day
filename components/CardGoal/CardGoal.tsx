@@ -66,7 +66,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
     }
   };
 
-  if (isLoading || ProgressisLoading) return <h2>Loading...</h2>;
+  if (isLoading) return <h2>Loading...</h2>;
   if (error) return <h2>Error loading data</h2>;
 
   return (
@@ -88,7 +88,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
               할일 추가
             </button>
           </div>
-          <ProgressBar value={progressData?.data.progress || 0} />
+          <ProgressBar value={ProgressisLoading ? 0 : progressData?.data.progress} />
         </div>
         <div className='grid grid-cols-2 gap-6 '>
           <ListTodoProgress

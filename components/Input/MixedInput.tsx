@@ -3,7 +3,7 @@
 import { EyeFilledIcon } from '@/assets/svgs/EyeFilledIcon';
 import { EyeSlashFilledIcon } from '@/assets/svgs/EyeSlashFilledIcon';
 import { Input, InputProps } from '@nextui-org/react';
-import { ChangeEvent, useState } from 'react';
+import { BaseSyntheticEvent, ChangeEvent, KeyboardEvent, KeyboardEventHandler, useState } from 'react';
 
 type InputType = 'text' | 'href' | 'password';
 type Size = 'full' | 'large' | 'small';
@@ -15,11 +15,21 @@ type BaseInputProps = {
   errorMessage?: string;
   value?: string | (readonly string[] & string);
   handleChange?: (e: ChangeEvent<HTMLInputElement>, name: string) => void;
+  handleKeyDown?: (e: KeyboardEvent<HTMLInputElement> | KeyboardEvent) => void;
   props?: InputProps;
 };
 
 // 기본 text와 password를 받는 Component
-export default function MixedInput({ size, name, type, errorMessage, value, handleChange, props }: BaseInputProps) {
+export default function MixedInput({
+  size,
+  name,
+  type,
+  errorMessage,
+  value,
+  handleChange,
+  handleKeyDown,
+  props,
+}: BaseInputProps) {
   const [passwordVisiblity, setPasswordVisiblity] = useState(false);
 
   function visiblityChange() {
@@ -48,10 +58,11 @@ export default function MixedInput({ size, name, type, errorMessage, value, hand
         )
       }
       errorMessage={errorMessage}
-      isInvalid={errorMessage ? true : false}
+      isInvalid={!!errorMessage}
       name={name}
       value={value}
       onChange={handleChange ? (e) => handleChange(e, name) : undefined}
+      onKeyDown={handleKeyDown ? (e) => handleKeyDown(e) : undefined}
       {...props}
     />
   );

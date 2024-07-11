@@ -10,7 +10,9 @@ type ModalFooterProps = {
 export default function ModalFooter({ handleConfirmPopupOpen, data }: ModalFooterProps) {
   return (
     <NextModalfooter>
-      <Button type='button' onClick={handleConfirmPopupOpen} variant='solid' disabled={data?.title ? false : true} />
+      <Button type='button' onClick={handleConfirmPopupOpen} variant='solid' disabled={data?.title ? false : true}>
+        확인
+      </Button>
     </NextModalfooter>
   );
 }

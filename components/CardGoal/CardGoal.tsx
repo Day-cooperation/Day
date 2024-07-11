@@ -77,7 +77,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
           isOpen={isModalOpen}
           modalType={modalType}
           onClose={() => setIsModalOpen(!isModalOpen)}
-          goalList={goalList}
+          goalList={[goal]}
         />
       )}
       <div className='flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] [&:nth-child(3)]:col-span-2'>

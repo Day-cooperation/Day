@@ -118,7 +118,7 @@ export default function Goal() {
           goalList={[goalResponse?.data]}
         />
       )}
-      <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px] mx-auto w-full'>
+      <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px] '>
         <h2 className='text-slate-900 text-lg font-semibold '>목표</h2>
         <div className='flex flex-col gap-4 md:gap-6 '>
           <div className=' bg-white border border-slate-100 rounded-xl px-6 py-4 flex flex-col gap-6'>

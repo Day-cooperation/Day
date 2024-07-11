@@ -31,7 +31,6 @@ export default function SideMenu() {
   };
 
   const handleGoalClick = (id: number) => {
-    toggleSideMenu();
     setCurrentTab('목표');
     router.push(`/goals/${id}`);
   };
@@ -114,7 +113,6 @@ export default function SideMenu() {
                   href='/dashboard'
                   onClick={() => {
                     setCurrentTab('대시보드');
-                    toggleSideMenu();
                   }}
                 >
                   대시보드
@@ -208,7 +206,7 @@ export default function SideMenu() {
           </div>
         </>
       )}
-      <div className='w-[60px] h-full' />
+      <div className='w-[60px] h-full lg:hidden' />
     </div>
   );
 }

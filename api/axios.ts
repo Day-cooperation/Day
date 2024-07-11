@@ -38,7 +38,7 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     // 이미 재시도한 요청인지 확인
     if (originalRequest.url === 'auth/tokens') {
-      window.location.replace('signin');
+      window.location.replace('/signin');
     }
     // 에러 응답 로그
     console.log('error.response?.message: ', originalRequest);

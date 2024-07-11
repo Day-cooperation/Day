@@ -10,7 +10,7 @@ import { deleteRequest, getRequest, patchRequest } from '@/api/api';
 import { Goal } from '@/types/Goal';
 import Modal from '../Modal/Modal';
 
-export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goal[] }) {
+export default function CardGoal({ goal, index }: { goal: Goal; index: number }) {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'create' | 'edit'>('create');
@@ -68,7 +68,6 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
 
   if (isLoading) return <h2>Loading...</h2>;
   if (error) return <h2>Error loading data</h2>;
-
   return (
     <>
       {isModalOpen && (
@@ -80,7 +79,9 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
           goalList={[goal]}
         />
       )}
-      <div className='flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] [&:nth-child(3)]:col-span-2'>
+      <div
+        className={`flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}
+      >
         <div className='flex flex-col gap-2'>
           <div className='flex justify-between'>
             <h1 className='text-lg font-bold'>{goal.title}</h1>

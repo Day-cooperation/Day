@@ -25,3 +25,25 @@ export type GetAllNote = {
   totalCount: number;
   notes: Note[];
 };
+
+export type NoteRead = {
+  todo: {
+    done: boolean;
+    fileUrl: string;
+    linkUrl: string;
+    title: string;
+    id: number;
+  };
+  linkUrl: string;
+  content: string;
+  updatedAt: string;
+  createdAt: string;
+  title: string;
+  id: number;
+  goal: {
+    title: string;
+    id: number;
+  };
+  userId: number;
+  teamId: string;
+};

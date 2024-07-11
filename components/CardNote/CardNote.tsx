@@ -3,8 +3,37 @@
 import { NoteList } from '@/assets/svgs/NoteList';
 import { Kebab } from '@/assets/svgs/Kebab';
 import { Note } from '@/types/Note';
+import Popover from '../Popover/Popover';
+import { useState } from 'react';
+import { ListTodoButtons } from '@/types/Todo';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteRequest } from '@/api/api';
+import { useRouter } from 'next/navigation';
 
 export default function CardNote({ noteList }: { noteList: Note[] }) {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const [popupOpen, setPopupOpen] = useState<number | null>(null);
+  const { mutate: deleteNoteMutate } = useMutation({
+    mutationFn: (noteId: number) => deleteRequest({ url: `notes/${noteId}` }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['noteList'] });
+    },
+  });
+
+  const handlePopupClick = (type: ListTodoButtons, id: number) => {
+    if (type === 'note read') {
+      // 추가
+    }
+    if (type === 'edit') {
+      router.push(`/notes/${id}/edit`);
+    }
+
+    if (type === 'delete') {
+      deleteNoteMutate(id);
+    }
+  };
+
   return (
     <>
       {noteList.map((item) => (
@@ -13,9 +42,14 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
             <div className='bg-blue-100 w-7 h-7 rounded-[8.4px] flex items-center justify-center'>
               <NoteList />
             </div>
-            <button type='button' onClick={() => {}}>
-              <Kebab />
-            </button>
+            <Popover
+              isGoal
+              goal
+              item={item}
+              handlePopupClick={handlePopupClick}
+              openPopupId={popupOpen}
+              setOpenPopupId={setPopupOpen}
+            />
           </div>
           <div className='flex flex-col gap-3'>
             <h2 className='text-slate-800 text-lg'>{item.title}</h2>

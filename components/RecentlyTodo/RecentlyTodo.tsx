@@ -22,8 +22,6 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
   });
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    // 성공했을때 querykey 초기화 시켜줘야하나??
-    // onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todoList'] }),
   });
   const { mutate: deleteTodoMutate, isPending } = useMutation({
     mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
@@ -67,7 +65,7 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
             <ArrowRight />
           </Link>
         </div>
-        {data?.data.todos ? (
+        {data?.data.todos.length ? (
           <div className='h-[154px] overflow-y-auto pt-1'>
             <ListTodo showGoal todos={data?.data.todos} onButtonClick={handleButtonClick}></ListTodo>
           </div>

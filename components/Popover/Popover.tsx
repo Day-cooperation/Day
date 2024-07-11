@@ -26,11 +26,7 @@ export default function Popover({ item, openPopupId, handlePopupClick, setOpenPo
     return () => document.removeEventListener('mousedown', outsideClick);
   }, [openPopupId]);
   return (
-    <NextPopover
-      isOpen={goal ? typeof openPopupId === 'number' : openPopupId === item.id}
-      radius='none'
-      classNames={{ content: ['rounded-xl border-0 p-0'] }}
-    >
+    <NextPopover isOpen={openPopupId === item.id} radius='none' classNames={{ content: ['rounded-xl border-0 p-0'] }}>
       <PopoverTrigger className='focus-visible:outline-none'>
         <button
           className='hidden group-hover:block'

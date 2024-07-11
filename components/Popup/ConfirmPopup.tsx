@@ -49,7 +49,7 @@ export default function ConfirmPopup({
         document.removeEventListener('keydown', handleCloseEvent);
       }
     };
-  }, [dialogRef, onConfirmClick]);
+  }, []);
 
   return (
     <dialog className='rounded-lg z-100' ref={dialogRef}>

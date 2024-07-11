@@ -69,6 +69,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
 
   if (isLoading || ProgressisLoading) return <h2>Loading...</h2>;
   if (error) return <h2>Error loading data</h2>;
+
   return (
     <>
       {isModalOpen && (
@@ -93,30 +94,31 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
         </div>
         <div className='grid grid-cols-2 gap-6'>
           <ListTodoProgress
+            displayTodoCount={isMore ? 10 : 5}
             subject='To do'
             itemList={todoList}
             onUpdateList={handleButtonClick}
             textValue={'아직 해야할 일이 없어요'}
           />
           <ListTodoProgress
+            displayTodoCount={isMore ? 10 : 5}
             subject='Done'
             itemList={doneList}
             onUpdateList={handleButtonClick}
             textValue={'아직 다 한 일이 없어요'}
           />
         </div>
-        {todoList.length > 4 ||
-          (doneList.length > 4 && (
-            <div className='flex justify-center min-h-0'>
-              <button
-                className='flex items-center justify-center text-xs font-semibold py-1 gap-2 bg-white pr-[21px] pl-[36px] rounded-2xl'
-                onClick={handleMoreClick}
-              >
-                더보기
-                <IcArrowDown className='w-6 h-6' />
-              </button>
-            </div>
-          ))}
+        {(todoList.length > 4 || todoList.length > 4) && (
+          <div className='flex justify-center min-h-0'>
+            <button
+              className='flex items-center justify-center text-xs font-semibold py-1 gap-2 bg-white pr-[21px] pl-[36px] rounded-2xl'
+              onClick={handleMoreClick}
+            >
+              {isMore ? '접기' : '더보기'}
+              <IcArrowDown className={`duration-300 w-6 h-6 ${isMore && 'rotate-180'}`} />
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

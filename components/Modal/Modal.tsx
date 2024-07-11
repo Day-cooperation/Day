@@ -140,7 +140,7 @@ export default function Modal({ modalType, items, goalList, isOpen, onClose }: M
             handleLinkUrlPopupOpen={handleLinkUrlPopupOpen}
             handleFileFormat={handleFileFormat}
             fileName={data.fileUrl}
-            items={mock}
+            items={goalList ? goalList : []}
             chips={chips}
           />
           <ModalFooter data={data} handleConfirmPopupOpen={handleConfirmPopupOpen} />

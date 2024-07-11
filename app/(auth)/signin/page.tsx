@@ -7,6 +7,7 @@ import { VALIDATE_INPUT_VALUE } from '@/constans';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, isAxiosError } from 'axios';
 import Link from 'next/link';
+import { redirect, useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type SigninInput = {
@@ -21,6 +22,7 @@ interface ErrorResponse {
 const { email, password } = VALIDATE_INPUT_VALUE;
 
 export default function Signin() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -29,6 +31,10 @@ export default function Signin() {
   } = useForm<SigninInput>({ mode: 'all' });
   const mutation = useMutation({
     mutationFn: (data: SigninInput) => signin(data),
+    onSuccess: () => {
+      router.push('/dashboard');
+      return <div>loading...</div>;
+    },
     onError: (error: AxiosError<ErrorResponse>) => {
       if (!isAxiosError(error)) return;
       if (error.response?.data.message.includes('이메일')) {
@@ -43,10 +49,6 @@ export default function Signin() {
   const onSubmit: SubmitHandler<SigninInput> = (data) => {
     mutation.mutate(data);
   };
-  const { isPending } = mutation;
-  if (isPending) {
-    return <div>loading...</div>;
-  }
 
   return (
     <>

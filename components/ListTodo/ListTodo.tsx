@@ -54,6 +54,7 @@ export default function ListTodo({ todos, showGoal = true, displayTodoCount = 0,
               <div className='flex justify-center items-center gap-1'>
                 <TodoListButtons item={item} handleClick={handleClick} />
                 <Popover
+                  isGoal={false}
                   openPopupId={openPopupTodoId}
                   handlePopupClick={handleClick}
                   setOpenPopupId={setOpenPopupTodoId}

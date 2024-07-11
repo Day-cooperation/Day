@@ -1,19 +1,21 @@
 'use client';
 
 import { Kebab } from '@/assets/svgs';
+import { Goal } from '@/types/Goal';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { Popover as NextPopover, PopoverTrigger, PopoverContent } from '@nextui-org/react';
 import { Dispatch, useEffect, useRef } from 'react';
 
 type PopoverProps = {
-  item: Todo;
+  isGoal?: boolean;
+  item: Todo | Goal;
   openPopupId: number | null;
   handlePopupClick: (buttonType: ListTodoButtons, id: number) => void;
   setOpenPopupId: Dispatch<number | null>;
   goal?: boolean;
 };
 
-export default function Popover({ item, openPopupId, handlePopupClick, setOpenPopupId, goal }: PopoverProps) {
+export default function Popover({ isGoal, item, openPopupId, handlePopupClick, setOpenPopupId, goal }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export default function Popover({ item, openPopupId, handlePopupClick, setOpenPo
     <NextPopover isOpen={openPopupId === item.id} radius='none' classNames={{ content: ['rounded-xl border-0 p-0'] }}>
       <PopoverTrigger className='focus-visible:outline-none'>
         <button
-          className='hidden group-hover:block'
+          className={`${isGoal ? 'block' : 'hidden'} group-hover:block`}
           onClick={() => {
             if (openPopupId) {
               setOpenPopupId(null);
@@ -38,7 +40,7 @@ export default function Popover({ item, openPopupId, handlePopupClick, setOpenPo
             }
           }}
         >
-          <Kebab className='w-6 h-6' />
+          <Kebab className={`w-6 h-6`} fill={isGoal ? 'white' : ''} />
         </button>
       </PopoverTrigger>
       <PopoverContent>

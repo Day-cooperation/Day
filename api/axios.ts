@@ -8,7 +8,7 @@ const REFRESH_TOKEN = 'refreshToken';
 
 export const instance = axios.create({
   baseURL: BASE_URL,
-  timeout: 5000,
+  timeout: 10000,
 });
 
 // 요청 인터셉터
@@ -36,19 +36,15 @@ instance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-
     // 이미 재시도한 요청인지 확인
-    if (originalRequest._retry) {
-      return Promise.reject(error);
+    if (originalRequest.url === 'auth/tokens') {
+      window.location.replace('signin');
     }
-
-    // 재시도 플래그 설정
-    originalRequest._retry = true;
+    // 에러 응답 로그
+    console.log('error.response?.message: ', originalRequest);
 
     const refreshToken = Cookies.get(REFRESH_TOKEN);
-
-    console.log('error.response?.message: ', error.response);
-
+    if (!refreshToken) window.location.replace('signin');
     // 액세스 토큰 만료 시
     if (refreshToken && error.response?.status === 401) {
       try {
@@ -72,6 +68,8 @@ instance.interceptors.response.use(
         }
       } catch (tokenRefreshError) {
         // 리프레시 토큰이 유효하지 않으면 에러 반환
+        Cookies.remove(ACCESS_TOKEN);
+        Cookies.remove(REFRESH_TOKEN);
         if ((tokenRefreshError as AxiosError).response?.status === 401) {
           return Promise.reject(tokenRefreshError);
         }

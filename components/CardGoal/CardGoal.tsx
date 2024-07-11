@@ -1,7 +1,7 @@
 'use client';
 
-import { ListTodoButtons, Todo } from '@/types/Todo';
-import { useEffect, useState } from 'react';
+import { Todo } from '@/types/Todo';
+import { useState } from 'react';
 import { IcArrowDown, Plus } from '@/assets/svgs';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import ListTodoProgress from './ListTodoProgress';
@@ -25,11 +25,6 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
   });
   const todoList = data?.data.todos.filter((todo: Todo) => todo.done === false);
   const doneList = data?.data.todos.filter((todo: Todo) => todo.done === true);
-  // const [todoList, setTodoList] = useState([]);
-  // const { mutate } = useMutation({
-  //   mutationKey: ['todoList'],
-  //   mutationFn: ({ id, data }) => patchRequest({ url: 'todos', params: id, data }),
-  // });
   const [isMore, setIsMore] = useState(false);
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
@@ -53,7 +48,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
   };
 
   const handleButtonClick = (type: string, id: number) => {
-    const selecteItem = data?.data.todos.filter((todo: Todo) => todo.id === id)[0];
+    const selecteItem = data?.data.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }

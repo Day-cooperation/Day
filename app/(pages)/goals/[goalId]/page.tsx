@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteRequest, getRequest, patchRequest } from '@/api/api';
-import { ArrowRight, Flag, Kebab, Plus } from '@/assets/svgs';
+import { ArrowRight, Flag, Plus } from '@/assets/svgs';
 import { NoteAndPen } from '@/assets/svgs/NoteAndPen';
 import MixedInput from '@/components/Input/MixedInput';
 import ListTodo from '@/components/ListTodo/ListTodo';
@@ -23,7 +23,6 @@ export default function Goal() {
 
   const { goalId } = useParams();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
-
   const { data: goalResponse } = useQuery({
     queryKey: ['goal', goalId],
     queryFn: () => getRequest({ url: `goals/${goalId}` }),

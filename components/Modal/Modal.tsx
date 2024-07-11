@@ -6,15 +6,10 @@ import ModalHeader from './ModalHeader';
 import ModalBody from './ModalBody';
 import { NewTodo, Todo } from '@/types/Todo';
 import ModalFooter from './ModalFooter';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { patchRequest, postRequest } from '@/api/api';
-import { fileUpload } from '@/api/fileUpload';
-import { convertTodoToFormdata } from '@/utils/convertTodoToFormdata';
-import { Goal } from '@/types/Goal';
 
 type ModalProps = {
   modalType: 'create' | 'edit';
-  items?: Todo;
+  items?: NewTodo;
   isOpen: boolean;
   onClose: () => void;
   goalList?: Goal[];

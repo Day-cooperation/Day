@@ -5,8 +5,8 @@ type BASIC_URL = 'goals' | 'notes' | 'todos';
 type GET_URL = BASIC_URL | 'todos/progress' | 'user';
 
 interface GetRequest {
-  url: GET_URL;
-  params?: number;
+  url: GET_URL | string;
+  params?: object;
 }
 
 // get 요청
@@ -21,7 +21,7 @@ export const getRequest = async ({ url, params }: GetRequest) => {
 
 interface PostRequest {
   url: BASIC_URL;
-  data: Object;
+  data: object;
 }
 
 // post 요청
@@ -35,9 +35,9 @@ export const postRequest = async ({ url, data }: PostRequest) => {
 };
 
 interface PatchRequest {
-  url: BASIC_URL;
-  params?: number;
-  data: Object;
+  url: BASIC_URL | string;
+  params?: object;
+  data: object;
 }
 
 // patch 요청
@@ -45,14 +45,18 @@ export const patchRequest = async ({ url, params, data }: PatchRequest) => {
   try {
     const response = await instance.patch(url, data, { params });
     return response;
-  } catch (e) {
-    if (e instanceof AxiosError) console.error(e.message);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      console.error('Axios error:', error.message);
+    } else {
+      console.error('Unexpected error:', error);
+    }
   }
 };
 
 interface DeleteRequest {
-  url: BASIC_URL;
-  params: number;
+  url: BASIC_URL | string;
+  params?: object;
 }
 
 // delete

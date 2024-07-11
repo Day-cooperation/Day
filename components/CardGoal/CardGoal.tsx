@@ -53,7 +53,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
   };
 
   const handleButtonClick = (type: string, id: number) => {
-    const selecteItem = data?.data.todos.filter((todo: Todo) => todo.id === id)[0];
+    const selecteItem = data?.data.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }

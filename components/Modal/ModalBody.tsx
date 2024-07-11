@@ -12,8 +12,8 @@ type ModalBodyProps = {
   setData: Dispatch<SetStateAction<NewTodo>>;
   handleLinkUrlPopupOpen: () => void;
   handleFileFormat: (e: ChangeEvent<HTMLInputElement>) => void;
-  fileName: string;
-  items: Goal[];
+  fileName?: string;
+  items: Goal[] | [];
   chips: { file: boolean; link: boolean };
 };
 
@@ -62,16 +62,18 @@ export default function ModalBody({
       />
       <label className='font-semibold'>
         목표
-        <Selector
-          placeholder='목표를 선택해주세요'
-          items={items}
-          name='goalId'
-          size='full'
-          value={data.goalId}
-          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-            setData((prev) => ({ ...prev, goalId: Number(e.target.value) }));
-          }}
-        />
+        {items && (
+          <Selector
+            placeholder='목표를 선택해주세요'
+            items={items}
+            name='goalId'
+            size='full'
+            value={data.goalId}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+              setData((prev) => ({ ...prev, goalId: Number(e.target.value) }));
+            }}
+          />
+        )}
       </label>
     </NextModalBody>
   );

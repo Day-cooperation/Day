@@ -1,58 +1,67 @@
 import { Modal as NextModal, ModalContent } from '@nextui-org/react';
 import ConfirmPopup from '../Popup/ConfirmPopup';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { Goal } from '@/types/Goal';
 import LinkUrlPopup from '../Popup/LinkUrlPopup';
 import ModalHeader from './ModalHeader';
 import ModalBody from './ModalBody';
-import { NewTodo } from '@/types/Todo';
+import { NewTodo, Todo } from '@/types/Todo';
 import ModalFooter from './ModalFooter';
-
-const mock = [
-  {
-    id: 63,
-    teamId: '1-1',
-    userId: 6,
-    title: '오늘만 살자',
-    createdAt: '2024-07-04T17:18:06.259Z',
-    updatedAt: '2024-07-04T17:18:06.259Z',
-  },
-  {
-    id: 64,
-    teamId: '1-1',
-    userId: 6,
-    title: '내일도 살자',
-    createdAt: '2024-07-04T18:28:10.939Z',
-    updatedAt: '2024-07-04T18:28:10.939Z',
-  },
-  {
-    id: 65,
-    teamId: '1-1',
-    userId: 6,
-    title: '모레도 살자',
-    createdAt: '2024-07-04T18:28:41.146Z',
-    updatedAt: '2024-07-04T18:28:41.146Z',
-  },
-];
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { patchRequest, postRequest } from '@/api/api';
+import { fileUpload } from '@/api/fileUpload';
+import { convertTodoToFormdata } from '@/utils/convertTodoToFormdata';
+import { Goal } from '@/types/Goal';
 
 type ModalProps = {
   modalType: 'create' | 'edit';
-  modalTodoState: boolean;
-  items?: NewTodo;
+  items?: Todo;
   isOpen: boolean;
   onClose: () => void;
   goalList?: Goal[];
 };
 
-const initialData = { title: '', fileUrl: '', linkUrl: '', goalId: 0, done: false };
+const INITIAL_DATA = { title: '', fileUrl: '', linkUrl: '', goalId: 0, done: false };
 
-export default function Modal({ modalType, items, goalList, isOpen, onClose }: ModalProps) {
+export default function Modal({ modalType, items, isOpen, goalList, onClose }: ModalProps) {
+  const convertData = convertTodoToFormdata(items);
+  const queryClient = useQueryClient();
   const [confirmValue, setConfirmText] = useState({ type: 'popup', text: '', description: '' });
-  const [chips, setChips] = useState({ file: items?.fileUrl ? true : false, link: items?.linkUrl ? true : false });
-  const [data, setData] = useState(modalType === 'create' ? initialData : items || initialData);
-
+  const [data, setData] = useState<NewTodo>(convertData || INITIAL_DATA);
+  const [chips, setChips] = useState({ file: false, link: false });
   const confirmRef = useRef<HTMLDialogElement | null>(null);
   const linkUrlRef = useRef<HTMLDialogElement | null>(null);
+
+  const { mutate } = useMutation({
+    mutationKey: ['post-file'],
+    mutationFn: (file: FormData) => fileUpload(file),
+    onSuccess: (response) => {
+      setChips((prev) => ({ ...prev, file: true }));
+      setData((prev) => ({ ...prev, fileUrl: response?.data.url }));
+      console.log('파일 업로드 성공' + response);
+    },
+    onError: (error) => {
+      console.error('파일 업로드 오류:', error);
+    },
+  });
+  const { mutate: newTodoMutate } = useMutation({
+    mutationKey: ['post-newTodo'],
+    mutationFn: (todoPostData: NewTodo) => postRequest({ url: 'todos', data: todoPostData }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-todos'] });
+      setData(INITIAL_DATA);
+      setChips({ file: false, link: false });
+    },
+  });
+
+  const { mutate: editTodoMutate } = useMutation({
+    mutationKey: ['post-editTodo'],
+    mutationFn: (todoPostData: NewTodo) => patchRequest({ url: `todos/${items?.id}`, data: todoPostData }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['get-todos'] });
+      setData(INITIAL_DATA);
+      setChips({ file: false, link: false });
+    },
+  });
 
   const handleConfirmPopupOpen = () => {
     if (!confirmRef.current) return;
@@ -64,22 +73,39 @@ export default function Modal({ modalType, items, goalList, isOpen, onClose }: M
 
   const handleFileFormat = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setChips((prev) => ({ ...prev, file: true }));
-      //TODO 파일 url주소 받아와야함 setData((prev) => ({...prev, linkUrl:여기}))
-    }
+    if (!file) return;
+    const fileData = new FormData();
+    fileData.append('file', file);
+    mutate(fileData);
   };
 
   const onConfirmClick = (response: 'ok' | 'cancel', type: string) => {
     if (response === 'cancel') return;
     if (response === 'ok' && type === 'modal') {
       onClose();
-      setData(initialData);
-      setChips({ file: false, link: false });
-      return;
+      if (modalType === 'create') {
+        setData(INITIAL_DATA);
+        setChips({ file: false, link: false });
+        return;
+      }
     }
-    console.log(data); //TODO data를 post하고 성공하면 밑에줄 이어지게 실패시 실패 팝업
-    setData(initialData);
+    const todoUpdateData = () => {
+      if (!data.fileUrl) {
+        delete data.fileUrl;
+      }
+      if (!data.linkUrl) {
+        delete data.linkUrl;
+      }
+      if (!data.goalId) {
+        delete data.goalId;
+      }
+      return data;
+    };
+    if (modalType === 'create') {
+      newTodoMutate(todoUpdateData());
+    }
+    editTodoMutate(todoUpdateData());
+    setData(INITIAL_DATA);
     onClose();
   };
 
@@ -112,6 +138,10 @@ export default function Modal({ modalType, items, goalList, isOpen, onClose }: M
 
     return () => document.removeEventListener('keydown', handleModalClose);
   }, [isOpen]);
+  useEffect(() => {
+    setData(convertData);
+    setChips({ file: !!convertData.fileUrl, link: !!convertData.linkUrl });
+  }, [items]);
 
   return (
     <>

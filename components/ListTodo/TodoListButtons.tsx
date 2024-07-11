@@ -21,7 +21,7 @@ export default function TodoListButtons({ item, handleClick }: TodoListButtonsPr
         </button>
       )}
       {item.noteId && (
-        <button onClick={() => handleClick('note', item.id)}>
+        <button onClick={() => handleClick('note read', item.id)}>
           <Note className='w-6 h-6' />
         </button>
       )}

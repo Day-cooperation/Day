@@ -3,7 +3,7 @@
 import TodoListButtons from './TodoListButtons';
 import { Todo, ListTodoButtons } from '@/types/Todo';
 import { Checkbox } from '@nextui-org/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Goal } from '@/assets/svgs';
 import Popover from '../Popover/Popover';
 
@@ -21,7 +21,6 @@ export default function ListTodo({ todos = [], showGoal = true, displayTodoCount
   const handleClick = (buttonType: ListTodoButtons, id: number) => {
     onButtonClick(buttonType, id);
   };
-
   return (
     <div className='-mt-0.5'>
       <div className='flex flex-col justify-center items-start gap-[10px] '>
@@ -32,7 +31,7 @@ export default function ListTodo({ todos = [], showGoal = true, displayTodoCount
               label: 'w-full pl-2 min-w-0',
               wrapper: 'w-[18px] h-[18px] m-0',
             }}
-            defaultSelected={item.done}
+            isSelected={item.done}
             onChange={() => handleClick('done', item.id)}
             key={item.id}
           >

@@ -19,16 +19,16 @@ type BaseInputProps = {
   size: Size;
   label?: string;
   placeholder?: string;
-  items: Goal[];
+  items?: Goal[];
   name: string;
-  value: number;
+  value?: number;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 };
 
 const style =
   'bg-slate-50 border border-transparent data-[hover=true]:bg-slate-50 data-[hover=true]:border-blue-300 data-[focus=true]:border-blue-500 group-data-[focus=true]:bg-slate-50 group-data-[has-helper=true]:!bg-slate-50';
 
-export default function Selector({ size, label, placeholder, items, name, onChange, value }: BaseInputProps) {
+export default function Selector({ size, label, placeholder, items = [], name, onChange, value }: BaseInputProps) {
   return (
     <Select
       aria-label='select subject'
@@ -45,9 +45,7 @@ export default function Selector({ size, label, placeholder, items, name, onChan
       labelPlacement='outside'
       onChange={onChange}
     >
-      {items.map((item) => (
-        <SelectItem key={item.id}>{item.title}</SelectItem>
-      ))}
+      {items?.map((item) => <SelectItem key={item.id}>{item.title}</SelectItem>)}
     </Select>
   );
 }

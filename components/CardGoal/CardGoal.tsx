@@ -81,7 +81,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
           goalList={goalList}
         />
       )}
-      <div className='flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] [&:nth-child(3)]:col-span-2 '>
+      <div className='flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] [&:nth-child(3)]:col-span-2'>
         <div className='flex flex-col gap-2'>
           <div className='flex justify-between'>
             <h1 className='text-lg font-bold'>{goal.title}</h1>
@@ -92,7 +92,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
           </div>
           <ProgressBar value={progressData?.data.progress || 0} />
         </div>
-        <div className='grid grid-cols-2 gap-6'>
+        <div className='grid grid-cols-2 gap-6 '>
           <ListTodoProgress
             displayTodoCount={isMore ? 10 : 5}
             subject='To do'

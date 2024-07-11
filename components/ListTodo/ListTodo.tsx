@@ -24,7 +24,7 @@ export default function ListTodo({ todos, showGoal = true, displayTodoCount = 0,
 
   return (
     <div className='-mt-0.5'>
-      <div className='flex flex-col justify-center items-start gap-[10px]'>
+      <div className='flex flex-col justify-center items-start gap-[10px] '>
         {todoList.map((item) => (
           <Checkbox
             classNames={{
@@ -36,7 +36,7 @@ export default function ListTodo({ todos, showGoal = true, displayTodoCount = 0,
             onChange={() => handleClick('done', item.id)}
             key={item.id}
           >
-            <div className='flex justify-between items-stretch'>
+            <div className='flex justify-between items-stretch '>
               <div
                 data-showgoal={showGoal}
                 className='data-[showgoal=true]:flex-col data-[showgoal=true]:items-start flex items-center justify-start truncate'

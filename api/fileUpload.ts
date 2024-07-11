@@ -1,11 +1,7 @@
 import { instance } from './axios';
 import { AxiosError } from 'axios';
 
-interface FileUpload {
-  file: File;
-}
-
-export const fileUpload = async (file: FileUpload) => {
+export const fileUpload = async (file: FormData) => {
   try {
     const response = await instance.post('files', file);
     return response;

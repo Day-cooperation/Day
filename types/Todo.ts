@@ -7,8 +7,8 @@ export type Todos = {
 export type Todo = {
   noteId: number | null;
   done: boolean;
-  linkUrl?: string | null;
-  fileUrl?: string | null;
+  linkUrl?: string;
+  fileUrl?: string;
   title: string;
   id: number;
   goal?: Goal;
@@ -25,10 +25,6 @@ export type Goal = {
 
 export type ListTodoButtons = 'file' | 'link' | 'note write' | 'done' | 'note' | 'edit' | 'delete' | 'note read';
 
-export type NewTodo = {
-  title: string;
-  fileUrl: string;
-  linkUrl: string;
-  goalId: number;
-  done: boolean;
+export type NewTodo = Pick<Todo, 'title' | 'linkUrl' | 'fileUrl' | 'done'> & {
+  goalId?: number;
 };

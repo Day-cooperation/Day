@@ -73,7 +73,6 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
     <>
       {isModalOpen && (
         <Modal
-          modalTodoState
           isOpen={isModalOpen}
           modalType={modalType}
           onClose={() => setIsModalOpen(!isModalOpen)}

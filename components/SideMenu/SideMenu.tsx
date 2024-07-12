@@ -33,9 +33,23 @@ export default function SideMenu() {
 
   const handleGoalClick = (id: number) => {
     setCurrentTab('목표');
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 1024) {
+        toggleSideMenu();
+      }
+    }
     router.push(`/goals/${id}`);
   };
 
+  const handleDashboardClick = () => {
+    setCurrentTab('대시보드');
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 1024) {
+        toggleSideMenu();
+      }
+    }
+  };
+  
   const handleNewTodoClick = () => {
     setIsModalOpen(true);
   };
@@ -120,12 +134,7 @@ export default function SideMenu() {
                 <div className='h-6 w-6 flex items-center justify-center'>
                   <Home />
                 </div>
-                <Link
-                  href='/dashboard'
-                  onClick={() => {
-                    setCurrentTab('대시보드');
-                  }}
-                >
+                <Link href='/dashboard' onClick={handleDashboardClick}>
                   대시보드
                 </Link>
               </div>

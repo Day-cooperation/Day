@@ -20,3 +20,4 @@ export * from './IcArrowDown';
 export * from './ArrowRight';
 export * from './Cancel';
 export * from './NoteFlag';
+export * from './Checked';

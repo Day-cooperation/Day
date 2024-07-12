@@ -1,40 +1,53 @@
 'use client';
+
 import { getRequest, patchRequest, postRequest } from '@/api/api';
 import { NoteFlag } from '@/assets/svgs';
 import Button from '@/components/Buttons/Button';
 import Counting from '@/components/Counting/Counting';
+import Toast from '@/components/Toast/Toast';
+import ToastRender from '@/components/Toast/ToastRender';
 import { NoteInputValue } from '@/types/Note';
 import { Todo } from '@/types/Todo';
 import { Textarea } from '@nextui-org/react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+const noti = () => toast(<ToastRender />);
+
 const INITIAL_VALUE = { todoId: null, title: '', content: '', linkUrl: '' };
+
 export default function Note() {
   const [hasNote, setHasNote] = useState(false);
   const [inputValue, setInputvalue] = useState<NoteInputValue>(INITIAL_VALUE);
-  const [sessionData, setSessionData] = useState<NoteInputValue>();
   const [disable, setDisable] = useState({ pullButton: false, pushButton: false });
+
   const pathId = usePathname().split('/')[1];
+
   const { isLoading, data: todos } = useQuery({ queryKey: ['getTodos'], queryFn: () => getRequest({ url: 'todos' }) });
 
   const { mutate: createNote } = useMutation({
     mutationKey: ['postNote'],
     mutationFn: (noteValue: NoteInputValue) => postRequest({ url: `notes`, data: noteValue }),
   });
+
   const { mutate: editNote } = useMutation({
     mutationKey: ['patchNote'],
     mutationFn: (noteValue: NoteInputValue) => patchRequest({ url: `notes/${pathId}`, data: noteValue }),
   });
 
   const todo = todos?.data.todos.find((item: Todo) => Number(pathId) === item.id);
+
   const noteHeader = hasNote ? '노트 수정' : '노트 작성';
+
   const noteCompleteButtonText = hasNote ? '수정 하기' : '작성 완료';
+
   const { data: notes } = useQuery({
     queryKey: ['getNote'],
     queryFn: () => getRequest({ url: `notes/${todo.noteId}` }),
     enabled: hasNote,
   });
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const name = e.target.name;
     setInputvalue((prev) => ({ ...prev, [name]: e.target.value }));
@@ -45,11 +58,13 @@ export default function Note() {
     if (!inputValue.linkUrl) {
       delete inputValue.linkUrl;
     }
+
     if (hasNote) {
       delete inputValue.todoId;
       editNote(inputValue);
       return;
     }
+
     createNote(inputValue);
   };
 
@@ -63,10 +78,31 @@ export default function Note() {
           sessionStorage.setItem(key, value || '');
         }
       });
+      noti();
+
       return;
     }
+
     if (buttonType === 'pull') {
-      setInputvalue(sessionData ?? INITIAL_VALUE);
+      const savedData: { [key: string]: string | null } = {};
+
+      Object.keys(sessionStorage).forEach((key) => {
+        savedData[key] = sessionStorage.getItem(key);
+      });
+
+      if (pathId !== savedData.todoId) return;
+
+      if (savedData.title === null || savedData.content === null) return;
+
+      setDisable((prev) => ({ ...prev, pullButton: false }));
+
+      setInputvalue((prev) => ({
+        ...prev,
+        title: savedData.title || '',
+        content: savedData.content || '',
+        linkUrl: savedData.linkUrl || '',
+        todoId: Number(savedData.todoId),
+      }));
     }
   };
 
@@ -80,24 +116,6 @@ export default function Note() {
       content: notes?.data.content ?? '',
     }));
   }, [todo, notes]);
-
-  useEffect(() => {
-    const savedData: { [key: string]: string | null } = {};
-
-    Object.keys(sessionStorage).forEach((key) => {
-      savedData[key] = sessionStorage.getItem(key);
-    });
-    if (pathId !== savedData.todoId) return;
-    if (savedData.title === null || savedData.content === null) return;
-    setDisable((prev) => ({ ...prev, pullButton: false }));
-    setSessionData((prev) => ({
-      ...prev,
-      title: savedData.title || '',
-      content: savedData.content || '',
-      linkUrl: savedData.linkUrl || '',
-      todoId: Number(savedData.todoId),
-    }));
-  }, [handleDataSaveClick]);
 
   if (isLoading) return <div>...isLoading</div>;
 
@@ -117,7 +135,11 @@ export default function Note() {
               <Button onClick={() => handleDataSaveClick('pull')} disabled={disable.pullButton}>
                 가져오기
               </Button>
-              <Button type='submit' variant='solid'>
+              <Button
+                type='submit'
+                variant='solid'
+                disabled={inputValue.title.length === 0 || inputValue.content.length === 0}
+              >
                 {noteCompleteButtonText}
               </Button>
             </div>
@@ -158,6 +180,7 @@ export default function Note() {
               }}
               placeholder='이 곳을 클릭해 노트 작성을 시작해주세요'
             />
+            <Toast />
           </div>
         </form>
       </div>

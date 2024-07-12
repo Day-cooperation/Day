@@ -48,6 +48,7 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
     mutationFn: (todoPostData: NewTodo) => postRequest({ url: 'todos', data: todoPostData }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getTodos'] });
+      queryClient.invalidateQueries({ queryKey: ['todoList'] });
       setData(INITIAL_DATA);
       setChips({ file: false, link: false });
     },

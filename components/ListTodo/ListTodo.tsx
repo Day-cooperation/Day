@@ -22,7 +22,7 @@ export default function ListTodo({ todos = [], showGoal, displayTodoCount = 0, o
 
   const handleClick = (buttonType: ListTodoButtons, id: number) => {
     onButtonClick(buttonType, id);
-    if(buttonType === 'note write') router.push(`/note/${id}/write`)
+    if (buttonType === 'note write') router.push(`/note/${id}/write`);
   };
   return (
     <div className='-mt-0.5'>

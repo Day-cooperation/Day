@@ -134,7 +134,7 @@ export default function TodoList() {
               할일 추가
             </button>
           </div>
-          
+
           <div className='flex flex-col gap-4 bg-white w-full h-[calc(100vh-124px)] md:h-full p-6 rounded-xl'>
             <Filter handleClick={handleFilterClick} />
             <ListTodo todos={todos} showGoal={true} onButtonClick={handleTodoTypeClick} />

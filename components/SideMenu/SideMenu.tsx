@@ -1,15 +1,12 @@
 'use client';
 import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, Flag } from '@/assets/svgs/index';
 
-import { BaseSyntheticEvent, ChangeEvent, KeyboardEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { BaseSyntheticEvent, KeyboardEvent, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
-import type { Goal } from '@/types/Goal';
-import type { User } from '@/types/User';
 import Button from '../Buttons/Button';
 import { getRequest, postRequest } from '@/api/api';
 import Modal from '../Modal/Modal';
 import Link from 'next/link';
-import { signin } from '@/api/auth';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import MixedInput from '../Input/MixedInput';
@@ -65,7 +62,6 @@ export default function SideMenu() {
   return (
     <div>
       <Modal
-        modalTodoState
         modalType='create'
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

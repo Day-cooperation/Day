@@ -7,7 +7,7 @@ import { VALIDATE_INPUT_VALUE } from '@/constans';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, isAxiosError } from 'axios';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type SigninInput = {

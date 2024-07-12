@@ -8,36 +8,8 @@ import ModalBody from './ModalBody';
 import { NewTodo } from '@/types/Todo';
 import ModalFooter from './ModalFooter';
 
-const mock = [
-  {
-    id: 63,
-    teamId: '1-1',
-    userId: 6,
-    title: '오늘만 살자',
-    createdAt: '2024-07-04T17:18:06.259Z',
-    updatedAt: '2024-07-04T17:18:06.259Z',
-  },
-  {
-    id: 64,
-    teamId: '1-1',
-    userId: 6,
-    title: '내일도 살자',
-    createdAt: '2024-07-04T18:28:10.939Z',
-    updatedAt: '2024-07-04T18:28:10.939Z',
-  },
-  {
-    id: 65,
-    teamId: '1-1',
-    userId: 6,
-    title: '모레도 살자',
-    createdAt: '2024-07-04T18:28:41.146Z',
-    updatedAt: '2024-07-04T18:28:41.146Z',
-  },
-];
-
 type ModalProps = {
   modalType: 'create' | 'edit';
-  modalTodoState: boolean;
   items?: NewTodo;
   isOpen: boolean;
   onClose: () => void;

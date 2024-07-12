@@ -1,7 +1,6 @@
 'use client';
 
 import { NoteList } from '@/assets/svgs/NoteList';
-import { Kebab } from '@/assets/svgs/Kebab';
 import { Note } from '@/types/Note';
 import Popover from '../Popover/Popover';
 import { useState } from 'react';

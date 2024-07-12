@@ -4,8 +4,7 @@ import { ArrowRight, Rectangles } from '@/assets/svgs';
 import ListTodo from '../ListTodo/ListTodo';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { deleteRequest, getRequest, patchRequest } from '@/api/api';
-import CardGoal from '@/components/CardGoal/CardGoal';
-import { QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import Link from 'next/link';
 import { useState } from 'react';
@@ -53,7 +52,6 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
         isOpen={isModalOpen}
         modalType='edit'
         goalList={goalList}
-        modalTodoState
       />
       <div className='relative w-full md:max-w-[588px] h-[250px] bg-white rounded-xl border-1 border-slate-100 px-6 py-4 flex flex-col gap-4'>
         <div className='flex justify-between'>

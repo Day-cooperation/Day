@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteRequest, getRequest, patchRequest } from '@/api/api';
-import { ArrowRight, Flag, Kebab, Plus } from '@/assets/svgs';
+import { ArrowRight, Flag, Plus } from '@/assets/svgs';
 import { NoteAndPen } from '@/assets/svgs/NoteAndPen';
 import MixedInput from '@/components/Input/MixedInput';
 import ListTodo from '@/components/ListTodo/ListTodo';
@@ -112,7 +112,6 @@ export default function Goal() {
     <>
       {isModalOpen && (
         <Modal
-          modalTodoState
           isOpen={isModalOpen}
           modalType={modalType}
           onClose={() => setIsModalOpen(!isModalOpen)}

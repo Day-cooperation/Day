@@ -61,6 +61,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
     }
   };
 
+  const isMoreFive = () => todoList.length > 5 || doneList.length > 5;
   if (isLoading) return <h2>Loading...</h2>;
   if (error) return <h2>Error loading data</h2>;
   return (
@@ -74,7 +75,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
         />
       )}
       <div
-        className={`flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}
+        className={`flex w-full p-6 flex-col ${isMoreFive() ? 'h-full' : 'h-[310px]'}  gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}
       >
         <div className='flex flex-col gap-2'>
           <div className='flex justify-between'>
@@ -102,7 +103,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
             textValue={'아직 다 한 일이 없어요'}
           />
         </div>
-        {(todoList.length > 4 || todoList.length > 4) && (
+        {(todoList.length > 5 || doneList.length > 5) && (
           <div className='flex justify-center min-h-0'>
             <button
               className='flex items-center justify-center text-xs font-semibold py-1 gap-2 bg-white pr-[21px] pl-[36px] rounded-2xl'

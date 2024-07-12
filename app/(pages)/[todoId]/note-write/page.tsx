@@ -19,7 +19,7 @@ const INITIAL_VALUE = { todoId: null, title: '', content: '', linkUrl: '' };
 
 export default function Note() {
   const [hasNote, setHasNote] = useState(false);
-  const [inputValue, setInputvalue] = useState<NoteInputValue>(INITIAL_VALUE);
+  const [inputValue, setInputValue] = useState<NoteInputValue>(INITIAL_VALUE);
   const [disable, setDisable] = useState({ pullButton: false, pushButton: false });
 
   const pathId = usePathname().split('/')[1];
@@ -33,7 +33,7 @@ export default function Note() {
 
   const { mutate: editNote } = useMutation({
     mutationKey: ['patchNote'],
-    mutationFn: (noteValue: NoteInputValue) => patchRequest({ url: `notes/${pathId}`, data: noteValue }),
+    mutationFn: (noteValue: NoteInputValue) => patchRequest({ url: `notes/${todo.noteId}`, data: noteValue }),
   });
 
   const todo = todos?.data.todos.find((item: Todo) => Number(pathId) === item.id);
@@ -50,7 +50,7 @@ export default function Note() {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const name = e.target.name;
-    setInputvalue((prev) => ({ ...prev, [name]: e.target.value }));
+    setInputValue((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -96,7 +96,7 @@ export default function Note() {
 
       setDisable((prev) => ({ ...prev, pullButton: false }));
 
-      setInputvalue((prev) => ({
+      setInputValue((prev) => ({
         ...prev,
         title: savedData.title || '',
         content: savedData.content || '',
@@ -108,8 +108,8 @@ export default function Note() {
 
   useEffect(() => {
     setHasNote(!!todo?.noteId);
-    setInputvalue((prev) => ({ ...prev, todoId: todo?.id }));
-    setInputvalue((prev) => ({
+    setInputValue((prev) => ({ ...prev, todoId: todo?.id }));
+    setInputValue((prev) => ({
       ...prev,
       title: notes?.data.title ?? '',
       linkUrl: notes?.data.linkUrl ?? '',
@@ -121,7 +121,7 @@ export default function Note() {
 
   return (
     <main className='bg-white'>
-      <div className='pt-6 max-w-[793px] min-h-screen'>
+      <div className='pt-6 max-w-[793px] min-h-screen relative'>
         <form onSubmit={handleSubmit}>
           <div className='flex justify-between items-center mb-4'>
             <h1 className='text-lg font-semibold text-slate-900'>{noteHeader}</h1>

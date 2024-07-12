@@ -6,6 +6,7 @@ import { Checkbox } from '@nextui-org/react';
 import { useState } from 'react';
 import { Goal } from '@/assets/svgs';
 import Popover from '../Popover/Popover';
+import { useRouter } from 'next/navigation';
 
 type ListTodoProps = {
   todos: Todo[];
@@ -15,11 +16,13 @@ type ListTodoProps = {
 };
 
 export default function ListTodo({ todos = [], showGoal, displayTodoCount = 0, onButtonClick }: ListTodoProps) {
+  const router = useRouter();
   const [openPopupTodoId, setOpenPopupTodoId] = useState<number | null>(null);
   const todoList = displayTodoCount ? todos.slice(0, displayTodoCount) : todos.slice(0);
 
   const handleClick = (buttonType: ListTodoButtons, id: number) => {
     onButtonClick(buttonType, id);
+    if(buttonType === 'note write') router.push(`/note/${id}/write`)
   };
   return (
     <div className='-mt-0.5'>

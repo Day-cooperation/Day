@@ -35,7 +35,7 @@ export default function TodoList() {
     mutate: noteMutate,
     isPending,
   } = useMutation({
-    mutationKey: ['get-note'],
+    mutationKey: ['getNote'],
     mutationFn: (id) => getRequest({ url: `notes/${id}` }),
     onSuccess: () => {
       if (!noteRef.current) return;
@@ -46,14 +46,14 @@ export default function TodoList() {
   const mutation = useMutation({
     mutationFn: ({ id, done }: { id: number; done: boolean }) =>
       patchRequest({ url: `todos/${id}`, data: { done: done } }),
-    mutationKey: ['patch-done'],
+    mutationKey: ['patchDone'],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getTodos'] });
     },
   });
 
   const { mutate: deleteMutate } = useMutation({
-    mutationKey: ['delete-todo'],
+    mutationKey: ['deleteTodo'],
     mutationFn: (id: number) => deleteRequest({ url: `todos/${id}` }),
     onSuccess: () => {
       setConfirm({ message: '', setDeleteId: 0 });

@@ -23,7 +23,7 @@ export default function TodoList() {
   const noteRef = useRef<HTMLDialogElement>(null);
   const router = useRouter();
   const { data: todoList, isLoading } = useQuery({
-    queryKey: ['get-todos'],
+    queryKey: ['getTodos'],
     queryFn: () => getRequest({ url: 'todos' }),
   });
   const { data: goalList } = useQuery({
@@ -120,7 +120,7 @@ export default function TodoList() {
       <NoteRead dialogRef={noteRef} data={noteData?.data} />
       <Modal modalType={modalType} isOpen={isOpen} items={todo} onClose={onClose} goalList={goalList?.data.goals} />
       <div className='w-full flex justify-center bg-slate-100'>
-        <div className='w-full mx-auto max-w-[792px] flex flex-col gap-4 '>
+        <div className='w-full max-w-[792px] flex flex-col gap-4'>
           <div className='flex justify-between mt-6'>
             <h1 className='text-lg font-semibold text-slate-900'>{pageTitle}</h1>
             <button

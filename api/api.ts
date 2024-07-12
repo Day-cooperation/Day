@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { instance } from './axios';
 
-type BASIC_URL = 'goals' | 'notes' | 'todos';
+type BASIC_URL = 'goals' | 'notes' | 'todos' | string;
 type GET_URL = BASIC_URL | 'todos/progress' | 'user';
 
 interface GetRequest {

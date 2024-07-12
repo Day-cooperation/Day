@@ -47,3 +47,10 @@ export type NoteRead = {
   userId: number;
   teamId: string;
 };
+
+export type NoteInputValue = {
+  todoId?: number | null;
+  title: string;
+  content: string;
+  linkUrl?: string;
+};

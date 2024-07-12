@@ -1,6 +1,7 @@
 'use client';
 import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, Flag } from '@/assets/svgs/index';
 
+import Cookies from 'js-cookie';
 import { BaseSyntheticEvent, KeyboardEvent, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
 import Button from '../Buttons/Button';
@@ -59,6 +60,12 @@ export default function SideMenu() {
     }
   };
 
+  const handleLogoutClick = () => {
+    Cookies.remove('accessToken');
+    Cookies.remove('refreshToken');
+    router.push('/signin');
+  };
+
   return (
     <div>
       <Modal
@@ -88,7 +95,11 @@ export default function SideMenu() {
                     <span className='text-slate-800 text-xs md:text-sm font-semibold'>{userData?.data.name}</span>
                     <span className='text-slate-600 text-xs md:text-sm font-medium'>{userData?.data.email}</span>
                   </div>
-                  <button type='button' className='text-slate-400 text-xs font-normal md:text-left'>
+                  <button
+                    type='button'
+                    className='text-slate-400 text-xs font-normal md:text-left'
+                    onClick={handleLogoutClick}
+                  >
                     로그아웃
                   </button>
                 </div>

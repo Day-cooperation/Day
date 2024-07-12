@@ -13,7 +13,7 @@ interface GetRequest {
 export const getRequest = async ({ url, params }: GetRequest) => {
   try {
     const response = await instance.get(url, { params });
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);
   }
@@ -28,7 +28,7 @@ interface PostRequest {
 export const postRequest = async ({ url, data }: PostRequest) => {
   try {
     const response = await instance.post(url, data);
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);
   }
@@ -44,7 +44,7 @@ interface PatchRequest {
 export const patchRequest = async ({ url, params, data }: PatchRequest) => {
   try {
     const response = await instance.patch(url, data, { params });
-    return response;
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       console.error('Axios error:', error.message);
@@ -63,7 +63,7 @@ interface DeleteRequest {
 export const deleteRequest = async ({ url, params }: DeleteRequest) => {
   try {
     const response = await instance.delete(url, { params });
-    return response;
+    return response.data;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);
   }

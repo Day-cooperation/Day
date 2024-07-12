@@ -92,7 +92,6 @@ export default function Goal() {
     <>
       {isModalOpen && (
         <Modal
-          modalTodoState
           isOpen={isModalOpen}
           modalType={modalType}
           onClose={() => setIsModalOpen(!isModalOpen)}

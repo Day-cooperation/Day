@@ -119,9 +119,9 @@ export default function TodoList() {
       />
       <NoteRead dialogRef={noteRef} data={noteData?.data} />
       <Modal modalType={modalType} isOpen={isOpen} items={todo} onClose={onClose} goalList={goalList?.data.goals} />
-      <div className='w-full flex justify-center bg-slate-100'>
-        <div className='w-full max-w-[792px] flex flex-col gap-4'>
-          <div className='flex justify-between mt-6'>
+      <div className='w-full p-4 md:p-6 bg-slate-100 h-full'>
+        <div className='w-full max-w-[792px] flex flex-col gap-4 h-full'>
+          <div className='flex justify-between'>
             <h1 className='text-lg font-semibold text-slate-900'>{pageTitle}</h1>
             <button
               className='flex gap-1 items-center justify-center text-sm font-semibold text-blue-500'
@@ -134,7 +134,8 @@ export default function TodoList() {
               할일 추가
             </button>
           </div>
-          <div className='flex flex-col gap-4 bg-white w-full min-h-[988px] p-6 rounded-xl mb-6'>
+          
+          <div className='flex flex-col gap-4 bg-white w-full h-[calc(100vh-124px)] md:h-full p-6 rounded-xl'>
             <Filter handleClick={handleFilterClick} />
             <ListTodo todos={todos} showGoal={true} onButtonClick={handleTodoTypeClick} />
           </div>

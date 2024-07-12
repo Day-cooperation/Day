@@ -44,7 +44,7 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
             </div>
             <Popover
               isGoal
-              goal
+              noteId={true}
               item={item}
               handlePopupClick={handlePopupClick}
               openPopupId={popupOpen}

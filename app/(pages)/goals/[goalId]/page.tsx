@@ -1,7 +1,7 @@
 'use client';
 
 import { deleteRequest, getRequest, patchRequest } from '@/api/api';
-import { ArrowRight, Flag, Kebab, Plus } from '@/assets/svgs';
+import { ArrowRight, Flag, Plus } from '@/assets/svgs';
 import { NoteAndPen } from '@/assets/svgs/NoteAndPen';
 import ListTodo from '@/components/ListTodo/ListTodo';
 import Modal from '@/components/Modal/Modal';
@@ -113,7 +113,7 @@ export default function Goal() {
               </div>
               <Popover
                 isGoal={true}
-                goal={false}
+                noteId={false}
                 item={goalResponse?.data || []}
                 handlePopupClick={handlePopupClick}
                 openPopupId={popupOpen}

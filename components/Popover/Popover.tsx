@@ -12,10 +12,10 @@ type PopoverProps = {
   openPopupId: number | null;
   handlePopupClick: (buttonType: ListTodoButtons, id: number) => void;
   setOpenPopupId: Dispatch<number | null>;
-  goal?: boolean;
+  noteId?: boolean;
 };
 
-export default function Popover({ isGoal, item, openPopupId, handlePopupClick, setOpenPopupId, goal }: PopoverProps) {
+export default function Popover({ isGoal, item, openPopupId, handlePopupClick, setOpenPopupId, noteId }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function Popover({ isGoal, item, openPopupId, handlePopupClick, s
       </PopoverTrigger>
       <PopoverContent>
         <div className='flex flex-col text-sm text-slate-700' ref={popoverRef}>
-          {goal && (
+          {noteId && (
             <button
               className='px-4 pt-2 pb-1.5 rounded-lg focus-visible:outline-none hover:bg-slate-200'
               onClick={() => {

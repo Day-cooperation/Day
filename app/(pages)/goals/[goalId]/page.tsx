@@ -143,7 +143,7 @@ export default function Goal() {
               </div>
               <Popover
                 isGoal={true}
-                goal={false}
+                noteId={false}
                 item={goalResponse?.data || []}
                 handlePopupClick={handlePopupClick}
                 openPopupId={popupOpen}

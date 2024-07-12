@@ -1,7 +1,7 @@
 'use client';
 
-import { ListTodoButtons, Todo } from '@/types/Todo';
-import { useEffect, useState } from 'react';
+import { Todo } from '@/types/Todo';
+import { useState } from 'react';
 import { IcArrowDown, Plus } from '@/assets/svgs';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import ListTodoProgress from './ListTodoProgress';
@@ -10,7 +10,7 @@ import { deleteRequest, getRequest, patchRequest } from '@/api/api';
 import { Goal } from '@/types/Goal';
 import Modal from '../Modal/Modal';
 
-export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goal[] }) {
+export default function CardGoal({ goal, index }: { goal: Goal; index: number }) {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'create' | 'edit'>('create');
@@ -25,11 +25,6 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
   });
   const todoList = data?.data.todos.filter((todo: Todo) => todo.done === false);
   const doneList = data?.data.todos.filter((todo: Todo) => todo.done === true);
-  // const [todoList, setTodoList] = useState([]);
-  // const { mutate } = useMutation({
-  //   mutationKey: ['todoList'],
-  //   mutationFn: ({ id, data }) => patchRequest({ url: 'todos', params: id, data }),
-  // });
   const [isMore, setIsMore] = useState(false);
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
@@ -53,7 +48,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
   };
 
   const handleButtonClick = (type: string, id: number) => {
-    const selecteItem = data?.data.todos.filter((todo: Todo) => todo.id === id)[0];
+    const selecteItem = data?.data.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
@@ -66,9 +61,8 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
     }
   };
 
-  if (isLoading || ProgressisLoading) return <h2>Loading...</h2>;
+  if (isLoading) return <h2>Loading...</h2>;
   if (error) return <h2>Error loading data</h2>;
-
   return (
     <>
       {isModalOpen && (
@@ -76,10 +70,12 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
           isOpen={isModalOpen}
           modalType={modalType}
           onClose={() => setIsModalOpen(!isModalOpen)}
-          goalList={goalList}
+          goalList={[goal]}
         />
       )}
-      <div className='flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] [&:nth-child(3)]:col-span-2'>
+      <div
+        className={`flex w-full p-6 flex-col gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}
+      >
         <div className='flex flex-col gap-2'>
           <div className='flex justify-between'>
             <h1 className='text-lg font-bold'>{goal.title}</h1>
@@ -88,7 +84,7 @@ export default function CardGoal({ goal, goalList }: { goal: Goal; goalList: Goa
               할일 추가
             </button>
           </div>
-          <ProgressBar value={progressData?.data.progress || 0} />
+          <ProgressBar value={ProgressisLoading ? 0 : progressData?.data.progress} />
         </div>
         <div className='grid grid-cols-2 gap-6 '>
           <ListTodoProgress

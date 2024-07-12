@@ -21,16 +21,17 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
   });
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    // 성공했을때 querykey 초기화 시켜줘야하나??
-    // onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todoList'] }),
-  });
-  const { mutate: deleteTodoMutate, isPending } = useMutation({
-    mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todoList'] }),
+  });
+  const { mutate: deleteTodoMutate } = useMutation({
+    mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todoList'] });
+    },
   });
 
   const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = data?.data.todos.filter((todo: Todo) => todo.id === id)[0];
+    const selecteItem = data?.data.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
@@ -42,7 +43,7 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
     }
   };
 
-  if (isLoading || isPending) return <h2>Loading...</h2>;
+  if (isLoading) return <h2>Loading...</h2>;
 
   return (
     <>
@@ -60,7 +61,7 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
             <ArrowRight />
           </Link>
         </div>
-        {data?.data.todos ? (
+        {data?.data.todos.length ? (
           <div className='h-[154px] overflow-y-auto pt-1'>
             <ListTodo showGoal todos={data?.data.todos} onButtonClick={handleButtonClick}></ListTodo>
           </div>

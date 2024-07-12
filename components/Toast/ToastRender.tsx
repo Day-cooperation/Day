@@ -15,13 +15,11 @@ export default function ToastRender() {
   }, []);
   return (
     <>
-      <div className='flex w-full'>
+      <div className='flex absolute left-0 right-0 justify-start rounded-[28px] py-[10px] px-6 bg-blue-50 text-blue-500'>
         <div>
           <Checked />
         </div>
-        <div>
-          <span>임시 저장이 완료되었습니다</span>
-        </div>
+        <span>임시 저장이 완료되었습니다</span>
         <div>ㆍ</div>
         <span>{`${count}초전`}</span>
       </div>

@@ -48,7 +48,7 @@ export default function TodoList() {
       patchRequest({ url: `todos/${id}`, data: { done: done } }),
     mutationKey: ['patch-done'],
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-todos'] });
+      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
     },
   });
 
@@ -57,7 +57,7 @@ export default function TodoList() {
     mutationFn: (id: number) => deleteRequest({ url: `todos/${id}` }),
     onSuccess: () => {
       setConfirm({ message: '', setDeleteId: 0 });
-      queryClient.invalidateQueries({ queryKey: ['get-todos'] });
+      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
     },
   });
 

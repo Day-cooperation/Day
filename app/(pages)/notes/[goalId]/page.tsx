@@ -20,7 +20,7 @@ export default function NoteList() {
 
   if (isLoading) return <h2>loading</h2>;
   return (
-    <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[792px]'>
+    <div className='p-4 md:p-6 flex flex-col h-full gap-4 max-w-[792px]'>
       <h2 className='text-slate-900 text-lg font-semibold '>노트 모아보기</h2>
       <div className='flex items-center gap-2 py-[14px] px-6 bg-white rounded-xl border border-slate-100'>
         <div className='p-[4.8px] bg-black rounded-lg'>
@@ -31,7 +31,7 @@ export default function NoteList() {
       {noteList?.data.notes.length ? (
         <CardNote noteList={noteList?.data.notes || []} />
       ) : (
-        <div className='flex flex-col grow justify-center items-center'>
+        <div className='flex flex-col h-[calc(100vh-178px)] md:h-full justify-center items-center'>
           <p className='text-slate-500 text-sm'>아직 등록된 노트가 없어요</p>
         </div>
       )}

@@ -23,11 +23,16 @@ export default function Goal() {
 
   const { goalId } = useParams();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
+  const [goalTitle, setGoalTitle] = useState('');
   const { data: goalResponse } = useQuery({
     queryKey: ['goal', goalId],
-    queryFn: () => getRequest({ url: `goals/${goalId}` }),
+    queryFn: async () => {
+      const response = await getRequest({ url: `goals/${goalId}` });
+      setGoalTitle(response?.data.title);
+
+      return response;
+    },
   });
-  const [goalTitle, setGoalTitle] = useState(goalResponse?.data.title);
   const { data: todoListResponse } = useQuery({
     queryKey: ['todoList', goalId],
     queryFn: () => getRequest({ url: 'todos', params: { goalId } }),

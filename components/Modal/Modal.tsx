@@ -47,17 +47,17 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
     mutationKey: ['post-newTodo'],
     mutationFn: (todoPostData: NewTodo) => postRequest({ url: 'todos', data: todoPostData }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-todos'] });
+      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
       setData(INITIAL_DATA);
       setChips({ file: false, link: false });
     },
   });
 
   const { mutate: editTodoMutate } = useMutation({
-    mutationKey: ['post-editTodo'],
+    mutationKey: ['postEditTodo'],
     mutationFn: (todoPostData: NewTodo) => patchRequest({ url: `todos/${items?.id}`, data: todoPostData }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['get-todos'] });
+      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
       setData(INITIAL_DATA);
       setChips({ file: false, link: false });
     },

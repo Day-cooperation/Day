@@ -3,18 +3,18 @@
 import TodoListButtons from './TodoListButtons';
 import { Todo, ListTodoButtons } from '@/types/Todo';
 import { Checkbox } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Goal } from '@/assets/svgs';
 import Popover from '../Popover/Popover';
 
 type ListTodoProps = {
   todos: Todo[];
   onButtonClick: (buttonType: ListTodoButtons, id: number) => void;
-  showGoal: boolean;
+  showGoal?: boolean;
   displayTodoCount?: number;
 };
 
-export default function ListTodo({ todos = [], showGoal = true, displayTodoCount = 0, onButtonClick }: ListTodoProps) {
+export default function ListTodo({ todos = [], showGoal, displayTodoCount = 0, onButtonClick }: ListTodoProps) {
   const [openPopupTodoId, setOpenPopupTodoId] = useState<number | null>(null);
   const todoList = displayTodoCount ? todos.slice(0, displayTodoCount) : todos.slice(0);
 

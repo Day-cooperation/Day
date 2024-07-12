@@ -3,7 +3,7 @@
 import TodoListButtons from './TodoListButtons';
 import { Todo, ListTodoButtons } from '@/types/Todo';
 import { Checkbox } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Goal } from '@/assets/svgs';
 import Popover from '../Popover/Popover';
 

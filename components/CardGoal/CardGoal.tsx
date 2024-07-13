@@ -5,38 +5,33 @@ import { useState } from 'react';
 import { IcArrowDown, Plus } from '@/assets/svgs';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import ListTodoProgress from './ListTodoProgress';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteRequest, getRequest, patchRequest } from '@/api/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { deleteRequest, patchRequest } from '@/api/api';
 import { Goal } from '@/types/Goal';
 import Modal from '../Modal/Modal';
+import { queryKey, useGetQuery } from '@/queries/query';
 
 export default function CardGoal({ goal, index }: { goal: Goal; index: number }) {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<'create' | 'edit'>('create');
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['todoList', goal.id],
-    queryFn: () => getRequest({ url: `todos`, params: { goalId: goal.id } }),
-  });
+  const { data, isLoading, error } = useGetQuery.todo(goal.id);
 
-  const { data: progressData, isLoading: ProgressisLoading } = useQuery({
-    queryKey: ['goalProgress', goal.id],
-    queryFn: () => getRequest({ url: 'todos/progress', params: { goalId: goal.id } }),
-  });
-  const todoList = data?.data.todos.filter((todo: Todo) => todo.done === false);
-  const doneList = data?.data.todos.filter((todo: Todo) => todo.done === true);
+  const { data: progressData, isLoading: ProgressisLoading } = useGetQuery.progress(goal.id);
+  const todoList = data?.todos.filter((todo: Todo) => todo.done === false);
+  const doneList = data?.todos.filter((todo: Todo) => todo.done === true);
   const [isMore, setIsMore] = useState(false);
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todoList', goal.id] });
-      queryClient.invalidateQueries({ queryKey: ['goalProgress', goal.id] });
+      queryClient.invalidateQueries(queryKey.todo(goal.id));
+      queryClient.invalidateQueries(queryKey.progress(goal.id));
     },
   });
 
   const { mutate: deleteTodoMutate } = useMutation({
     mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todoList'] }),
+    onSuccess: () => queryClient.invalidateQueries(queryKey.todo()),
   });
   const handleMoreClick = () => {
     setIsMore(!isMore);
@@ -48,7 +43,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
   };
 
   const handleButtonClick = (type: string, id: number) => {
-    const selecteItem = data?.data.todos.find((todo: Todo) => todo.id === id);
+    const selecteItem = data?.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
@@ -85,7 +80,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
               할일 추가
             </button>
           </div>
-          <ProgressBar value={ProgressisLoading ? 0 : progressData?.data.progress} />
+          <ProgressBar value={ProgressisLoading ? 0 : progressData?.progress} />
         </div>
         <div className='grid grid-cols-2 gap-6 '>
           <ListTodoProgress

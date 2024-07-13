@@ -1,17 +1,13 @@
 'use client';
-import { getRequest } from '@/api/api';
 import CardGoal from '@/components/CardGoal/CardGoal';
 import { Goal } from '@/types/Goal';
-import { useQuery } from '@tanstack/react-query';
 
 import { Flag } from '@/assets/svgs';
 import RecentlyTodo from '@/components/RecentlyTodo/RecentlyTodo';
+import { useGetQuery } from '@/queries/query';
 
 export default function Dashboard() {
-  const { data: goalListReseponse, isLoading } = useQuery({
-    queryKey: ['goalList'],
-    queryFn: () => getRequest({ url: 'goals' }),
-  });
+  const { data: goalListReseponse, isLoading } = useGetQuery.goal();
 
   if (isLoading) return <h1>loading...</h1>;
   return (
@@ -20,7 +16,7 @@ export default function Dashboard() {
       <main className=' flex flex-col md:gap-6 gap-4'>
         <div className='flex flex-col md:flex-row md:gap-6 gap-4'>
           <div className='w-full'>
-            <RecentlyTodo goalList={goalListReseponse?.data.goals} />
+            <RecentlyTodo goalList={goalListReseponse.goals} />
           </div>
           <div className=' h-[250px] w-full md:max-w-[588px] bg-blue-500 rounded-xl'></div>
         </div>
@@ -32,7 +28,7 @@ export default function Dashboard() {
             <h2 className='text-slate-800 text-lg font-semibold'>목표 별 할 일</h2>
           </div>
           <div className='lg:grid lg:grid-cols-2 gap-4 flex flex-col'>
-            {goalListReseponse?.data.goals.map((goal: Goal, index: number) => {
+            {goalListReseponse.goals.map((goal: Goal, index: number) => {
               if (index >= 3) return;
               return <CardGoal key={goal.id} goal={goal} index={index} />;
             })}

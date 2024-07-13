@@ -9,6 +9,7 @@ import { ListTodoButtons } from '@/types/Todo';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deleteRequest } from '@/api/api';
 import { useRouter } from 'next/navigation';
+import { queryKey } from '@/queries/query';
 
 export default function CardNote({ noteList }: { noteList: Note[] }) {
   const router = useRouter();
@@ -17,7 +18,7 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
   const { mutate: deleteNoteMutate } = useMutation({
     mutationFn: (noteId: number) => deleteRequest({ url: `notes/${noteId}` }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['noteList'] });
+      queryClient.invalidateQueries(queryKey.note(noteList[0].goal.id));
     },
   });
 

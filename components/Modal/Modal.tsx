@@ -11,6 +11,7 @@ import { convertTodoToFormdata } from '@/utils/convertTodoToFormdata';
 import { fileUpload } from '@/api/fileUpload';
 import { Goal } from '@/types/Goal';
 import { patchRequest, postRequest } from '@/api/api';
+import { queryKey } from '@/queries/query';
 
 type ModalProps = {
   modalType: 'create' | 'edit';
@@ -47,8 +48,7 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
     mutationKey: ['post-newTodo'],
     mutationFn: (todoPostData: NewTodo) => postRequest({ url: 'todos', data: todoPostData }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
-      queryClient.invalidateQueries({ queryKey: ['todoList'] });
+      queryClient.invalidateQueries(queryKey.todo());
       setData(INITIAL_DATA);
       setChips({ file: false, link: false });
     },
@@ -58,7 +58,7 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
     mutationKey: ['postEditTodo'],
     mutationFn: (todoPostData: NewTodo) => patchRequest({ url: `todos/${items?.id}`, data: todoPostData }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
+      queryClient.invalidateQueries(queryKey.todo());
       setData(INITIAL_DATA);
       setChips({ file: false, link: false });
     },

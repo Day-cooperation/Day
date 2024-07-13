@@ -5,20 +5,21 @@ import Cookies from 'js-cookie';
 import { BaseSyntheticEvent, KeyboardEvent, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
 import Button from '../Buttons/Button';
-import { getRequest, postRequest } from '@/api/api';
+import { postRequest } from '@/api/api';
 import Modal from '../Modal/Modal';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MixedInput from '../Input/MixedInput';
+import { queryKey, useGetQuery } from '@/queries/query';
 
 export default function SideMenu() {
   const queryClient = useQueryClient();
-  const { data: userData } = useQuery({ queryKey: ['user'], queryFn: () => getRequest({ url: 'user' }) });
-  const { data } = useQuery({ queryKey: ['goalList'], queryFn: () => getRequest({ url: 'goals' }) });
+  const { data: userData } = useGetQuery.user();
+  const { data } = useGetQuery.goal();
   const { mutate: createGoalMutation } = useMutation({
     mutationFn: (input: string) => postRequest({ url: 'goals', data: { title: input } }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['goalList'] }),
+    onSuccess: () => queryClient.invalidateQueries(queryKey.goal()),
   });
   const [isOpen, setIsOpen] = useState(true);
   const [isNewGoalInputActive, setIsNewGoalInputActive] = useState(false);
@@ -26,7 +27,7 @@ export default function SideMenu() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('DashBoard');
   const router = useRouter();
-
+  const { data: response } = useGetQuery.note(68, null);
   const toggleSideMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -82,12 +83,7 @@ export default function SideMenu() {
 
   return (
     <div>
-      <Modal
-        modalType='create'
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        goalList={data?.data.goals}
-      />
+      <Modal modalType='create' isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} goalList={data?.goals} />
       {isOpen ? (
         <>
           <div className='hidden z-[11] md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black'></div>
@@ -106,8 +102,8 @@ export default function SideMenu() {
                 <Profile className='h-8 w-8 md:h-16 md:w-16 shrink-0' />
                 <div className='flex md:flex-col md:gap-2 w-full justify-between items-end md:items-start'>
                   <div className='flex flex-col'>
-                    <span className='text-slate-800 text-xs md:text-sm font-semibold'>{userData?.data.name}</span>
-                    <span className='text-slate-600 text-xs md:text-sm font-medium'>{userData?.data.email}</span>
+                    <span className='text-slate-800 text-xs md:text-sm font-semibold'>{userData?.name}</span>
+                    <span className='text-slate-600 text-xs md:text-sm font-medium'>{userData?.email}</span>
                   </div>
                   <button
                     type='button'
@@ -178,7 +174,7 @@ export default function SideMenu() {
                 </div>
               </div>
               <div className='relative max-h-[calc(100vh-283px)] md:max-h-[calc(100vh-430px)] overflow-y-auto'>
-                <TabSideMenu goalList={data?.data.goals} handleGoalClick={handleGoalClick} />
+                <TabSideMenu goalList={data?.goals} handleGoalClick={handleGoalClick} />
                 <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/50 to-white/100 pointer-events-none' />
               </div>
               {/* 테블릿 ~ : 목표 버튼  */}

@@ -4,34 +4,30 @@ import { ArrowRight, Rectangles } from '@/assets/svgs';
 import ListTodo from '../ListTodo/ListTodo';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { deleteRequest, getRequest, patchRequest } from '@/api/api';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import Link from 'next/link';
 import { useState } from 'react';
 import Modal from '../Modal/Modal';
 import { Goal } from '@/types/Goal';
+import { queryKey, useGetQuery } from '@/queries/query';
 
 export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['todoList'],
-    queryFn: () => getRequest({ url: 'todos' }),
-  });
+  const { data, isLoading } = useGetQuery.todo();
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todoList'] }),
+    onSuccess: () => queryClient.invalidateQueries(queryKey.todo()),
   });
   const { mutate: deleteTodoMutate } = useMutation({
     mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todoList'] });
-    },
+    onSuccess: () => queryClient.invalidateQueries(queryKey.todo()),
   });
 
   const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = data?.data.todos.find((todo: Todo) => todo.id === id);
+    const selecteItem = data?.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
@@ -61,9 +57,9 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
             <ArrowRight />
           </Link>
         </div>
-        {data?.data.todos.length ? (
+        {data?.todos.length ? (
           <div className='h-[154px] overflow-y-auto pt-1'>
-            <ListTodo showGoal todos={data?.data.todos} onButtonClick={handleButtonClick}></ListTodo>
+            <ListTodo showGoal todos={data?.todos} onButtonClick={handleButtonClick}></ListTodo>
           </div>
         ) : (
           <div className='h-[154px] flex items-center justify-center'>

@@ -7,10 +7,10 @@ interface Signin {
 }
 
 export const signin = async (data: Signin) => {
-  const response = await instance.post('auth/login', data);
-  if (response.data.accessToken && typeof document !== 'undefined') {
-    Cookies.set('accessToken', response.data.accessToken);
-    Cookies.set('refreshToken', response.data.refreshToken);
+  const { data: response } = await instance.post('auth/login', data);
+  if (response.accessToken && typeof document !== 'undefined') {
+    Cookies.set('accessToken', response.accessToken);
+    Cookies.set('refreshToken', response.refreshToken);
   }
   return response;
 };
@@ -22,10 +22,10 @@ interface Signup {
 }
 
 export const signup = async (data: Signup) => {
-  const response = await instance.post('user', data);
-  if (response.data.accessToken && typeof document !== 'undefined') {
-    Cookies.set('accessToken', response.data.accessToken);
-    Cookies.set('refreshToken', response.data.refreshToken);
+  const { data: response } = await instance.post('user', data);
+  if (response.accessToken && typeof document !== 'undefined') {
+    Cookies.set('accessToken', response.accessToken);
+    Cookies.set('refreshToken', response.refreshToken);
   }
   return response;
 };

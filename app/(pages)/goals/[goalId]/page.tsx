@@ -8,8 +8,9 @@ import ListTodo from '@/components/ListTodo/ListTodo';
 import Modal from '@/components/Modal/Modal';
 import Popover from '@/components/Popover/Popover';
 import ProgressBar from '@/components/ProgressBar/ProgressBar';
+import { queryKey, useGetQuery } from '@/queries/query';
 import { ListTodoButtons, Todo } from '@/types/Todo';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { KeyboardEvent, useState } from 'react';
@@ -24,23 +25,9 @@ export default function Goal() {
   const { goalId } = useParams();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
   const [goalTitle, setGoalTitle] = useState('');
-  const { data: goalResponse } = useQuery({
-    queryKey: ['goal', goalId],
-    queryFn: async () => {
-      const response = await getRequest({ url: `goals/${goalId}` });
-      setGoalTitle(response?.data.title);
-
-      return response;
-    },
-  });
-  const { data: todoListResponse } = useQuery({
-    queryKey: ['todoList', goalId],
-    queryFn: () => getRequest({ url: 'todos', params: { goalId } }),
-  });
-  const { data: goalProgress, isLoading } = useQuery({
-    queryKey: ['goalProgress', goalId],
-    queryFn: () => getRequest({ url: 'todos/progress', params: { goalId } }),
-  });
+  const { data: goalResponse } = useGetQuery.goal();
+  const { data: todoListResponse } = useGetQuery.todo(Number(goalId));
+  const { data: goalProgress, isLoading } = useGetQuery.progress(Number(goalId));
 
   const handleAddTodo = () => {
     setModalType('create');
@@ -50,14 +37,14 @@ export default function Goal() {
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todoList', goalId] });
-      queryClient.invalidateQueries({ queryKey: ['goalProgress', goalId] });
+      queryClient.invalidateQueries(queryKey.todo(Number(goalId)));
+      queryClient.invalidateQueries(queryKey.progress(Number(goalId)));
     },
   });
 
   const { mutate: deleteTodoMutate } = useMutation({
     mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todoList'] }),
+    onSuccess: () => queryClient.invalidateQueries(queryKey.todo()),
   });
 
   const { mutate: deleteGoalMutate } = useMutation({
@@ -70,11 +57,11 @@ export default function Goal() {
 
   const { mutate: updateGoalMutate } = useMutation({
     mutationFn: (input: string) => patchRequest({ url: `goals/${goalId}`, data: { title: input } }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['goal', goalId] }),
+    onSuccess: () => queryClient.invalidateQueries(queryKey.goal(Number(goalId))),
   });
 
   const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = todoListResponse?.data.todos.filter((todo: Todo) => todo.id === id)[0];
+    const selecteItem = todoListResponse?.todos.filter((todo: Todo) => todo.id === id)[0];
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
@@ -109,8 +96,8 @@ export default function Goal() {
     }
   };
 
-  const todoList = todoListResponse?.data.todos.filter((todo: Todo) => todo.done === false) || [];
-  const doneList = todoListResponse?.data.todos.filter((todo: Todo) => todo.done === true) || [];
+  const todoList = todoListResponse?.todos.filter((todo: Todo) => todo.done === false) || [];
+  const doneList = todoListResponse?.todos.filter((todo: Todo) => todo.done === true) || [];
 
   return (
     <>
@@ -119,7 +106,7 @@ export default function Goal() {
           isOpen={isModalOpen}
           modalType={modalType}
           onClose={() => setIsModalOpen(!isModalOpen)}
-          goalList={[goalResponse?.data]}
+          goalList={[goalResponse]}
         />
       )}
       <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px] '>
@@ -142,14 +129,14 @@ export default function Goal() {
                       handleKeyDown={handleKeydownInput}
                     />
                   ) : (
-                    <span className='text-slate-800 text-lg font-semibold'>{goalResponse?.data.title}</span>
+                    <span className='text-slate-800 text-lg font-semibold'>{goalResponse?.title}</span>
                   )}
                 </div>
               </div>
               <Popover
                 isGoal={true}
                 noteId={false}
-                item={goalResponse?.data || []}
+                item={goalResponse || []}
                 handlePopupClick={handlePopupClick}
                 openPopupId={popupOpen}
                 setOpenPopupId={setPopupOpen}
@@ -158,7 +145,7 @@ export default function Goal() {
             <div className='flex flex-col gap-2 '>
               <span className='text-slate-900 text-xs font-semibold'>Progress</span>
               <div className='-mx-2'>
-                <ProgressBar value={isLoading ? 0 : goalProgress?.data.progress} />
+                <ProgressBar value={isLoading ? 0 : goalProgress?.progress} />
               </div>
             </div>
           </div>

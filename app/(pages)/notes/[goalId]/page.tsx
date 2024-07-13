@@ -1,22 +1,14 @@
 'use client';
 
-import { getRequest } from '@/api/api';
 import { Flag } from '@/assets/svgs';
 import CardNote from '@/components/CardNote/CardNote';
-import { useQuery } from '@tanstack/react-query';
+import { useGetQuery } from '@/queries/query';
 import { useParams } from 'next/navigation';
 
 export default function NoteList() {
   const { goalId } = useParams();
-  const { data: goalResponse } = useQuery({
-    queryKey: ['goal', goalId],
-    queryFn: () => getRequest({ url: `goals/${goalId}` }),
-  });
-
-  const { data: noteList, isLoading } = useQuery({
-    queryKey: ['noteList'],
-    queryFn: () => getRequest({ url: 'notes', params: { goalId } }),
-  });
+  const { data: goalResponse } = useGetQuery.goal(Number(goalId));
+  const { data: noteResponse, isLoading } = useGetQuery.note(Number(goalId), null);
 
   if (isLoading) return <h2>loading</h2>;
   return (
@@ -26,10 +18,10 @@ export default function NoteList() {
         <div className='p-[4.8px] bg-black rounded-lg'>
           <Flag fill='white' width={14} height={14} />
         </div>
-        <span className='text-slate-800 text-sm font-semibold'>{goalResponse?.data.title}</span>
+        <span className='text-slate-800 text-sm font-semibold'>{goalResponse?.title}</span>
       </div>
-      {noteList?.data.notes.length ? (
-        <CardNote noteList={noteList?.data.notes || []} />
+      {noteResponse?.notes?.length ? (
+        <CardNote noteList={noteResponse?.notes || []} />
       ) : (
         <div className='flex flex-col h-[calc(100vh-178px)] md:h-full justify-center items-center'>
           <p className='text-slate-500 text-sm'>아직 등록된 노트가 없어요</p>

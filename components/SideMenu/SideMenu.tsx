@@ -2,7 +2,7 @@
 import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, Flag } from '@/assets/svgs/index';
 
 import Cookies from 'js-cookie';
-import { BaseSyntheticEvent, KeyboardEvent, useState } from 'react';
+import { BaseSyntheticEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
 import Button from '../Buttons/Button';
 import { postRequest } from '@/api/api';
@@ -30,27 +30,22 @@ export default function SideMenu() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('DashBoard');
   const router = useRouter();
+  const sideRef = useRef<HTMLDivElement>(null);
   const toggleSideMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleGoalClick = (id: number) => {
-    setCurrentTab('목표');
-    if (typeof window !== 'undefined') {
-      if (window.innerWidth < 1024) {
-        toggleSideMenu();
-      }
-    }
-    router.push(`/goals/${id}`);
-  };
+  const handleMenuClick = (id?: number) => {
+    if (id) setCurrentTab('목표');
+    else setCurrentTab('대시보드');
 
-  const handleDashboardClick = () => {
-    setCurrentTab('대시보드');
     if (typeof window !== 'undefined') {
       if (window.innerWidth < 1024) {
         toggleSideMenu();
       }
     }
+    
+    if (id) router.push(`/goals/${id}`);
   };
 
   const handleNewTodoClick = () => {
@@ -83,13 +78,26 @@ export default function SideMenu() {
     router.push('/signin');
   };
 
+  useEffect(() => {
+    const outsideClick = (e: MouseEvent) => {
+      if (typeof window !== 'undefined') {
+        if (isOpen && !sideRef.current?.contains(e.target as Node) && window.innerWidth < 1024) {
+          toggleSideMenu();
+        }
+      }
+    };
+    document.addEventListener('mousedown', outsideClick);
+
+    return () => document.removeEventListener('mousedown', outsideClick);
+  }, [isOpen]);
   return (
     <div>
-      <Modal modalType='create' isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} goalList={data?.goals} />
+      <Modal modalType='create' isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       {isOpen ? (
         <>
           <div className='hidden z-[11] md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black'></div>
           <div
+            ref={sideRef}
             className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isOpen ? '' : 'hidden'}`}
           >
             <div className='p-6 border-b'>
@@ -132,7 +140,7 @@ export default function SideMenu() {
                 <div className='h-6 w-6 flex items-center justify-center'>
                   <Home />
                 </div>
-                <Link href='/dashboard' onClick={handleDashboardClick}>
+                <Link href='/dashboard' onClick={() => handleMenuClick()}>
                   대시보드
                 </Link>
               </div>
@@ -176,7 +184,7 @@ export default function SideMenu() {
                 </div>
               </div>
               <div className='relative max-h-[calc(100vh-283px)] md:max-h-[calc(100vh-430px)] overflow-y-auto'>
-                <TabSideMenu goalList={data?.goals} handleGoalClick={handleGoalClick} />
+                <TabSideMenu goalList={data?.goals} handleGoalClick={handleMenuClick} />
                 <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/50 to-white/100 pointer-events-none' />
               </div>
               {/* 테블릿 ~ : 목표 버튼  */}

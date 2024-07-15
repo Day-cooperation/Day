@@ -4,46 +4,99 @@ import { ArrowRight, Rectangles } from '@/assets/svgs';
 import ListTodo from '../ListTodo/ListTodo';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { deleteRequest, getRequest, patchRequest } from '@/api/api';
+import NoteRead from '@/components/Note/NoteRead';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Modal from '../Modal/Modal';
 import { Goal } from '@/types/Goal';
 import { queryKey, useGetQuery } from '@/queries/query';
+import ConfirmPopup from '../Popup/ConfirmPopup';
+import { useDisclosure } from '@nextui-org/react';
 
 export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
-  const queryClient = useQueryClient();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const confirmRef = useRef<HTMLDialogElement>(null);
+  const noteRef = useRef<HTMLDialogElement>(null);
+  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
+  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
+  const [todo, setTodo] = useState();
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const { data, isLoading } = useGetQuery.todo();
+  const queryClient = useQueryClient();
+
+  const { data: todoResponse, isLoading } = useGetQuery.todo();
+
+  const { data: noteData, mutate: noteMutate } = useMutation({
+    mutationKey: ['getNote'],
+    mutationFn: (id) => getRequest({ url: `notes/${id}` }),
+    onSuccess: () => {
+      if (!noteRef.current) return;
+      noteRef.current.showModal();
+    },
+  });
+
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    onSuccess: () => queryClient.invalidateQueries(queryKey.todo()),
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKey.todo());
+      goalList.forEach((goal) => {
+        queryClient.invalidateQueries(queryKey.todo(goal.id));
+        queryClient.invalidateQueries(queryKey.progress(goal.id));
+      });
+    },
   });
-  const { mutate: deleteTodoMutate } = useMutation({
-    mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
-    onSuccess: () => queryClient.invalidateQueries(queryKey.todo()),
+
+  const { mutate: deleteMutate } = useMutation({
+    mutationFn: (id: number) => deleteRequest({ url: `todos/${id}` }),
+    onSuccess: () => {
+      setConfirm({ message: '', setDeleteId: 0 });
+      queryClient.invalidateQueries(queryKey.todo());
+      goalList.forEach((goal) => {
+        queryClient.invalidateQueries(queryKey.todo(goal.id));
+        queryClient.invalidateQueries(queryKey.progress(goal.id));
+      });
+    },
   });
 
   const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = data?.todos.find((todo: Todo) => todo.id === id);
+    const selecteItem = todoResponse?.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
     if (type === 'delete') {
-      deleteTodoMutate({ path: String(selecteItem.id) });
+      if (!confirmRef.current) return;
+      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
+      confirmRef.current.showModal();
     }
     if (type === 'edit') {
-      setIsModalOpen(!isModalOpen);
+      setModalType('edit');
+      setTodo(selecteItem);
+      onOpen();
+    }
+    if (type === 'note read') {
+      noteMutate(selecteItem.noteId);
     }
   };
 
+  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
+    if (answer === 'ok') {
+      deleteMutate(confirm.setDeleteId);
+    }
+  };
   if (isLoading) return <h2>Loading...</h2>;
 
   return (
     <>
-      <Modal onClose={() => setIsModalOpen(!isModalOpen)} isOpen={isModalOpen} modalType='edit' goalList={goalList} />
+      <ConfirmPopup
+        type='popup'
+        dialogRef={confirmRef}
+        confirmText={confirm.message}
+        onConfirmClick={handleDeleteConfirmClick}
+        confirm
+      />
+      <NoteRead dialogRef={noteRef} data={noteData} />
+      <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} items={todo} />
       <div className='relative w-full md:max-w-[588px] h-[250px] bg-white rounded-xl border-1 border-slate-100 px-6 py-4 flex flex-col gap-4'>
         <div className='flex justify-between'>
           <div className='flex items-center justify-center gap-2'>
@@ -57,9 +110,9 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
             <ArrowRight />
           </Link>
         </div>
-        {data?.todos.length ? (
+        {todoResponse?.todos.length ? (
           <div className='h-[154px] overflow-y-auto pt-1'>
-            <ListTodo showGoal todos={data?.todos} onButtonClick={handleButtonClick}></ListTodo>
+            <ListTodo showGoal todos={todoResponse?.todos} onButtonClick={handleButtonClick}></ListTodo>
           </div>
         ) : (
           <div className='h-[154px] flex items-center justify-center'>

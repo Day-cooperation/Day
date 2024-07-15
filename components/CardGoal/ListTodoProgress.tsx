@@ -1,11 +1,11 @@
-import { Todo } from '@/types/Todo';
+import { ListTodoButtons, Todo } from '@/types/Todo';
 import ListTodo from '../ListTodo/ListTodo';
 
 type ListTodoProgressProps = {
   itemList: Todo[];
   subject: 'To do' | 'Done';
   textValue: string;
-  onUpdateList: (buttonType: string, id: number) => void;
+  onUpdateList: (buttonType: ListTodoButtons, id: number) => void;
   displayTodoCount: number;
 };
 

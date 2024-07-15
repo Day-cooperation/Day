@@ -15,16 +15,18 @@ import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 export default function TodoList() {
-  const queryClient = useQueryClient();
-  const [todoState, setTodoState] = useState('All');
+  const confirmRef = useRef<HTMLDialogElement>(null);
+  const noteRef = useRef<HTMLDialogElement>(null);
   const [modalType, setModalType] = useState<'create' | 'edit'>('create');
   const [todo, setTodo] = useState<Todo>();
   const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
-  const confirmRef = useRef<HTMLDialogElement>(null);
-  const noteRef = useRef<HTMLDialogElement>(null);
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  
+  const [todoState, setTodoState] = useState('All');
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { data: todoList, isLoading } = useGetQuery.todo();
-  const { data: goalList } = useGetQuery.goal();
+
   const { data: noteData, mutate: noteMutate } = useMutation({
     mutationKey: ['getNote'],
     mutationFn: (id) => getRequest({ url: `notes/${id}` }),
@@ -34,7 +36,7 @@ export default function TodoList() {
     },
   });
 
-  const mutation = useMutation({
+  const {mutate: todoMutation} = useMutation({
     mutationFn: ({ id, done }: { id: number; done: boolean }) =>
       patchRequest({ url: `todos/${id}`, data: { done: done } }),
     mutationKey: ['patchDone'],
@@ -52,7 +54,6 @@ export default function TodoList() {
     },
   });
 
-  const { isOpen, onClose, onOpen } = useDisclosure();
   const todos =
     todoState === 'All'
       ? todoList?.todos
@@ -62,7 +63,7 @@ export default function TodoList() {
   const handleTodoTypeClick = (buttonType: ListTodoButtons, id: number) => {
     if (buttonType === 'done') {
       const todo = todos.find((item: Todo) => id === item.id);
-      mutation.mutate({ id, done: !todo.done });
+      todoMutation({ id, done: !todo.done });
       return;
     }
     if (buttonType === 'edit' || buttonType === 'file' || buttonType === 'link') {
@@ -109,7 +110,7 @@ export default function TodoList() {
         confirm
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
-      <Modal modalType={modalType} isOpen={isOpen} items={todo} onClose={onClose} goalList={goalList?.goals} />
+      <Modal modalType={modalType} isOpen={isOpen} items={todo} onClose={onClose} />
       <div className='w-full p-4 md:p-6 bg-slate-100 h-full'>
         <div className='w-full max-w-[792px] flex flex-col gap-4 h-full'>
           <div className='flex justify-between'>

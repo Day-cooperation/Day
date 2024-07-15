@@ -7,32 +7,45 @@ import MixedInput from '@/components/Input/MixedInput';
 import ListTodo from '@/components/ListTodo/ListTodo';
 import Modal from '@/components/Modal/Modal';
 import Popover from '@/components/Popover/Popover';
+import ConfirmPopup from '@/components/Popup/ConfirmPopup';
 import ProgressBar from '@/components/ProgressBar/ProgressBar';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { ListTodoButtons, Todo } from '@/types/Todo';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
+import NoteRead from '@/components/Note/NoteRead';
 import { useParams, useRouter } from 'next/navigation';
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { useDisclosure } from '@nextui-org/react';
 
 export default function Goal() {
-  const route = useRouter();
+  const confirmRef = useRef<HTMLDialogElement>(null);
+  const noteRef = useRef<HTMLDialogElement>(null);
+  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
+  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
+  const [todo, setTodo] = useState();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const [confirmType, setConfirmType] = useState<'popup' | 'goal'>('popup');
   const queryClient = useQueryClient();
   const [isGoalTitleEdit, setIsGoalTitleEdit] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
 
   const { goalId } = useParams();
+  const route = useRouter();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
+  const { data: goalResponse } = useGetQuery.goal(Number(goalId));
   const [goalTitle, setGoalTitle] = useState('');
-  const { data: goalResponse } = useGetQuery.goal();
-  const { data: todoListResponse } = useGetQuery.todo(Number(goalId));
+  const { data: goalTodoResponse } = useGetQuery.todo(Number(goalId));
   const { data: goalProgress, isLoading } = useGetQuery.progress(Number(goalId));
 
-  const handleAddTodo = () => {
-    setModalType('create');
-    setIsModalOpen(!isModalOpen);
-  };
+  const { data: noteData, mutate: noteMutate } = useMutation({
+    mutationKey: ['getNote'],
+    mutationFn: (id) => getRequest({ url: `notes/${id}` }),
+    onSuccess: () => {
+      if (!noteRef.current) return;
+      noteRef.current.showModal();
+    },
+  });
 
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
@@ -43,12 +56,16 @@ export default function Goal() {
   });
 
   const { mutate: deleteTodoMutate } = useMutation({
-    mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `todos/${path}` }),
-    onSuccess: () => queryClient.invalidateQueries(queryKey.todo()),
+    mutationFn: (path: number) => deleteRequest({ url: `todos/${path}` }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todo(Number(goalId)));
+      queryClient.invalidateQueries(queryKey.progress(Number(goalId)));
+    },
   });
 
   const { mutate: deleteGoalMutate } = useMutation({
-    mutationFn: ({ path }: { path: string }) => deleteRequest({ url: `goals/${path}` }),
+    mutationFn: (path: number) => deleteRequest({ url: `goals/${path}` }),
     onSuccess: () => {
       route.push('/dashboard');
       return <div>loading...</div>;
@@ -59,17 +76,29 @@ export default function Goal() {
     mutationFn: (input: string) => patchRequest({ url: `goals/${goalId}`, data: { title: input } }),
     onSuccess: () => queryClient.invalidateQueries(queryKey.goal(Number(goalId))),
   });
+  const handleAddTodo = () => {
+    setModalType('create');
+    onOpen();
+  };
 
   const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = todoListResponse?.todos.filter((todo: Todo) => todo.id === id)[0];
+    const selecteItem = goalTodoResponse?.todos.find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
     if (type === 'delete') {
-      deleteTodoMutate({ path: String(selecteItem.id) });
+      if (!confirmRef.current) return;
+      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
+      setConfirmType('popup');
+      confirmRef.current.showModal();
     }
     if (type === 'edit') {
-      setIsModalOpen(!isModalOpen);
+      setModalType('edit');
+      setTodo(selecteItem);
+      onOpen();
+    }
+    if (type === 'note read') {
+      noteMutate(selecteItem.noteId);
     }
   };
 
@@ -79,9 +108,8 @@ export default function Goal() {
       setIsGoalTitleEdit(false);
     }
     if (e.key === 'Enter') {
-      updateGoalMutate(goalTitle);
       setGoalTitle(goalTitle);
-
+      updateGoalMutate(goalTitle);
       setIsGoalTitleEdit(false);
     }
   };
@@ -92,26 +120,44 @@ export default function Goal() {
     }
 
     if (type === 'delete') {
-      deleteGoalMutate({ path: goalId as string });
+      if (!confirmRef.current) return;
+      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
+      setConfirmType('goal');
+      confirmRef.current.showModal();
     }
   };
 
-  const todoList = todoListResponse?.todos.filter((todo: Todo) => todo.done === false) || [];
-  const doneList = todoListResponse?.todos.filter((todo: Todo) => todo.done === true) || [];
+  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
+    if (answer === 'ok') {
+      if (confirmType === 'goal') {
+        deleteGoalMutate(Number(goalId));
+      } else {
+        deleteTodoMutate(confirm.setDeleteId);
+      }
+    }
+  };
 
+  const todoList = goalTodoResponse?.todos.filter((todo: Todo) => todo.done === false) || [];
+  const doneList = goalTodoResponse?.todos.filter((todo: Todo) => todo.done === true) || [];
+
+  useEffect(() => {
+    setGoalTitle(goalResponse?.title);
+  }, [goalResponse]);
   return (
     <>
-      {isModalOpen && (
-        <Modal
-          isOpen={isModalOpen}
-          modalType={modalType}
-          onClose={() => setIsModalOpen(!isModalOpen)}
-          goalList={[goalResponse]}
-        />
-      )}
-      <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px] '>
+      <ConfirmPopup
+        type={confirmType}
+        dialogRef={confirmRef}
+        confirmText={confirm.message}
+        onConfirmClick={handleDeleteConfirmClick}
+        confirm
+      />
+      <NoteRead dialogRef={noteRef} data={noteData} />
+      <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} items={todo} />
+
+      <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px]'>
         <h2 className='text-slate-900 text-lg font-semibold '>목표</h2>
-        <div className='flex flex-col gap-4 md:gap-6 '>
+        <div className='flex flex-col gap-4 md:gap-6 h-full'>
           <div className=' bg-white border border-slate-100 rounded-xl px-6 py-4 flex flex-col gap-6'>
             <div className='flex max-w-[1200px] justify-between'>
               <div>
@@ -159,7 +205,9 @@ export default function Goal() {
           </Link>
 
           <div className='flex flex-col lg:flex-row gap-6 '>
-            <div className='flex flex-col lg:max-w-[588px] min-h-[228px] w-full bg-white px-6 py-4 rounded-xl gap-4'>
+            <div
+              className={`flex flex-col lg:max-w-[588px] ${todoList.length > 4 ? '' : 'h-[238px]'} w-full bg-white px-6 py-4 rounded-xl gap-4`}
+            >
               <div className='flex justify-between'>
                 <h3 className='text-slate-800 text-lg font-bold'>To do</h3>
                 <button className='flex items-center gap-1 text-sm font-semibold text-blue-500' onClick={handleAddTodo}>
@@ -175,7 +223,9 @@ export default function Goal() {
                 </div>
               )}
             </div>
-            <div className='flex flex-col gap-4 lg:max-w-[588px] min-h-[228px] w-full bg-slate-200 px-6 py-4 rounded-xl'>
+            <div
+              className={`flex flex-col gap-4 lg:max-w-[588px] ${doneList.length > 5 ? 'h-full' : 'h-[238px]'} w-full bg-slate-200 px-6 py-4 rounded-xl`}
+            >
               <h3 className='text-slate-800 text-lg font-bold'>Done</h3>
               {doneList.length ? (
                 <ListTodo onButtonClick={handleButtonClick} showGoal={false} todos={doneList} />

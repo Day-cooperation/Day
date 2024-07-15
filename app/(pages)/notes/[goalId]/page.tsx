@@ -8,7 +8,7 @@ import { useParams } from 'next/navigation';
 export default function NoteList() {
   const { goalId } = useParams();
   const { data: goalResponse } = useGetQuery.goal(Number(goalId));
-  const { data: noteResponse, isLoading } = useGetQuery.note(Number(goalId), null);
+  const { data: noteResponse, isLoading } = useGetQuery.note(Number(goalId));
 
   if (isLoading) return <h2>loading</h2>;
   return (

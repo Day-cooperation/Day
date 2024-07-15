@@ -11,19 +11,18 @@ import { convertTodoToFormdata } from '@/utils/convertTodoToFormdata';
 import { fileUpload } from '@/api/fileUpload';
 import { Goal } from '@/types/Goal';
 import { patchRequest, postRequest } from '@/api/api';
-import { queryKey } from '@/queries/query';
+import { queryKey, useGetQuery } from '@/queries/query';
 
 type ModalProps = {
   modalType: 'create' | 'edit';
   items?: Todo;
   isOpen: boolean;
   onClose: () => void;
-  goalList?: Goal[];
 };
 
 const INITIAL_DATA = { title: '', fileUrl: '', linkUrl: '', goalId: 0, done: false };
 
-export default function Modal({ modalType, items, isOpen, goalList, onClose }: ModalProps) {
+export default function Modal({ modalType, items, isOpen, onClose }: ModalProps) {
   const convertData = convertTodoToFormdata(items);
   const queryClient = useQueryClient();
   const [confirmValue, setConfirmText] = useState({ type: 'popup', text: '', description: '' });
@@ -32,6 +31,7 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
   const confirmRef = useRef<HTMLDialogElement | null>(null);
   const linkUrlRef = useRef<HTMLDialogElement | null>(null);
 
+  const { data: goalListResponse } = useGetQuery.goal();
   const { mutate } = useMutation({
     mutationKey: ['post-file'],
     mutationFn: (file: FormData) => fileUpload(file),
@@ -49,6 +49,10 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
     mutationFn: (todoPostData: NewTodo) => postRequest({ url: 'todos', data: todoPostData }),
     onSuccess: () => {
       queryClient.invalidateQueries(queryKey.todo());
+      goalListResponse.goals?.forEach((goal: Goal) => {
+        queryClient.invalidateQueries(queryKey.todo(goal.id));
+        queryClient.invalidateQueries(queryKey.progress(goal.id));
+      });
       setData(INITIAL_DATA);
       setChips({ file: false, link: false });
     },
@@ -59,6 +63,10 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
     mutationFn: (todoPostData: NewTodo) => patchRequest({ url: `todos/${items?.id}`, data: todoPostData }),
     onSuccess: () => {
       queryClient.invalidateQueries(queryKey.todo());
+      goalListResponse.goals?.forEach((goal: Goal) => {
+        queryClient.invalidateQueries(queryKey.todo(goal.id));
+        queryClient.invalidateQueries(queryKey.progress(goal.id));
+      });
       setData(INITIAL_DATA);
       setChips({ file: false, link: false });
     },
@@ -171,7 +179,7 @@ export default function Modal({ modalType, items, isOpen, goalList, onClose }: M
             handleLinkUrlPopupOpen={handleLinkUrlPopupOpen}
             handleFileFormat={handleFileFormat}
             fileName={data.fileUrl}
-            items={goalList ? goalList : []}
+            items={goalListResponse?.goals ? goalListResponse?.goals : []}
             chips={chips}
           />
           <ModalFooter data={data} handleConfirmPopupOpen={handleConfirmPopupOpen} />

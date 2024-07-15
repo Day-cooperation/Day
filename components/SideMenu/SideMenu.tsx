@@ -44,7 +44,6 @@ export default function SideMenu() {
         toggleSideMenu();
       }
     }
-    
     if (id) router.push(`/goals/${id}`);
   };
 

@@ -21,7 +21,7 @@ export default function TodoList() {
   const [todo, setTodo] = useState<Todo>();
   const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
   const { isOpen, onClose, onOpen } = useDisclosure();
-  
+
   const [todoState, setTodoState] = useState('All');
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -36,7 +36,7 @@ export default function TodoList() {
     },
   });
 
-  const {mutate: todoMutation} = useMutation({
+  const { mutate: todoMutation } = useMutation({
     mutationFn: ({ id, done }: { id: number; done: boolean }) =>
       patchRequest({ url: `todos/${id}`, data: { done: done } }),
     mutationKey: ['patchDone'],

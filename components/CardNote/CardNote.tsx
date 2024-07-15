@@ -27,7 +27,7 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
   });
   const { data: noteData, mutate: noteMutate } = useMutation({
     mutationKey: ['getNote'],
-    mutationFn: (id:number) => getRequest({ url: `notes/${id}` }),
+    mutationFn: (id: number) => getRequest({ url: `notes/${id}` }),
     onSuccess: () => {
       if (!noteRef.current) return;
       noteRef.current.showModal();

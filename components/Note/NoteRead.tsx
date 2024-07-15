@@ -17,7 +17,7 @@ export default function NoteRead({ dialogRef, data }: NoteProps) {
   };
   return (
     <dialog ref={dialogRef} className='bg-black/50'>
-      <div className='fixed right-0 top-0 bg-white w-full max-w-[800px] h-full p-6'>
+      <div className='fixed right-0 top-0 bg-white w-full max-w-[512px] lg:max-w-[800px]  h-full p-6'>
         <button className='p-[5px]' onClick={handleClickClose}>
           <Cancel className='w-[13px] h-[13px] mb-4' />
         </button>

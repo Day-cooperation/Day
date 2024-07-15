@@ -19,7 +19,10 @@ export default function SideMenu() {
   const { data } = useGetQuery.goal();
   const { mutate: createGoalMutation } = useMutation({
     mutationFn: (input: string) => postRequest({ url: 'goals', data: { title: input } }),
-    onSuccess: () => queryClient.invalidateQueries(queryKey.goal()),
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKey.goal());
+      queryClient.invalidateQueries(queryKey.todo());
+    },
   });
   const [isOpen, setIsOpen] = useState(true);
   const [isNewGoalInputActive, setIsNewGoalInputActive] = useState(false);
@@ -27,7 +30,6 @@ export default function SideMenu() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState('DashBoard');
   const router = useRouter();
-  const { data: response } = useGetQuery.note(68, null);
   const toggleSideMenu = () => {
     setIsOpen(!isOpen);
   };

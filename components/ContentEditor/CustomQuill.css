@@ -1,0 +1,19 @@
+.ql-picker.custom-color-picker .ql-picker-options {
+  @apply !top-auto bottom-full mb-1;
+}
+
+.ql-container.ql-snow {
+  @apply !border-none;
+}
+
+.ql-editor {
+  @apply !h-editor !p-0 !font-pretendard;
+}
+
+[data-link='true'] {
+  @apply !h-urlView;
+}
+
+.ql-editor.ql-blank::before {
+  @apply !left-0 text-slate-400 text-base font-normal !font-pretendard;
+}

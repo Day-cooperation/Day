@@ -52,5 +52,5 @@ export type NoteInputValue = {
   todoId?: number | null;
   title: string;
   content: string;
-  linkUrl?: string;
+  linkUrl: string | null;
 };

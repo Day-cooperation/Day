@@ -1,97 +1,41 @@
 'use client';
 
-import { deleteRequest, getRequest, patchRequest } from '@/api/api';
 import { Plus } from '@/assets/svgs';
 import Filter from '@/components/Filter/Filter';
 import ListTodo from '@/components/ListTodo/ListTodo';
 import Modal from '@/components/Modal/Modal';
 import NoteRead from '@/components/Note/NoteRead';
 import ConfirmPopup from '@/components/Popup/ConfirmPopup';
-import { queryKey, useGetQuery } from '@/queries/query';
-import { ListTodoButtons, Todo } from '@/types/Todo';
-import { useDisclosure } from '@nextui-org/react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useListTodo } from '@/hooks/useListTodo';
+import { Todo } from '@/types/Todo';
+import { useState } from 'react';
 
 export default function TodoList() {
-  const confirmRef = useRef<HTMLDialogElement>(null);
-  const noteRef = useRef<HTMLDialogElement>(null);
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
-  const [todo, setTodo] = useState<Todo>();
-  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const {
+    isLoading,
+    confirmRef,
+    confirm,
+    handleDeleteConfirmClick,
+    noteRef,
+    noteData,
+    onClose,
+    isOpen,
+    modalType,
+    todo,
+    todoResponse,
+    handleListPopupClick,
+    onOpen,
+    setModalType,
+  } = useListTodo();
 
   const [todoState, setTodoState] = useState('All');
-  const queryClient = useQueryClient();
-  const router = useRouter();
-  const { data: todoList, isLoading } = useGetQuery.todo();
-
-  const { data: noteData, mutate: noteMutate } = useMutation({
-    mutationKey: ['getNote'],
-    mutationFn: (id) => getRequest({ url: `notes/${id}` }),
-    onSuccess: () => {
-      if (!noteRef.current) return;
-      noteRef.current.showModal();
-    },
-  });
-
-  const { mutate: todoMutation } = useMutation({
-    mutationFn: ({ id, done }: { id: number; done: boolean }) =>
-      patchRequest({ url: `todos/${id}`, data: { done: done } }),
-    mutationKey: ['patchDone'],
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
-    },
-  });
-
-  const { mutate: deleteMutate } = useMutation({
-    mutationKey: ['deleteTodo'],
-    mutationFn: (id: number) => deleteRequest({ url: `todos/${id}` }),
-    onSuccess: () => {
-      setConfirm({ message: '', setDeleteId: 0 });
-      queryClient.invalidateQueries(queryKey.todo());
-    },
-  });
 
   const todos =
     todoState === 'All'
-      ? todoList?.todos
-      : todoList?.todos.filter((item: Todo) => item.done === (todoState === 'To do' ? false : true));
+      ? todoResponse?.todos
+      : todoResponse?.todos.filter((item: Todo) => item.done === (todoState === 'To do' ? false : true));
   const pageTitle = `${todoState === 'All' ? '모든 할 일' : todoState === 'To do' ? '할 일' : '완료한 일'}(${todos?.length || 0})`;
 
-  const handleTodoTypeClick = (buttonType: ListTodoButtons, id: number) => {
-    if (buttonType === 'done') {
-      const todo = todos.find((item: Todo) => id === item.id);
-      todoMutation({ id, done: !todo.done });
-      return;
-    }
-    if (buttonType === 'edit' || buttonType === 'file' || buttonType === 'link') {
-      setModalType('edit');
-      setTodo(todos.find((item: Todo) => id === item.id));
-      onOpen();
-    }
-
-    if (buttonType === 'delete') {
-      if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
-      confirmRef.current.showModal();
-    }
-    if (buttonType === 'note write') {
-      router.push('note');
-    }
-
-    if (buttonType === 'note read') {
-      const noteId = todos.find((item: Todo) => item.id === id).noteId;
-      noteMutate(noteId);
-    }
-  };
-
-  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
-    if (answer === 'ok') {
-      deleteMutate(confirm.setDeleteId);
-    }
-  };
   const handleFilterClick = (category: 'All' | 'To do' | 'Done') => {
     setTodoState(category);
   };
@@ -129,7 +73,7 @@ export default function TodoList() {
 
           <div className='flex flex-col gap-4 bg-white w-full h-[calc(100vh-124px)] md:h-full p-6 rounded-xl'>
             <Filter handleClick={handleFilterClick} />
-            <ListTodo todos={todos} showGoal={true} onButtonClick={handleTodoTypeClick} />
+            <ListTodo todos={todos} showGoal={true} onButtonClick={handleListPopupClick} />
           </div>
         </div>
       </div>

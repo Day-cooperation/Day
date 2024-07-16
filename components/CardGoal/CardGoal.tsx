@@ -1,63 +1,41 @@
 'use client';
 
-import { ListTodoButtons, Todo } from '@/types/Todo';
-import { useRef, useState } from 'react';
+import { Todo } from '@/types/Todo';
+import { useState } from 'react';
 import { IcArrowDown, Plus } from '@/assets/svgs';
 import ProgressBar from '../ProgressBar/ProgressBar';
 import ListTodoProgress from './ListTodoProgress';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteRequest, getRequest, patchRequest } from '@/api/api';
 import { Goal } from '@/types/Goal';
 import Modal from '../Modal/Modal';
 import NoteRead from '@/components/Note/NoteRead';
-import { queryKey, useGetQuery } from '@/queries/query';
+import { useGetQuery } from '@/queries/query';
 import ConfirmPopup from '../Popup/ConfirmPopup';
-import { useDisclosure } from '@nextui-org/react';
+import { useListTodo } from '@/hooks/useListTodo';
 
 export default function CardGoal({ goal, index }: { goal: Goal; index: number }) {
-  const confirmRef = useRef<HTMLDialogElement>(null);
-  const noteRef = useRef<HTMLDialogElement>(null);
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
-  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
-  const [todo, setTodo] = useState();
-  const { isOpen, onClose, onOpen } = useDisclosure();
-
+  const {
+    isLoading,
+    confirmRef,
+    confirm,
+    handleDeleteConfirmClick,
+    noteRef,
+    noteData,
+    onClose,
+    isOpen,
+    modalType,
+    todo,
+    todoResponse,
+    handleListPopupClick,
+    onOpen,
+    error,
+    setModalType,
+  } = useListTodo(goal.id);
   const [isMore, setIsMore] = useState(false);
-
-  const queryClient = useQueryClient();
-
-  const { data: goalTodoResponse, isLoading, error } = useGetQuery.todo(goal.id);
 
   const { data: progressData, isLoading: ProgressisLoading } = useGetQuery.progress(goal.id);
 
-  const todoList = goalTodoResponse?.todos.filter((todo: Todo) => todo.done === false);
-  const doneList = goalTodoResponse?.todos.filter((todo: Todo) => todo.done === true);
-
-  const { data: noteData, mutate: noteMutate } = useMutation({
-    mutationKey: ['getNote'],
-    mutationFn: (id) => getRequest({ url: `notes/${id}` }),
-    onSuccess: () => {
-      if (!noteRef.current) return;
-      noteRef.current.showModal();
-    },
-  });
-
-  const { mutate: updateTodoMutate } = useMutation({
-    mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
-      queryClient.invalidateQueries(queryKey.todo(goal.id));
-      queryClient.invalidateQueries(queryKey.progress(goal.id));
-    },
-  });
-
-  const { mutate: deleteTodoMutate } = useMutation({
-    mutationFn: (path: number) => deleteRequest({ url: `todos/${path}` }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
-      queryClient.invalidateQueries(queryKey.goal(goal.id));
-    },
-  });
+  const todoList = todoResponse?.todos.filter((todo: Todo) => todo.done === false);
+  const doneList = todoResponse?.todos.filter((todo: Todo) => todo.done === true);
 
   const handleMoreClick = () => {
     setIsMore(!isMore);
@@ -66,32 +44,6 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
   const handleAddTodo = () => {
     setModalType('create');
     onOpen();
-  };
-
-  const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = goalTodoResponse?.todos.find((todo: Todo) => todo.id === id);
-    if (type === 'done') {
-      updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
-    }
-    if (type === 'delete') {
-      if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
-      confirmRef.current.showModal();
-    }
-    if (type === 'edit') {
-      setModalType('edit');
-      setTodo(selecteItem);
-      onOpen();
-    }
-    if (type === 'note read') {
-      noteMutate(selecteItem.noteId);
-    }
-  };
-
-  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
-    if (answer === 'ok') {
-      deleteTodoMutate(confirm.setDeleteId);
-    }
   };
 
   const isMoreFive = () => todoList.length > 5 || doneList.length > 5;
@@ -128,14 +80,14 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
             displayTodoCount={isMore ? 10 : 5}
             subject='To do'
             itemList={todoList}
-            onUpdateList={handleButtonClick}
+            onUpdateList={handleListPopupClick}
             textValue={'아직 해야할 일이 없어요'}
           />
           <ListTodoProgress
             displayTodoCount={isMore ? 10 : 5}
             subject='Done'
             itemList={doneList}
-            onUpdateList={handleButtonClick}
+            onUpdateList={handleListPopupClick}
             textValue={'아직 다 한 일이 없어요'}
           />
         </div>

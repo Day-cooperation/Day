@@ -2,88 +2,29 @@
 
 import { ArrowRight, Rectangles } from '@/assets/svgs';
 import ListTodo from '../ListTodo/ListTodo';
-import { ListTodoButtons, Todo } from '@/types/Todo';
-import { deleteRequest, getRequest, patchRequest } from '@/api/api';
 import NoteRead from '@/components/Note/NoteRead';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import Link from 'next/link';
-import { useRef, useState } from 'react';
 import Modal from '../Modal/Modal';
-import { Goal } from '@/types/Goal';
-import { queryKey, useGetQuery } from '@/queries/query';
 import ConfirmPopup from '../Popup/ConfirmPopup';
-import { useDisclosure } from '@nextui-org/react';
+import { useListTodo } from '@/hooks/useListTodo';
 
-export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
-  const confirmRef = useRef<HTMLDialogElement>(null);
-  const noteRef = useRef<HTMLDialogElement>(null);
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
-  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
-  const [todo, setTodo] = useState();
-  const { isOpen, onClose, onOpen } = useDisclosure();
+export default function RecentlyTodo() {
+  const {
+    isLoading,
+    confirmRef,
+    confirm,
+    handleDeleteConfirmClick,
+    noteRef,
+    noteData,
+    onClose,
+    isOpen,
+    modalType,
+    todo,
+    todoResponse,
+    handleListPopupClick,
+  } = useListTodo();
 
-  const queryClient = useQueryClient();
-
-  const { data: todoResponse, isLoading } = useGetQuery.todo();
-
-  const { data: noteData, mutate: noteMutate } = useMutation({
-    mutationKey: ['getNote'],
-    mutationFn: (id) => getRequest({ url: `notes/${id}` }),
-    onSuccess: () => {
-      if (!noteRef.current) return;
-      noteRef.current.showModal();
-    },
-  });
-
-  const { mutate: updateTodoMutate } = useMutation({
-    mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
-      goalList.forEach((goal) => {
-        queryClient.invalidateQueries(queryKey.todo(goal.id));
-        queryClient.invalidateQueries(queryKey.progress(goal.id));
-      });
-    },
-  });
-
-  const { mutate: deleteMutate } = useMutation({
-    mutationFn: (id: number) => deleteRequest({ url: `todos/${id}` }),
-    onSuccess: () => {
-      setConfirm({ message: '', setDeleteId: 0 });
-      queryClient.invalidateQueries(queryKey.todo());
-      goalList.forEach((goal) => {
-        queryClient.invalidateQueries(queryKey.todo(goal.id));
-        queryClient.invalidateQueries(queryKey.progress(goal.id));
-      });
-    },
-  });
-
-  const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = todoResponse?.todos.find((todo: Todo) => todo.id === id);
-    if (type === 'done') {
-      updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
-    }
-    if (type === 'delete') {
-      if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
-      confirmRef.current.showModal();
-    }
-    if (type === 'edit') {
-      setModalType('edit');
-      setTodo(selecteItem);
-      onOpen();
-    }
-    if (type === 'note read') {
-      noteMutate(selecteItem.noteId);
-    }
-  };
-
-  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
-    if (answer === 'ok') {
-      deleteMutate(confirm.setDeleteId);
-    }
-  };
   if (isLoading) return <h2>Loading...</h2>;
 
   return (
@@ -112,7 +53,7 @@ export default function RecentlyTodo({ goalList }: { goalList: Goal[] }) {
         </div>
         {todoResponse?.todos.length ? (
           <div className='h-[154px] overflow-y-auto pt-1'>
-            <ListTodo showGoal todos={todoResponse?.todos} onButtonClick={handleButtonClick}></ListTodo>
+            <ListTodo showGoal todos={todoResponse?.todos} onButtonClick={handleListPopupClick}></ListTodo>
           </div>
         ) : (
           <div className='h-[154px] flex items-center justify-center'>

@@ -9,5 +9,5 @@ interface EmbedState {
 export const useEmbedingUrlStore = create<EmbedState>((set) => ({
   url: null,
   setUrl: (newUrl: string) => set({ url: newUrl }),
-  clearUrl: () => set({ url: '' }),
+  clearUrl: () => set({ url: null }),
 }));

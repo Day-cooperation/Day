@@ -51,7 +51,12 @@ export default function NoteRead({ dialogRef, data }: NoteProps) {
         </div>
         <div className='flex flex-col gap-4'>
           <h1 className='py-3 border-y-1 text-lg font-medium'>{data?.title}</h1>
-          <p className='text-pretty text-slate-700 self-stretch'>{data?.content}</p>
+          <div
+            className='text-pretty text-slate-700 self-stretch'
+            dangerouslySetInnerHTML={{
+              __html: data?.content ?? '',
+            }}
+          />
         </div>
       </div>
     </dialog>

@@ -40,7 +40,7 @@ export default function Goal() {
   } = useListTodo(Number(goalId));
 
   const [confirmType, setConfirmType] = useState<'popup' | 'goal'>('popup');
-  
+
   const router = useRouter();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
   const [goalTitle, setGoalTitle] = useState('');

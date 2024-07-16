@@ -36,7 +36,7 @@ export const useGetQuery = {
       ...queryKey.progress(goalId),
       queryFn: () => getRequest({ url: 'todos/progress', params: { goalId } }),
     }),
-  note: (goalId?: number, noteId?: number) => {
+  note: (goalId?: number, noteId?: number, hasNote?: boolean) => {
     if (goalId)
       return useQuery({
         ...queryKey.note(goalId),
@@ -46,6 +46,7 @@ export const useGetQuery = {
       return useQuery({
         ...queryKey.note(),
         queryFn: () => getRequest({ url: `notes/${noteId}` }),
+        enabled: hasNote,
       });
   },
 };

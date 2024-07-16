@@ -7,6 +7,7 @@ type ButtonProps = Omit<NextButtonProps, 'size'> & {
   size?: 'xl' | 'lg' | 'md' | 'sm';
   variant?: 'solid' | 'bordered';
   disabled?: boolean;
+  className?: string;
 };
 
 const CustomButton = extendVariants(NextButton, {
@@ -35,6 +36,7 @@ export default function Button({
   size = 'xl',
   variant = 'bordered',
   disabled = false,
+  className,
   ...props
 }: ButtonProps) {
   return (
@@ -42,7 +44,7 @@ export default function Button({
       type={type}
       variant={variant}
       size={size}
-      className='py-3 text-white data-[hover=true]:!opacity-100 border-1 data-[pressed=true]:scale-100'
+      className={`py-3 text-white data-[hover=true]:!opacity-100 border-1 data-[pressed=true]:scale-100 ${className}`}
       radius='md'
       disableRipple
       disableAnimation

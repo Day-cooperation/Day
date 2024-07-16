@@ -1,42 +1,61 @@
 'use client';
 
 import { getRequest, patchRequest, postRequest } from '@/api/api';
-import { NoteFlag } from '@/assets/svgs';
+import { Cancel, NoteFlag } from '@/assets/svgs';
 import Button from '@/components/Buttons/Button';
+import ContentEditor from '@/components/ContentEditor/ContentEditor';
 import Counting from '@/components/Counting/Counting';
+import LinkBar from '@/components/LinkBar/LinkBar';
 import Toast from '@/components/Toast/Toast';
 import ToastRender from '@/components/Toast/ToastRender';
+import { useEmbedingUrlStore } from '@/stores/useEmbedingUrlStore';
 import { NoteInputValue } from '@/types/Note';
 import { Todo } from '@/types/Todo';
-import { Textarea } from '@nextui-org/react';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { usePathname } from 'next/navigation';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useParams, useRouter } from 'next/navigation';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+
 const noti = () => toast(<ToastRender />);
 
-const INITIAL_VALUE = { todoId: null, title: '', content: '', linkUrl: '' };
-
 export default function Note() {
+  const { url, setUrl } = useEmbedingUrlStore();
+
+  const { todoId } = useParams();
+
+  const INITIAL_VALUE = { todoId: Number(todoId), title: '', content: '', linkUrl: url };
+
   const [hasNote, setHasNote] = useState(false);
   const [inputValue, setInputValue] = useState<NoteInputValue>(INITIAL_VALUE);
-  const [disable, setDisable] = useState({ pullButton: false, pushButton: false });
+  const [disable, setDisable] = useState({ pullButton: true, pushButton: true });
 
-  const pathId = usePathname().split('/')[1];
+  const queryClient = useQueryClient();
+
+  const router = useRouter();
 
   const { isLoading, data: todos } = useQuery({ queryKey: ['getTodos'], queryFn: () => getRequest({ url: 'todos' }) });
 
   const { mutate: createNote } = useMutation({
     mutationKey: ['postNote'],
     mutationFn: (noteValue: NoteInputValue) => postRequest({ url: `notes`, data: noteValue }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
+      setInputValue(INITIAL_VALUE);
+      router.push('/todolist');
+    },
   });
 
   const { mutate: editNote } = useMutation({
     mutationKey: ['patchNote'],
     mutationFn: (noteValue: NoteInputValue) => patchRequest({ url: `notes/${todo.noteId}`, data: noteValue }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
+      setInputValue(INITIAL_VALUE);
+      router.push('/todolist');
+    },
   });
 
-  const todo = todos?.data.todos.find((item: Todo) => Number(pathId) === item.id);
+  const todo = todos?.data.todos.find((item: Todo) => Number(todoId) === item.id);
 
   const noteHeader = hasNote ? '노트 수정' : '노트 작성';
 
@@ -48,19 +67,22 @@ export default function Note() {
     enabled: hasNote,
   });
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     setInputValue((prev) => ({ ...prev, [name]: e.target.value }));
+  };
+
+  const handleEditorChange = (content: string) => {
+    setInputValue((prev) => ({ ...prev, content: content }));
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!inputValue.linkUrl) {
-      delete inputValue.linkUrl;
+      inputValue.linkUrl = null;
     }
 
     if (hasNote) {
-      delete inputValue.todoId;
       editNote(inputValue);
       return;
     }
@@ -70,52 +92,63 @@ export default function Note() {
 
   const handleDataSaveClick = (buttonType: 'push' | 'pull') => {
     if (buttonType === 'push') {
-      sessionStorage.clear();
+      localStorage.clear();
+
       Object.entries(inputValue).forEach(([key, value]) => {
         if (typeof value === 'number') {
-          sessionStorage.setItem(key, String(value));
+          localStorage.setItem(key, String(value));
         } else {
-          sessionStorage.setItem(key, value || '');
+          localStorage.setItem(key, value || '');
         }
       });
-      noti();
 
+      noti();
+      setDisable((prev) => ({ ...prev, pullButton: false }));
       return;
     }
 
     if (buttonType === 'pull') {
       const savedData: { [key: string]: string | null } = {};
 
-      Object.keys(sessionStorage).forEach((key) => {
-        savedData[key] = sessionStorage.getItem(key);
+      Object.keys(localStorage).forEach((key) => {
+        savedData[key] = localStorage.getItem(key);
       });
-
-      if (pathId !== savedData.todoId) return;
-
-      if (savedData.title === null || savedData.content === null) return;
-
-      setDisable((prev) => ({ ...prev, pullButton: false }));
 
       setInputValue((prev) => ({
         ...prev,
         title: savedData.title || '',
         content: savedData.content || '',
-        linkUrl: savedData.linkUrl || '',
         todoId: Number(savedData.todoId),
       }));
+
+      setUrl(savedData.linkUrl || '');
     }
   };
 
   useEffect(() => {
     setHasNote(!!todo?.noteId);
-    setInputValue((prev) => ({ ...prev, todoId: todo?.id }));
+
+    if (todoId !== localStorage.getItem('todoId')) {
+      setDisable((prev) => ({ ...prev, pullButton: true }));
+      return;
+    }
+    setDisable((prev) => ({ ...prev, pullButton: false }));
+
+    if (!hasNote) {
+      setInputValue(INITIAL_VALUE);
+      return;
+    }
     setInputValue((prev) => ({
       ...prev,
+      todoId: Number(todoId),
       title: notes?.data.title ?? '',
-      linkUrl: notes?.data.linkUrl ?? '',
       content: notes?.data.content ?? '',
     }));
   }, [todo, notes]);
+
+  useEffect(() => {
+    setInputValue((prev) => ({ ...prev, linkUrl: url ?? null }));
+  }, [url]);
 
   if (isLoading) return <div>...isLoading</div>;
 
@@ -127,23 +160,53 @@ export default function Note() {
             <h1 className='text-lg font-semibold text-slate-900'>{noteHeader}</h1>
             <div className='flex gap-2 '>
               <Button
+                type='button'
                 onClick={() => handleDataSaveClick('push')}
                 disabled={inputValue.title.length === 0 || inputValue.content.length === 0}
+                className='sm:h-9 md:h-11'
               >
                 임시저장
-              </Button>
-              <Button onClick={() => handleDataSaveClick('pull')} disabled={disable.pullButton}>
-                가져오기
               </Button>
               <Button
                 type='submit'
                 variant='solid'
                 disabled={inputValue.title.length === 0 || inputValue.content.length === 0}
+                className='sm:h-9 md:h-11'
               >
                 {noteCompleteButtonText}
               </Button>
             </div>
           </div>
+          {!disable.pullButton && (
+            <div
+              data-temp={!disable.pullButton}
+              className='flex data-[] items-center justify-between rounded-3xl bg-blue-50 py-4 pl-4 pr-3 mb-6'
+            >
+              <div className='flex gap-4'>
+                <button
+                  onClick={() => {
+                    localStorage.clear();
+                  }}
+                  type='button'
+                  className='bg-blue-500 rounded-full w-[18px] h-[18px] flex items-center justify-center'
+                >
+                  <Cancel strokeColor='#F8FAFC' className='w-2.5 h-2.5 shrink-0' />
+                </button>
+                <p className='text-sm font-semibold text-blue-500'>
+                  임시 저장된 노트가 있어요. 저장된 노트를 불러오시겠어요?
+                </p>
+              </div>
+              <Button
+                type='button'
+                size='sm'
+                onClick={() => handleDataSaveClick('pull')}
+                disabled={disable.pullButton}
+                className='h-9 rounded-3xl'
+              >
+                불러오기
+              </Button>
+            </div>
+          )}
           <div className='flex gap-1.5 mb-3'>
             <div className='rounded-md bg-slate-800 p-1'>
               <NoteFlag className='w-4 h-4' />
@@ -166,23 +229,17 @@ export default function Note() {
             />
             <Counting isTitle={true} target={inputValue.title} className='absolute top-3 right-0 font-medium' />
           </div>
-          <div className='flex flex-col'>
+          <div className='flex flex-col '>
             <Counting isTitle={false} target={inputValue.content} className='mb-3' />
-            <Textarea
-              name='content'
-              disableAnimation={true}
-              onChange={handleChange}
-              maxRows={100}
-              value={inputValue.content}
-              className='w-full resize-none focus:outline-none placeholder:text-slate-400 font-medium'
-              classNames={{
-                inputWrapper: 'bg-white shadow-none data-[hover=true]:bg-white group-data-[focus=true]:bg-white p-0 ',
-              }}
-              placeholder='이 곳을 클릭해 노트 작성을 시작해주세요'
-            />
+            {inputValue.linkUrl && <LinkBar linkUrl={inputValue.linkUrl} />}
             <Toast />
           </div>
         </form>
+        <ContentEditor
+          linkUrlView={!!inputValue.linkUrl}
+          value={inputValue.content}
+          handleEditorChange={handleEditorChange}
+        />
       </div>
     </main>
   );

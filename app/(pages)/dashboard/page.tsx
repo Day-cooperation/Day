@@ -16,7 +16,7 @@ export default function Dashboard() {
       <main className=' flex flex-col md:gap-6 gap-4'>
         <div className='flex flex-col md:flex-row md:gap-6 gap-4'>
           <div className='w-full'>
-            <RecentlyTodo goalList={goalListReseponse.goals} />
+            <RecentlyTodo/>
           </div>
           <div className=' h-[250px] w-full md:max-w-[588px] bg-blue-500 rounded-xl'></div>
         </div>

@@ -113,8 +113,11 @@ export default function Modal({ modalType, items, isOpen, onClose }: ModalProps)
     if (modalType === 'create') {
       newTodoMutate(todoUpdateData());
     }
-    editTodoMutate(todoUpdateData());
-    setData(INITIAL_DATA);
+
+    if (modalType === 'edit') {
+      editTodoMutate(todoUpdateData());
+      setData(INITIAL_DATA);
+    }
     onClose();
   };
 

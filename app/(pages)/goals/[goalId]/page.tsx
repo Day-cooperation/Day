@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteRequest, getRequest, patchRequest } from '@/api/api';
+import { deleteRequest, patchRequest } from '@/api/api';
 import { ArrowRight, Flag, Plus } from '@/assets/svgs';
 import { NoteAndPen } from '@/assets/svgs/NoteAndPen';
 import MixedInput from '@/components/Input/MixedInput';
@@ -11,63 +11,47 @@ import ConfirmPopup from '@/components/Popup/ConfirmPopup';
 import ProgressBar from '@/components/ProgressBar/ProgressBar';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { ListTodoButtons, Todo } from '@/types/Todo';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
 import NoteRead from '@/components/Note/NoteRead';
 import { useParams, useRouter } from 'next/navigation';
-import { KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { useDisclosure } from '@nextui-org/react';
+import { KeyboardEvent, useEffect, useState } from 'react';
+import { useListTodo } from '@/hooks/useListTodo';
 
 export default function Goal() {
-  const confirmRef = useRef<HTMLDialogElement>(null);
-  const noteRef = useRef<HTMLDialogElement>(null);
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
-  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
-  const [todo, setTodo] = useState();
-  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { goalId } = useParams();
+
+  const {
+    queryClient,
+    confirmRef,
+    confirm,
+    noteRef,
+    noteData,
+    setConfirm,
+    onClose,
+    isOpen,
+    modalType,
+    todo,
+    todoResponse,
+    handleListPopupClick,
+    onOpen,
+    handleDeleteConfirmClick,
+    setModalType,
+  } = useListTodo(Number(goalId));
 
   const [confirmType, setConfirmType] = useState<'popup' | 'goal'>('popup');
-  const queryClient = useQueryClient();
-  const [isGoalTitleEdit, setIsGoalTitleEdit] = useState(false);
-
-  const { goalId } = useParams();
-  const route = useRouter();
+  
+  const router = useRouter();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
-  const { data: goalResponse } = useGetQuery.goal(Number(goalId));
   const [goalTitle, setGoalTitle] = useState('');
-  const { data: goalTodoResponse } = useGetQuery.todo(Number(goalId));
+  const [isGoalTitleEdit, setIsGoalTitleEdit] = useState(false);
+  const { data: goalResponse } = useGetQuery.goal(Number(goalId));
   const { data: goalProgress, isLoading } = useGetQuery.progress(Number(goalId));
-
-  const { data: noteData, mutate: noteMutate } = useMutation({
-    mutationKey: ['getNote'],
-    mutationFn: (id) => getRequest({ url: `notes/${id}` }),
-    onSuccess: () => {
-      if (!noteRef.current) return;
-      noteRef.current.showModal();
-    },
-  });
-
-  const { mutate: updateTodoMutate } = useMutation({
-    mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo(Number(goalId)));
-      queryClient.invalidateQueries(queryKey.progress(Number(goalId)));
-    },
-  });
-
-  const { mutate: deleteTodoMutate } = useMutation({
-    mutationFn: (path: number) => deleteRequest({ url: `todos/${path}` }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
-      queryClient.invalidateQueries(queryKey.todo(Number(goalId)));
-      queryClient.invalidateQueries(queryKey.progress(Number(goalId)));
-    },
-  });
 
   const { mutate: deleteGoalMutate } = useMutation({
     mutationFn: (path: number) => deleteRequest({ url: `goals/${path}` }),
     onSuccess: () => {
-      route.push('/dashboard');
+      router.push('/dashboard');
       return <div>loading...</div>;
     },
   });
@@ -76,30 +60,10 @@ export default function Goal() {
     mutationFn: (input: string) => patchRequest({ url: `goals/${goalId}`, data: { title: input } }),
     onSuccess: () => queryClient.invalidateQueries(queryKey.goal(Number(goalId))),
   });
+
   const handleAddTodo = () => {
     setModalType('create');
     onOpen();
-  };
-
-  const handleButtonClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = goalTodoResponse?.todos.find((todo: Todo) => todo.id === id);
-    if (type === 'done') {
-      updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
-    }
-    if (type === 'delete') {
-      if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
-      setConfirmType('popup');
-      confirmRef.current.showModal();
-    }
-    if (type === 'edit') {
-      setModalType('edit');
-      setTodo(selecteItem);
-      onOpen();
-    }
-    if (type === 'note read') {
-      noteMutate(selecteItem.noteId);
-    }
   };
 
   const handleKeydownInput = (e: KeyboardEvent<HTMLInputElement> | KeyboardEvent) => {
@@ -114,7 +78,7 @@ export default function Goal() {
     }
   };
 
-  const handlePopupClick = (type: ListTodoButtons, id: number) => {
+  const handleGoalPopupClick = (type: ListTodoButtons, id: number) => {
     if (type === 'edit') {
       setIsGoalTitleEdit(true);
     }
@@ -127,18 +91,18 @@ export default function Goal() {
     }
   };
 
-  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
+  const handleConfirmClick = (answer: 'ok' | 'cancel') => {
     if (answer === 'ok') {
       if (confirmType === 'goal') {
         deleteGoalMutate(Number(goalId));
       } else {
-        deleteTodoMutate(confirm.setDeleteId);
+        handleDeleteConfirmClick(answer);
       }
     }
   };
 
-  const todoList = goalTodoResponse?.todos.filter((todo: Todo) => todo.done === false) || [];
-  const doneList = goalTodoResponse?.todos.filter((todo: Todo) => todo.done === true) || [];
+  const todoList = todoResponse?.todos.filter((todo: Todo) => todo.done === false) || [];
+  const doneList = todoResponse?.todos.filter((todo: Todo) => todo.done === true) || [];
 
   useEffect(() => {
     setGoalTitle(goalResponse?.title);
@@ -149,7 +113,7 @@ export default function Goal() {
         type={confirmType}
         dialogRef={confirmRef}
         confirmText={confirm.message}
-        onConfirmClick={handleDeleteConfirmClick}
+        onConfirmClick={handleConfirmClick}
         confirm
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
@@ -175,7 +139,7 @@ export default function Goal() {
                       handleKeyDown={handleKeydownInput}
                     />
                   ) : (
-                    <span className='text-slate-800 text-lg font-semibold'>{goalResponse?.title}</span>
+                    <span className='text-slate-800 text-lg font-semibold'>{goalTitle}</span>
                   )}
                 </div>
               </div>
@@ -183,7 +147,7 @@ export default function Goal() {
                 isGoal={true}
                 noteId={false}
                 item={goalResponse || []}
-                handlePopupClick={handlePopupClick}
+                handlePopupClick={handleGoalPopupClick}
                 openPopupId={popupOpen}
                 setOpenPopupId={setPopupOpen}
               />
@@ -216,7 +180,7 @@ export default function Goal() {
                 </button>
               </div>
               {todoList.length ? (
-                <ListTodo onButtonClick={handleButtonClick} showGoal={false} todos={todoList} />
+                <ListTodo onButtonClick={handleListPopupClick} showGoal={false} todos={todoList} />
               ) : (
                 <div className='flex items-center justify-center h-full'>
                   <p className='text-slate-500 text-sm'>해야할 일이 아직 없어요</p>
@@ -228,7 +192,7 @@ export default function Goal() {
             >
               <h3 className='text-slate-800 text-lg font-bold'>Done</h3>
               {doneList.length ? (
-                <ListTodo onButtonClick={handleButtonClick} showGoal={false} todos={doneList} />
+                <ListTodo onButtonClick={handleListPopupClick} showGoal={false} todos={doneList} />
               ) : (
                 <div className='flex items-center justify-center h-full'>
                   <p className='text-slate-500 text-sm'>해야할 일이 아직 없어요</p>

@@ -40,7 +40,7 @@ export default function LinkUrlPopup({ dialogRef, onLinkUrlChange }: LinkUrlPopu
     };
     const handleCloseEvent = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onLinkUrlChange('cancel');
+        onLinkUrlChange('');
       }
     };
     if (!dialogRef.current) return;
@@ -62,7 +62,7 @@ export default function LinkUrlPopup({ dialogRef, onLinkUrlChange }: LinkUrlPopu
           <h1 className='text-lg font-bold'>링크 업로드</h1>
           <button
             onClick={() => {
-              onLinkUrlChange('cancel');
+              onLinkUrlChange('');
               handlePopupClose();
             }}
           >
@@ -85,8 +85,9 @@ export default function LinkUrlPopup({ dialogRef, onLinkUrlChange }: LinkUrlPopu
               handleChange={handleLinkUrlChange}
             />
           </label>
-          {/*TODO linkUrl에 대한 유효성 검사 필요*/}
-          <Button type='submit' size='xl' variant='solid' disabled={!linkUrl} />
+          <Button type='submit' size='xl' variant='solid' disabled={!linkUrl}>
+            확인
+          </Button>
         </form>
       </div>
     </dialog>

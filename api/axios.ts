@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 
-const BASE_URL = 'https://sp-slidtodo-api.vercel.app/1-1';
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const isServer = typeof window === 'undefined';
 const ACCESS_TOKEN = 'accessToken';
 const REFRESH_TOKEN = 'refreshToken';

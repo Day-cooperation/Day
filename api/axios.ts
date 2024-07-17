@@ -36,6 +36,7 @@ instance.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
+
     // 이미 재시도한 요청인지 확인
     if (originalRequest.url === 'auth/tokens') {
       window.location.replace('/signin');
@@ -44,7 +45,8 @@ instance.interceptors.response.use(
     console.log('error.response?.message: ', originalRequest);
 
     const refreshToken = Cookies.get(REFRESH_TOKEN);
-    if (!refreshToken) window.location.replace('/signin');
+    if (!refreshToken && window.location.pathname !== '/signin' && window.location.pathname !== '/signup')
+      window.location.replace('/signin');
     // 액세스 토큰 만료 시
     if (refreshToken && error.response?.status === 401) {
       try {

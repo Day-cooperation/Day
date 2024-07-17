@@ -7,7 +7,7 @@ import { VALIDATE_INPUT_VALUE } from '@/constans';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError, isAxiosError } from 'axios';
 import Link from 'next/link';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type SigninInput = {
@@ -55,7 +55,7 @@ export default function Signin() {
     <>
       <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)} method='post'>
         <label className='mb-6 font-semibold'>
-          아이디
+          이메일
           <MixedInput
             size='full'
             name='email'

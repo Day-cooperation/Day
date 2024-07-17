@@ -73,7 +73,7 @@ export default function Signup() {
           />
         </label>
         <label className='mb-6 font-semibold'>
-          아이디
+          이메일
           <MixedInput
             size='full'
             name='email'

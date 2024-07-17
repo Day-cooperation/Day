@@ -13,7 +13,7 @@ export const VALIDATE_INPUT_VALUE = {
     },
   },
   password: {
-    regexp: /^(?=.*\d)[a-zA-Z\d]{8,}$/,
+    regexp: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
     message: {
       required: '패스워드를 입력해주세요.',
       pattern: '알파벳과 숫자를 섞어 입력해주세요.',

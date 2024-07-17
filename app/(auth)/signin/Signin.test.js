@@ -10,23 +10,11 @@ jest.mock('next/navigation');
 
 describe('Signin Page', () => {
 
-  beforeAll(() => {
-    // Enable API mocking before all the tests.
-    server.listen()
-  })
+  // 목 서버 실행
+  beforeAll(() => server.listen());
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
   
-  afterEach(() => {
-    // Reset the request handlers between each test.
-    // This way the handlers we add on a per-test basis
-    // do not leak to other, irrelevant tests.
-    server.resetHandlers()
-  })
-  
-
-  afterAll(() => {
-    // Finally, disable API mocking after the tests are done.
-    server.close()
-  })
   // 목함수 선언
   const mockRouterPush = jest.fn();
   beforeEach(() => {
@@ -43,7 +31,6 @@ describe('Signin Page', () => {
     expect(screen.getByLabelText('이메일')).toBeInTheDocument();
     expect(screen.getByLabelText('비밀번호')).toBeInTheDocument();
   });
-
 
   test('빈 input 일 시 에러 메시지', async () => {
     const loginBtn = screen.getByRole('button', { name: '로그인' });
@@ -75,6 +62,15 @@ describe('Signin Page', () => {
     fireEvent.submit(screen.getByRole('button', { name: /로그인/ }));
 
     expect(await screen.findByText(/가입되지 않은 이메일입니다/)).toBeInTheDocument();
+  });
+
+  test('비밀번호 틀렸을 때 이메일 에러메시지', async () => {
+    fireEvent.change(screen.getByLabelText(/이메일/), { target: { value: 'test@email.com' } });
+    fireEvent.change(screen.getByLabelText(/비밀번호/), { target: { value: 'password123' } });
+
+    fireEvent.submit(screen.getByRole('button', { name: /로그인/ }));
+
+    expect(await screen.findByText(/비밀번호가 올바르지 않습니다/)).toBeInTheDocument();
   });
 
   test('로그인 성공 시 /dashboard로 리다이렉트', async () => {

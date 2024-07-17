@@ -45,7 +45,7 @@ instance.interceptors.response.use(
     console.log('error.response?.message: ', originalRequest);
 
     const refreshToken = Cookies.get(REFRESH_TOKEN);
-    if (!refreshToken && window.location.pathname !== '/signin' && window.location.pathname !== '/signup')
+    if (!refreshToken && (window.location.pathname === '/signin' || window.location.pathname === '/signup'))
       window.location.replace('/signin');
     // 액세스 토큰 만료 시
     if (refreshToken && error.response?.status === 401) {

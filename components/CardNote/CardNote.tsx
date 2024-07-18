@@ -35,10 +35,6 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
   });
 
   const handlePopupClick = (type: ListTodoButtons, id: number) => {
-    if (type === 'note read') {
-      noteMutate(id);
-      // 추가
-    }
     if (type === 'edit') {
       router.push(`/notes/${id}/edit`);
     }
@@ -66,7 +62,10 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
       {noteList.map((item) => (
-        <div className='bg-white p-6 w-full max-w-[792px] border-[1px] rounded-xl'>
+        <button
+          className='bg-white p-6 w-full max-w-[792px] border-[1px] rounded-xl text-left'
+          onClick={() => noteMutate(item.id)}
+        >
           <div className='flex justify-between items-center mb-4'>
             <div className='bg-blue-100 w-7 h-7 rounded-[8.4px] flex items-center justify-center'>
               <NoteList />
@@ -87,7 +86,7 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
               <span className='text-xs font-normal'>{item.todo.title}</span>
             </div>
           </div>
-        </div>
+        </button>
       ))}
     </>
   );

@@ -9,12 +9,6 @@ import { server } from '@/mocks/server';
 jest.mock('next/navigation');
 
 describe('Signin Page', () => {
-
-  // 목 서버 실행
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
-  
   // 목함수 선언
   const mockRouterPush = jest.fn();
   beforeEach(() => {

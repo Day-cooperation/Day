@@ -2,18 +2,11 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import Signup from './page';
 import { customRender } from '@/test-utils/TestProvider';
-import { server } from '@/mocks/server';
 
 // navigation 목
 jest.mock('next/navigation');
 
 describe('Signup Page', () => {
-
-  // 목 서버 실행
-  beforeAll(() => server.listen());
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
-
   // 목함수 선언
   const mockRouterPush = jest.fn();
   beforeEach(() => {

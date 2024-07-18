@@ -2,16 +2,20 @@
   @apply !top-auto bottom-full mb-1;
 }
 
+.ql-toolbar.ql-snow .ql-formats:nth-child(3) {
+  @apply !mr-0;
+}
+
+.quill {
+  @apply flex flex-col grow overflow-y-auto;
+}
+
 .ql-container.ql-snow {
-  @apply !border-none;
+  @apply !border-none flex flex-col grow overflow-y-auto;
 }
 
 .ql-editor {
-  @apply !h-editor !p-0 !font-pretendard;
-}
-
-[data-link='true'] {
-  @apply !h-urlView;
+  @apply grow max-h-full !font-pretendard overflow-y-auto;
 }
 
 .ql-editor.ql-blank::before {

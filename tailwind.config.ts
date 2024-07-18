@@ -10,10 +10,6 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      height: {
-        editor: 'calc(100vh - 330px)',
-        urlView: 'calc(100vh - 382px)',
-      },
       fontFamily: {
         pretendard: ['var(--font-pretendard)'],
       },
@@ -27,11 +23,6 @@ const config: Config = {
     },
   },
   darkMode: 'class',
-  plugins: [
-    nextui(),
-    function ({ addVariant }: { addVariant: (name: string, generator: string) => void }) {
-      addVariant('data-link', '&[data-link="true"]');
-    },
-  ],
+  plugins: [nextui()],
 };
 export default config;

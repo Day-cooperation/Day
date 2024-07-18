@@ -11,7 +11,7 @@ export default function Dashboard() {
 
   if (isLoading) return <h1>loading...</h1>;
   return (
-    <div className='flex flex-col p-4 md:p-6 items-stretch max-w-[1200px] md:gap-3'>
+    <div className='flex flex-col p-4 md:p-6 items-stretch max-w-[1200px] md:gap-3 lg:ml-[331px]'>
       <h1 className='text-left max-w-full hidden md:block text-slate-900 text-lg font-semibold'>대시보드</h1>
       <main className=' flex flex-col md:gap-6 gap-4'>
         <div className='flex flex-col md:flex-row md:gap-6 gap-4'>

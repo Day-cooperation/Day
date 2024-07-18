@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MixedInput from '../Input/MixedInput';
 import { queryKey, useGetQuery } from '@/queries/query';
+import { useSideMenuOpen } from '@/stores/useSideMenuOpen';
 
 export default function SideMenu() {
   const queryClient = useQueryClient();
@@ -31,6 +32,9 @@ export default function SideMenu() {
   const [currentTab, setCurrentTab] = useState('DashBoard');
   const router = useRouter();
   const sideRef = useRef<HTMLDivElement>(null);
+
+  const { setIsOpen: setSideMenuOpen } = useSideMenuOpen();
+
   const toggleSideMenu = () => {
     setIsOpen(!isOpen);
   };
@@ -78,6 +82,7 @@ export default function SideMenu() {
   };
 
   useEffect(() => {
+    setSideMenuOpen(isOpen);
     const outsideClick = (e: MouseEvent) => {
       if (typeof window !== 'undefined') {
         if (isOpen && !sideRef.current?.contains(e.target as Node) && window.innerWidth < 1024) {
@@ -94,10 +99,10 @@ export default function SideMenu() {
       <Modal modalType='create' isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       {isOpen ? (
         <>
-          <div className='hidden z-[11] md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black'></div>
+          <div className='hidden z-[11] md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black '></div>
           <div
             ref={sideRef}
-            className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isOpen ? '' : 'hidden'}`}
+            className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 border-r ${isOpen ? '' : 'hidden'}`}
           >
             <div className='p-6 border-b'>
               <div className='flex justify-between mb-4 md:mb-[13px]'>
@@ -221,7 +226,7 @@ export default function SideMenu() {
             <h2 className='text-slate-900 font-semibold'>{currentTab}</h2>
           </div>
           {/* 테블릿 이상 */}
-          <div className='z-10 fixed hidden md:block w-[60px] duration-150 bg-white p-[15px] h-screen'>
+          <div className='z-10 fixed hidden md:block w-[60px] duration-150 bg-white p-[15px] h-screen border-r'>
             <div className='flex flex-col justify-between items-center gap-4'>
               <LogoIcon />
               <button type='button' onClick={toggleSideMenu}>

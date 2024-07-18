@@ -12,36 +12,19 @@ export const handlers = [
         ctx.json({ message: '가입되지 않은 이메일입니다.' }) // 응답 데이터
       );
     } else if (email === 'test@email.com' && password === 'test1234') {
-      return res(
-        ctx.status(201), // 상태 코드
-        ctx.json({ ...mock, user: { email, name: 'test' } }) // 응답 데이터
-      );
+      return res(ctx.status(201), ctx.json(jest.fn()));
     } else if (email === 'test@email.com' && password !== 'test1234') {
       return res(ctx.status(400), ctx.json({ message: '비밀번호가 올바르지 않습니다.' }));
     }
   }),
 
   rest.post(BASE_URL + '/user', (req, res, ctx) => {
-    const { email, name } = req.body;
+    const { email } = req.body;
     if (email === 'test@email.com') {
       console.log('vvv');
       return res(ctx.status(409), ctx.json({ message: '이미 사용 중인 이메일입니다.' }));
     } else {
-      return res(ctx.status(201), ctx.json({ ...mock, user: { email, name } }));
+      return res(ctx.status(201), ctx.json(jest.fn()));
     }
   }),
 ];
-
-const mock = {
-  data: {
-    accessToken: 'accesstoken',
-    refreshToken: 'refreshtoken',
-    user: {
-      id: 7,
-      email: 'test@email.com',
-      name: 'test',
-      createdAt: '2024-07-08T14:21:16.862Z',
-      updatedAt: '2024-07-08T14:21:16.862Z',
-    },
-  },
-};

@@ -24,14 +24,13 @@ describe('convertTodoToFormdata', () => {
     };
 
     const expected = {
-        title: 'Test Todo',
-        fileUrl: 'test-file-url',
-        linkUrl: 'test-link-url',
-        goalId: 1,
-        done: true,
-      };
+      title: 'Test Todo',
+      fileUrl: 'test-file-url',
+      linkUrl: 'test-link-url',
+      goalId: 1,
+      done: true,
+    };
 
     expect(convertTodoToFormdata(todo)).toEqual(expected);
   });
-
 });

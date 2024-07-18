@@ -194,7 +194,7 @@ export default function Goal() {
                 <ListTodo onButtonClick={handleListPopupClick} showGoal={false} todos={doneList} />
               ) : (
                 <div className='flex items-center justify-center h-full'>
-                  <p className='text-slate-500 text-sm'>해야할 일이 아직 없어요</p>
+                  <p className='text-slate-500 text-sm'> 아직 다 한 일이 없어요</p>
                 </div>
               )}
             </div>

@@ -17,6 +17,12 @@ type PopoverProps = {
 export default function Popover({ isGoal, item, openPopupId, handlePopupClick, setOpenPopupId }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
+  const handleOptionClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, type: 'edit' | 'delete') => {
+    e.stopPropagation();
+    handlePopupClick(type, item.id);
+    setOpenPopupId(null);
+  };
+
   useEffect(() => {
     const outsideClick = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
@@ -31,7 +37,8 @@ export default function Popover({ isGoal, item, openPopupId, handlePopupClick, s
       <PopoverTrigger className='focus-visible:outline-none'>
         <button
           className={`${isGoal ? 'block' : 'hidden'} group-hover:block`}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             if (openPopupId) {
               setOpenPopupId(null);
             } else {
@@ -46,19 +53,13 @@ export default function Popover({ isGoal, item, openPopupId, handlePopupClick, s
         <div className='flex flex-col text-sm text-slate-700' ref={popoverRef}>
           <button
             className='px-4 pt-2 pb-1.5 rounded-lg focus-visible:outline-none hover:bg-slate-200'
-            onClick={() => {
-              handlePopupClick('edit', item.id);
-              setOpenPopupId(null);
-            }}
+            onClick={(e) => handleOptionClick(e, 'edit')}
           >
             수정하기
           </button>
           <button
             className='px-4 pt-1.5 rounded-lg pb-2 focus-visible:outline-none hover:bg-slate-200'
-            onClick={() => {
-              handlePopupClick('delete', item.id);
-              setOpenPopupId(null);
-            }}
+            onClick={(e) => handleOptionClick(e, 'delete')}
           >
             삭제하기
           </button>

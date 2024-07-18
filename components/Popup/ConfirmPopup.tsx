@@ -10,7 +10,7 @@ type ConfirmPopupProps = {
   description?: string;
   confirm?: boolean;
   onConfirmClick: (confirm: 'ok' | 'cancel', type: string) => void;
-  type: string;
+  type?: string;
 };
 
 export default function ConfirmPopup({
@@ -53,7 +53,7 @@ export default function ConfirmPopup({
 
   return (
     <dialog className='rounded-lg z-100' ref={dialogRef}>
-      <div className=' flex w-[402px] p-6' ref={divRef}>
+      <div className=' flex mx-[38px] md:w-[450px] lg:w-[402px] p-6' ref={divRef}>
         <div className='w-full flex flex-col justify-between gap-6'>
           <div className='flex justify-end'>
             <button
@@ -77,6 +77,7 @@ export default function ConfirmPopup({
                   handlePopupClose();
                 }}
                 size='sm'
+                className='h-12'
               >
                 취소
               </Button>
@@ -88,6 +89,7 @@ export default function ConfirmPopup({
               }}
               size='sm'
               variant='solid'
+              className='h-12'
             >
               확인
             </Button>

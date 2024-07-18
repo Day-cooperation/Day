@@ -55,7 +55,7 @@ export default function TodoList() {
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
       <Modal modalType={modalType} isOpen={isOpen} items={todo} onClose={onClose} />
-      <div className='w-full p-4 md:p-6 bg-slate-100 h-full'>
+      <div className='w-full p-4 md:p-6 bg-slate-100 h-full lg:ml-[331px] '>
         <div className='w-full max-w-[792px] flex flex-col gap-4 h-full'>
           <div className='flex justify-between'>
             <h1 className='text-lg font-semibold text-slate-900'>{pageTitle}</h1>

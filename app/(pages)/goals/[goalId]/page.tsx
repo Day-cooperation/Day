@@ -119,7 +119,7 @@ export default function Goal() {
       <NoteRead dialogRef={noteRef} data={noteData} />
       <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} items={todo} />
 
-      <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px]'>
+      <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px] lg:ml-[331px]'>
         <h2 className='text-slate-900 text-lg font-semibold '>목표</h2>
         <div className='flex flex-col gap-4 md:gap-6 h-full'>
           <div className=' bg-white border border-slate-100 rounded-xl px-6 py-4 flex flex-col gap-6'>

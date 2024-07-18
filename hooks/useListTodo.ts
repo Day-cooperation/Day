@@ -2,6 +2,7 @@ import { deleteRequest, getRequest, patchRequest } from '@/api/api';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { Goal } from '@/types/Goal';
 import { ListTodoButtons, Todo } from '@/types/Todo';
+import { fileDownload } from '@/utils/fileDownload';
 import { useDisclosure } from '@nextui-org/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRef, useState } from 'react';
@@ -78,6 +79,20 @@ export const useListTodo = (goalId?: number) => {
     }
     if (type === 'note read') {
       noteMutate(selecteItem.noteId);
+    }
+    if (type === 'file') {
+      fileDownload(selecteItem);
+    }
+    if (type === 'link') {
+      let link = selecteItem.linkUrl;
+      if (typeof window !== 'undefined') {
+        if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1'))
+          if (!selecteItem.linkUrl.startsWith('http')) link = 'http://' + link;
+
+        window.open(link);
+      }
+    }
+    if (type === 'note write') {
     }
   };
 

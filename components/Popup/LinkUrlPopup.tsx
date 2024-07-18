@@ -40,7 +40,7 @@ export default function LinkUrlPopup({ dialogRef, onLinkUrlChange }: LinkUrlPopu
     };
     const handleCloseEvent = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onLinkUrlChange('');
+        handlePopupClose();
       }
     };
     if (!dialogRef.current) return;
@@ -57,12 +57,11 @@ export default function LinkUrlPopup({ dialogRef, onLinkUrlChange }: LinkUrlPopu
 
   return (
     <dialog ref={dialogRef} className='rounded-xl'>
-      <div ref={divRef} className='p-6 flex flex-col w-[472px] gap-6 '>
+      <div ref={divRef} className='p-6 flex flex-col w-[311px] md:w-[520px] lg:w-[472px] gap-6 '>
         <div className='flex justify-between'>
           <h1 className='text-lg font-bold'>링크 업로드</h1>
           <button
             onClick={() => {
-              onLinkUrlChange('');
               handlePopupClose();
             }}
           >

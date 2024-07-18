@@ -5,6 +5,7 @@ import { ListTodoButtons, Todo } from '@/types/Todo';
 import { fileDownload } from '@/utils/fileDownload';
 import { useDisclosure } from '@nextui-org/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
 export const useListTodo = (goalId?: number) => {
@@ -18,6 +19,7 @@ export const useListTodo = (goalId?: number) => {
   const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
   const [todo, setTodo] = useState();
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const router = useRouter();
 
   // 노트 읽고 띄워주기
   const { data: noteData, mutate: noteMutate } = useMutation({
@@ -93,6 +95,7 @@ export const useListTodo = (goalId?: number) => {
       }
     }
     if (type === 'note write') {
+      router.push(`/note/${id}/write`);
     }
   };
 

@@ -12,10 +12,9 @@ type PopoverProps = {
   openPopupId: number | null;
   handlePopupClick: (buttonType: ListTodoButtons, id: number) => void;
   setOpenPopupId: Dispatch<number | null>;
-  noteId?: boolean;
 };
 
-export default function Popover({ isGoal, item, openPopupId, handlePopupClick, setOpenPopupId, noteId }: PopoverProps) {
+export default function Popover({ isGoal, item, openPopupId, handlePopupClick, setOpenPopupId }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -45,17 +44,6 @@ export default function Popover({ isGoal, item, openPopupId, handlePopupClick, s
       </PopoverTrigger>
       <PopoverContent>
         <div className='flex flex-col text-sm text-slate-700' ref={popoverRef}>
-          {noteId && (
-            <button
-              className='px-4 pt-2 pb-1.5 rounded-lg focus-visible:outline-none hover:bg-slate-200'
-              onClick={() => {
-                handlePopupClick('note read', item.id);
-                setOpenPopupId(null);
-              }}
-            >
-              노트 보기
-            </button>
-          )}
           <button
             className='px-4 pt-2 pb-1.5 rounded-lg focus-visible:outline-none hover:bg-slate-200'
             onClick={() => {

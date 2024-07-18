@@ -100,7 +100,7 @@ export default function SideMenu() {
           <div className='hidden z-[11] md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black '></div>
           <div
             ref={sideRef}
-            className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isSideMenuOpen ? '' : 'hidden'}`}
+            className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isSideMenuOpen ? '' : 'hidden'} border-r`}
           >
             <div className='p-6 border-b'>
               <div className='flex justify-between mb-4 md:mb-[13px]'>
@@ -218,7 +218,7 @@ export default function SideMenu() {
         // 사이드 메뉴 접혔을 때
         <>
           {/* 모바일 */}
-          <div className='h-12 bg-white md:hidden flex items-center gap-4 px-4'>
+          <div className='h-12 bg-white md:hidden flex items-center gap-4 px-4 border-b'>
             <button type='button' onClick={toggleSideMenu}>
               <Hamburger />
             </button>

@@ -60,7 +60,7 @@ export default function RecentlyTodo() {
             <p className='text-sm text-slate-500'>최근 등록한 할 일이 없어요</p>
           </div>
         )}
-        <div className='absolute bottom-4 h-[51px] w-[calc(100%-48PX)] bg-gradient-to-b from-white/0 to-white/100 pointer-events-none' />
+        <div className='absolute bottom-4 h-[51px] w-[calc(100%-48px)] bg-gradient-to-b from-white/0 to-white/100 pointer-events-none' />
       </div>
     </>
   );

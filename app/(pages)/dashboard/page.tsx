@@ -28,7 +28,7 @@ export default function Dashboard() {
             <h2 className='text-slate-800 text-lg font-semibold'>목표 별 할 일</h2>
           </div>
           <div className='lg:grid lg:grid-cols-2 gap-4 flex flex-col'>
-            {goalListReseponse.goals.map((goal: Goal, index: number) => {
+            {goalListReseponse?.goals.map((goal: Goal, index: number) => {
               if (index >= 3) return;
               return <CardGoal key={goal.id} goal={goal} index={index} />;
             })}

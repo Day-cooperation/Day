@@ -58,7 +58,7 @@ describe('Signin Page', () => {
     expect(await screen.findByText(/가입되지 않은 이메일입니다/)).toBeInTheDocument();
   });
 
-  test('비밀번호 틀렸을 때 이메일 에러메시지', async () => {
+  test('비밀번호 틀렸을 때 비밀번호 에러메시지', async () => {
     fireEvent.change(screen.getByLabelText(/이메일/), { target: { value: 'test@email.com' } });
     fireEvent.change(screen.getByLabelText(/비밀번호/), { target: { value: 'password123' } });
 

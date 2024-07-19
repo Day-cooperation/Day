@@ -37,7 +37,7 @@ export default function Popover({ isGoal, item, openPopupId, handlePopupClick, s
       <PopoverTrigger className='focus-visible:outline-none'>
         <button
           aria-label='popover'
-          className={`${isGoal ? 'block' : 'hidden'} group-hover:block`}
+          className={`${isGoal ? 'block' : 'lg:hidden'} group-hover:block`}
           onClick={(e) => {
             e.stopPropagation();
             if (openPopupId) {

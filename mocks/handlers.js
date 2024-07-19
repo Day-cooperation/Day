@@ -1,7 +1,7 @@
 import { rest } from 'msw';
-import { env } from 'process';
+import { mockGoalList, mockNoteList, mockProgress, mockTodoList, mockUser } from './mockResponse';
 
-const BASE_URL = env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 // 요청마다 여기에다 반환할 값들 추가 해줘야 함
 export const handlers = [
   rest.post(BASE_URL + '/auth/login', (req, res, ctx) => {
@@ -26,5 +26,24 @@ export const handlers = [
     } else {
       return res(ctx.status(201), ctx.json(jest.fn()));
     }
+  }),
+
+  rest.get(BASE_URL + '/user', (req, res, ctx) => {
+    return res(ctx.json(mockUser));
+  }),
+  rest.get(BASE_URL + '/goals', (req, res, ctx) => {
+    return res(ctx.json(mockGoalList));
+  }),
+  rest.get(BASE_URL + '/goals/:id', (req, res, ctx) => {
+    return res(ctx.json(mockGoalList.goals[0]));
+  }),
+  rest.get(BASE_URL + '/todos', (req, res, ctx) => {
+    return res(ctx.json(mockTodoList));
+  }),
+  rest.get(BASE_URL + '/todos/progress', (req, res, ctx) => {
+    return res(ctx.json(mockProgress));
+  }),
+  rest.get(BASE_URL + '/notes', (req, res, ctx) => {
+    return res(ctx.json(mockNoteList));
   }),
 ];

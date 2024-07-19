@@ -88,8 +88,7 @@ export const useListTodo = (goalId?: number) => {
     if (type === 'link') {
       let link = selecteItem.linkUrl;
       if (typeof window !== 'undefined') {
-        if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1'))
-          if (!selecteItem.linkUrl.startsWith('http')) link = 'http://' + link;
+        if (!selecteItem.linkUrl.startsWith('http')) link = 'https://' + link;
 
         window.open(link);
       }

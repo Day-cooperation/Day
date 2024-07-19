@@ -80,13 +80,9 @@ export default function Note() {
 
   const { data: notes } = useGetQuery.note(undefined, todo?.noteId, hasNote);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-
-    setInputValue((prev) => ({ ...prev, [name]: e.target.value }));
-
-    if (name !== 'title') return;
-    if (e.target.value === notes?.[name]) {
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue((prev) => ({ ...prev, title: e.target.value }));
+    if (e.target.value === notes?.title) {
       setPostEnable(false);
     } else {
       setPostEnable(true);
@@ -302,7 +298,7 @@ export default function Note() {
                 className='py-3 md:text-lg font-medium placeholder:text-slate-400 border-y-1 w-full'
                 placeholder='노트의 제목을 입력해주세요'
                 value={inputValue.title || ''}
-                onChange={handleChange}
+                onChange={handleTitleChange}
               />
               <Counting isTitle={true} target={inputValue.title} className='absolute top-3 right-0 font-medium' />
             </div>

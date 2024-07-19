@@ -35,8 +35,9 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
   });
 
   const handlePopupClick = (type: ListTodoButtons, id: number) => {
+    const todoId = noteList.find((note) => note.id === id)?.todo.id;
     if (type === 'edit') {
-      router.push(`/notes/${id}/edit`);
+      router.push(`/note/write/${todoId}`);
     }
 
     if (type === 'delete') {

@@ -25,7 +25,11 @@ export default function TodoListButtons({ item, handleClick }: TodoListButtonsPr
           <Note className='w-6 h-6' />
         </button>
       )}
-      <button aria-label='note-write' className='hidden group-hover:block' onClick={() => handleClick('note write', item.id)}>
+      <button
+        aria-label='note-write'
+        className='lg:hidden group-hover:block'
+        onClick={() => handleClick('note write', item.id)}
+      >
         <NoteWrite className='w-6 h-6' />
       </button>
     </>

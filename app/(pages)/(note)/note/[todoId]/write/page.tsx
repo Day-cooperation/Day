@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { queryKey } from '@/queries/query';
 
 const noti = () => toast(<ToastRender />);
 
@@ -53,7 +54,7 @@ export default function Note() {
     mutationKey: ['postNote'],
     mutationFn: (noteValue: NoteInputValue) => postRequest({ url: `notes`, data: noteValue }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
+      queryClient.invalidateQueries(queryKey.todo());
       setInputValue(INITIAL_VALUE);
       clearUrl();
       router.push('/todolist');
@@ -64,7 +65,7 @@ export default function Note() {
     mutationKey: ['patchNote'],
     mutationFn: (noteValue: NoteInputValue) => patchRequest({ url: `notes/${todo.noteId}`, data: noteValue }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getTodos'] });
+      queryClient.invalidateQueries(queryKey.todo());
       setInputValue(INITIAL_VALUE);
       clearUrl();
       router.push('/todolist');
@@ -86,18 +87,18 @@ export default function Note() {
 
     if (name !== 'title') return;
     if (e.target.value === notes?.[name]) {
-      setPostEnable(() => false);
+      setPostEnable(false);
     } else {
-      setPostEnable(() => true);
+      setPostEnable(true);
     }
   };
 
   const handleEditorChange = (content: string) => {
     setInputValue((prev) => ({ ...prev, content: content }));
     if (content === notes.content) {
-      setPostEnable(() => false);
+      setPostEnable(false);
     } else {
-      setPostEnable(() => true);
+      setPostEnable(true);
     }
   };
 

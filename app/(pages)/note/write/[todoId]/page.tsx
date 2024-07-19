@@ -91,7 +91,7 @@ export default function Note() {
 
   const handleEditorChange = (content: string) => {
     setInputValue((prev) => ({ ...prev, content: content }));
-    if (content === notes.content) {
+    if (content === notes?.content) {
       setPostEnable(false);
     } else {
       setPostEnable(true);

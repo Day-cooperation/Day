@@ -12,7 +12,7 @@ export default function NoteList() {
 
   if (isLoading) return <h2>loading</h2>;
   return (
-    <div className='lg:ml-[331px] p-4 md:p-6 flex flex-col h-full gap-4 max-w-[792px]'>
+    <div className='p-4 md:p-6 flex flex-col h-full gap-4 max-w-[792px]'>
       <h2 className='text-slate-900 text-lg font-semibold '>노트 모아보기</h2>
       <div className='flex items-center gap-2 py-[14px] px-6 bg-white rounded-xl border border-slate-100'>
         <div className='p-[4.8px] bg-black rounded-lg'>

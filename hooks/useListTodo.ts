@@ -95,7 +95,7 @@ export const useListTodo = (goalId?: number) => {
       }
     }
     if (type === 'note write') {
-      router.push(`/note/${id}/write`);
+      router.push(`/note/write/${id}`);
     }
   };
 

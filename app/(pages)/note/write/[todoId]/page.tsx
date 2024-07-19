@@ -42,7 +42,7 @@ export default function Note() {
   const [confirmType, setConfirmType] = useState('');
   const [postEnable, setPostEnable] = useState(false);
 
-  const mainTagClassName = `${isOpen ? 'lg:ml-[331px]' : 'md:ml-0 lg:ml-[87px]'} ${embedUrl && 'lg:flex data-[open=true]:lg:!ml-[281px] lg:!ml-[60px]'}`;
+  const mainTagClassName = `${embedUrl && 'lg:flex data-[open=true]:lg:!-ml-[52px] data-[open=false]:lg:!-ml-[311px]'}`;
 
   const queryClient = useQueryClient();
 

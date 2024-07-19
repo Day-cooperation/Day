@@ -21,7 +21,6 @@ export const handlers = [
   rest.post(BASE_URL + '/user', (req, res, ctx) => {
     const { email } = req.body;
     if (email === 'test@email.com') {
-      console.log('vvv');
       return res(ctx.status(409), ctx.json({ message: '이미 사용 중인 이메일입니다.' }));
     } else {
       return res(ctx.status(201), ctx.json(jest.fn()));

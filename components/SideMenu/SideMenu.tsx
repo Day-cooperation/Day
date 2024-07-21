@@ -8,7 +8,7 @@ import Button from '../Buttons/Button';
 import { postRequest } from '@/api/api';
 import Modal from '../Modal/Modal';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MixedInput from '../Input/MixedInput';
 import { queryKey, useGetQuery } from '@/queries/query';
@@ -34,6 +34,7 @@ export default function SideMenu() {
   const [currentTab, setCurrentTab] = useState('DashBoard');
   const router = useRouter();
   const sideRef = useRef<HTMLDivElement>(null);
+  const pathName = usePathname();
 
   const { setIsOpen: setSideMenuOpen } = useSideMenuOpen();
 
@@ -42,9 +43,6 @@ export default function SideMenu() {
   };
 
   const handleMenuClick = (id?: number) => {
-    if (id) setCurrentTab('목표');
-    else setCurrentTab('대시보드');
-
     if (typeof window !== 'undefined') {
       if (window.innerWidth < 1024) {
         toggleSideMenu();
@@ -78,6 +76,14 @@ export default function SideMenu() {
     Cookies.remove('refreshToken');
     router.push('/signin');
   };
+
+  useEffect(() => {
+    if (pathName) {
+      const newHeader = pathName.split('/')[1];
+      const headerUpper = newHeader.charAt(0).toUpperCase() + newHeader.slice(1);
+      setCurrentTab(headerUpper);
+    }
+  }, [pathName]);
 
   useEffect(() => {
     setSideMenuOpen(isOpen);

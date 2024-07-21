@@ -71,7 +71,7 @@ export default function TodoList() {
             </button>
           </div>
 
-          <div className='flex flex-col gap-4 bg-white w-full h-[calc(100vh-124px)] md:h-full p-6 rounded-xl'>
+          <div className='flex flex-col gap-4 bg-white w-full min-h-[calc(100vh-130px)] md:min-h-[calc(100vh-92px)] p-6 rounded-xl'>
             <Filter handleClick={handleFilterClick} />
             <ListTodo todos={todos} showGoal={true} onButtonClick={handleListPopupClick} />
           </div>

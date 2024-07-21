@@ -1,8 +1,18 @@
 import { customRender } from '@/test-utils/TestProvider';
 import Dashboard from './page';
 import { fireEvent, screen, waitForElementToBeRemoved } from '@testing-library/react';
+import { useRouter } from 'next/navigation';
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 
 describe('Dashboard Page', () => {
+  const mockPush = jest.fn();
+  beforeAll(() => {
+    useRouter.mockReturnValue({ push: mockPush });
+  });
+
   test('Dashboard page 랜더링', async () => {
     customRender(<Dashboard />);
     await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));

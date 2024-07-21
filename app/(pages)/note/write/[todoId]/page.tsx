@@ -23,6 +23,10 @@ import { queryKey } from '@/queries/query';
 
 const noti = () => toast(<ToastRender />);
 
+type InputValueTypes = Omit<NoteInputValue, 'linkUrl'> & {
+  linkUrl?: string | null;
+};
+
 export default function Note() {
   const { url, setUrl, clearUrl } = useEmbedingUrlStore();
 
@@ -35,7 +39,7 @@ export default function Note() {
   const INITIAL_VALUE = { todoId: Number(todoId) || null, title: '', content: '', linkUrl: url || '' };
 
   const [hasNote, setHasNote] = useState(false);
-  const [inputValue, setInputValue] = useState<NoteInputValue>(INITIAL_VALUE);
+  const [inputValue, setInputValue] = useState<InputValueTypes>(INITIAL_VALUE);
   const [disable, setDisable] = useState({ pullButton: true, pushButton: true });
   const [embedUrl, setEmbedUrl] = useState<string | null>(null);
   const [confirmDescription, setConfirmDescription] = useState('');
@@ -52,7 +56,7 @@ export default function Note() {
 
   const { mutate: createNote } = useMutation({
     mutationKey: ['postNote'],
-    mutationFn: (noteValue: NoteInputValue) => postRequest({ url: `notes`, data: noteValue }),
+    mutationFn: (noteValue: InputValueTypes) => postRequest({ url: `notes`, data: noteValue }),
     onSuccess: () => {
       queryClient.invalidateQueries(queryKey.todo());
       setInputValue(INITIAL_VALUE);
@@ -63,7 +67,7 @@ export default function Note() {
 
   const { mutate: editNote } = useMutation({
     mutationKey: ['patchNote'],
-    mutationFn: (noteValue: NoteInputValue) => patchRequest({ url: `notes/${todo.noteId}`, data: noteValue }),
+    mutationFn: (noteValue: InputValueTypes) => patchRequest({ url: `notes/${todo.noteId}`, data: noteValue }),
     onSuccess: () => {
       queryClient.invalidateQueries(queryKey.todo());
       setInputValue(INITIAL_VALUE);
@@ -108,7 +112,9 @@ export default function Note() {
       editNote(inputValue);
       return;
     }
-
+    if (!inputValue.linkUrl) {
+      delete inputValue.linkUrl;
+    }
     createNote(inputValue);
   };
 
@@ -228,7 +234,7 @@ export default function Note() {
             onClick={() => setEmbedUrl(() => null)}
           />
         )}
-        <div className='pt-[11px] md:pt-[25px] px-4 md:px-6 min-w-[375px] md:max-w-[684px] lg:max-w-[793px] min-h-[calc(100vh-48px)] max-h-[calc(100vh-48px)] md:min-h-screen md:max-h-screen flex justify-stretch flex-col relative overflow-y-auto '>
+        <div className='pt-[11px] md:pt-[25px] px-4 md:px-6 md:max-w-[684px] lg:max-w-[793px] min-h-[calc(100vh-48px)] max-h-[calc(100vh-48px)] md:min-h-screen md:max-h-screen flex justify-stretch flex-col relative overflow-y-auto '>
           <form onSubmit={handleSubmit}>
             <div className='flex justify-between items-center mb-4'>
               <h1 className='md:text-lg font-semibold text-slate-900'>{noteHeader}</h1>

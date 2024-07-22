@@ -11,16 +11,14 @@ import dynamic from 'next/dynamic';
 type ContentEditorProps = {
   value?: string;
   handleEditorChange: (content: string) => void;
-  linkUrlView: boolean;
-  temp: boolean;
 };
 
-const Editor = dynamic(() => import('react-quill'), {
+const Editor = dynamic(() => import('react-quill-new'), {
   loading: () => <p>Loading...</p>,
   ssr: false,
 });
 
-export default function ContentEditor({ value, handleEditorChange, linkUrlView, temp }: ContentEditorProps) {
+export default function ContentEditor({ value, handleEditorChange }: ContentEditorProps) {
   useEffect(() => {
     const loadIcons = async () => {
       const Quill = (await import('react-quill')).default.Quill;

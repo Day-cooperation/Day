@@ -34,7 +34,7 @@ export default function Note() {
 
   const { isOpen } = useSideMenuOpen();
 
-  const { todoId } = useParams();
+  const { todoId } = useParams() || {};
 
   const INITIAL_VALUE = { todoId: Number(todoId) || null, title: '', content: '', linkUrl: url || '' };
 
@@ -214,7 +214,7 @@ export default function Note() {
     setDisable((prev) => ({ ...prev, pullButton: false }));
   }, [todo, notes]);
 
-  if (isLoading) return <div>...isLoading</div>;
+  if (isLoading) return <div role='heading'>...isLoading</div>;
 
   return (
     <>
@@ -237,7 +237,9 @@ export default function Note() {
         <div className='pt-[11px] md:pt-[25px] px-4 md:px-6 md:max-w-[684px] lg:max-w-[793px] min-h-[calc(100vh-48px)] max-h-[calc(100vh-48px)] md:min-h-screen md:max-h-screen flex justify-stretch flex-col relative overflow-y-auto '>
           <form onSubmit={handleSubmit}>
             <div className='flex justify-between items-center mb-4'>
-              <h1 className='md:text-lg font-semibold text-slate-900'>{noteHeader}</h1>
+              <h1 role='heading' className='md:text-lg font-semibold text-slate-900'>
+                {noteHeader}
+              </h1>
               <div className='flex gap-2 -mr-1.5'>
                 <Button
                   type='button'
@@ -290,7 +292,12 @@ export default function Note() {
               <div className='rounded-md bg-slate-800 p-1'>
                 <NoteFlag className='w-4 h-4' />
               </div>
-              <h2 className='font-medium text-slate-800'>{todo?.goal?.title}</h2>
+
+              {todo?.goal ? (
+                <h2 className='font-medium text-slate-800'>{todo?.goal?.title}</h2>
+              ) : (
+                <h2 className='font-medium text-slate-300'>설정된 목표가 없어요.</h2>
+              )}
             </div>
             <div className='flex gap-2 items-center mb-6'>
               <span className='py-0.5, px-[3px] text-xs font-medium text-slate-700 bg-slate-100 rounded-[4px]'>
@@ -314,12 +321,7 @@ export default function Note() {
               <Toast />
             </div>
           </form>
-          <ContentEditor
-            linkUrlView={!!inputValue.linkUrl}
-            temp={!disable.pullButton}
-            value={inputValue.content}
-            handleEditorChange={handleEditorChange}
-          />
+          <ContentEditor value={inputValue.content} handleEditorChange={handleEditorChange} />
         </div>
       </main>
     </>

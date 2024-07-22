@@ -81,7 +81,7 @@ export const mockTodoList = {
       createdAt: '2024-07-18T07:07:11.522Z',
     },
     {
-      noteId: 2,
+      noteId: null,
       done: false,
       linkUrl: 'https://example.com/link2',
       fileUrl: 'https://example.com/file2',
@@ -109,6 +109,19 @@ export const mockTodoList = {
       },
       userId: 3,
       teamId: 'team3',
+      updatedAt: '2024-07-18T09:00:00.000Z',
+      createdAt: '2024-07-18T09:00:00.000Z',
+    },
+    {
+      noteId: 5,
+      done: true,
+      linkUrl: 'https://example.com/link5',
+      fileUrl: 'https://example.com/file5',
+      title: 'Todo TEST',
+      id: 5,
+      goal: null,
+      userId: 1,
+      teamId: 'team1',
       updatedAt: '2024-07-18T09:00:00.000Z',
       createdAt: '2024-07-18T09:00:00.000Z',
     },
@@ -151,5 +164,47 @@ export const mockGoalList = {
     },
   ],
 };
+
+export const mockNote = [
+  {
+    id: 5,
+    title: 'Title Test',
+    content: '<p>Example Content Test</p>',
+    linkUrl: 'https://www.naver.com',
+    createdAt: '2024-07-19T23:12:06.349Z',
+    updatedAt: '2024-07-22T13:16:59.824Z',
+    teamId: 'team1',
+    userId: 1,
+    goal: null,
+    todo: {
+      id: 5,
+      title: 'REACT-QUILL',
+      fileUrl: null,
+      linkUrl: null,
+      done: false,
+    },
+  },
+  {
+    id: 1,
+    title: 'Title Test',
+    content: '<p><em style="color: rgb(230, 0, 0);">Example Content Test</em></p>',
+    linkUrl: 'https://www.naver.com',
+    createdAt: '2024-07-19T23:12:06.349Z',
+    updatedAt: '2024-07-22T13:16:59.824Z',
+    teamId: 'team1',
+    userId: 1,
+    goal: {
+      id: 1,
+      title: 'First Goal',
+    },
+    todo: {
+      id: 1,
+      title: 'REACT-QUILL',
+      fileUrl: null,
+      linkUrl: null,
+      done: false,
+    },
+  },
+];
 
 export const mockProgress = { progress: 0 };

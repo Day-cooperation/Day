@@ -1,4 +1,5 @@
 import { Cancel } from '@/assets/svgs';
+import { useEffect, useState } from 'react';
 
 type EmbededProps = {
   embedUrl: string;
@@ -7,6 +8,15 @@ type EmbededProps = {
 };
 
 export default function Embeded({ embedUrl, dataYoutube, onClick }: EmbededProps) {
+  const [formatUrl, setFormatUrl] = useState(embedUrl);
+
+  //https:// 가 없으면 상대경로로 인식 하기 때문에 넣어줘야함.
+  useEffect(() => {
+    if (!embedUrl.startsWith('https://')) {
+      setFormatUrl(`https://${embedUrl}`);
+    }
+  }, []);
+
   return (
     <div
       data-youtube={dataYoutube}
@@ -22,7 +32,7 @@ export default function Embeded({ embedUrl, dataYoutube, onClick }: EmbededProps
           <iframe
             width={'100%'}
             height={'100%'}
-            src={embedUrl}
+            src={formatUrl}
             allow='acceleromater; autoplay; clipboard-write encrypted-media; gyroscope; picture-in-picture'
             allowFullScreen
             className='group-data-[youtube=true]:absolute group-data-[youtube=true]:top-0 group-data-[youtube=true]:bottom-0 lg:w-[543px] data-[youtube=false]:h-[clac(100%-40px)]'

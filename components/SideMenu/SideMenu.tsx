@@ -1,7 +1,6 @@
 'use client';
 import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, Flag } from '@/assets/svgs/index';
 
-import Cookies from 'js-cookie';
 import { BaseSyntheticEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
 import Button from '../Buttons/Button';
@@ -14,6 +13,7 @@ import MixedInput from '../Input/MixedInput';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { useSideMenuOpen } from '@/stores/useSideMenuOpen';
 import { useDisclosure } from '@nextui-org/react';
+import { signOut } from 'next-auth/react';
 
 export default function SideMenu() {
   const queryClient = useQueryClient();
@@ -71,12 +71,6 @@ export default function SideMenu() {
     }
   };
 
-  const handleLogoutClick = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-    router.push('/signin');
-  };
-
   useEffect(() => {
     if (pathName) {
       const newHeader = pathName.split('/')[1];
@@ -127,7 +121,7 @@ export default function SideMenu() {
                   <button
                     type='button'
                     className='text-slate-400 text-xs font-normal md:text-left'
-                    onClick={handleLogoutClick}
+                    onClick={() => signOut({ callbackUrl: '/signin' })}
                   >
                     로그아웃
                   </button>

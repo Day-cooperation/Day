@@ -8,7 +8,6 @@ import { useGetQuery } from '@/queries/query';
 
 export default function Dashboard() {
   const { data: goalListReseponse, isLoading } = useGetQuery.goal();
-
   if (isLoading) return <h1>loading...</h1>;
   return (
     <div className='flex flex-col p-4 md:p-6 items-stretch max-w-[1200px] md:gap-3'>

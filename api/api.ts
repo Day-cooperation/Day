@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { instance } from './axios';
+import { axiosAuth } from './axios';
 
 type BASIC_URL = 'goals' | 'notes' | 'todos' | string;
 type GET_URL = BASIC_URL | 'todos/progress' | 'user';
@@ -12,7 +12,7 @@ interface GetRequest {
 // get 요청
 export const getRequest = async ({ url, params }: GetRequest) => {
   try {
-    const response = await instance.get(url, { params });
+    const response = await axiosAuth.get(url, { params });
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);
@@ -27,7 +27,7 @@ interface PostRequest {
 // post 요청
 export const postRequest = async ({ url, data }: PostRequest) => {
   try {
-    const response = await instance.post(url, data);
+    const response = await axiosAuth.post(url, data);
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);
@@ -43,7 +43,7 @@ interface PatchRequest {
 // patch 요청
 export const patchRequest = async ({ url, params, data }: PatchRequest) => {
   try {
-    const response = await instance.patch(url, data, { params });
+    const response = await axiosAuth.patch(url, data, { params });
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
@@ -62,7 +62,7 @@ interface DeleteRequest {
 // delete
 export const deleteRequest = async ({ url, params }: DeleteRequest) => {
   try {
-    const response = await instance.delete(url, { params });
+    const response = await axiosAuth.delete(url, { params });
     return response.data;
   } catch (e) {
     if (e instanceof AxiosError) console.error(e.message);

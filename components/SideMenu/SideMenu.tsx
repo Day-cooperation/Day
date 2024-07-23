@@ -106,7 +106,7 @@ export default function SideMenu() {
           <div className='hidden z-[11] md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black '></div>
           <div
             ref={sideRef}
-            className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isSideMenuOpen ? '' : 'hidden'} border-r`}
+            className={`fixed w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isSideMenuOpen ? '' : 'hidden'} border-r`}
           >
             <div className='p-6 border-b'>
               <div className='flex justify-between mb-4 md:mb-[13px]'>

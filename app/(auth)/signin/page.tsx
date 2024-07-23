@@ -1,11 +1,9 @@
 'use client';
 
-import { signin } from '@/api/auth';
 import Button from '@/components/Buttons/Button';
 import MixedInput from '@/components/Input/MixedInput';
 import { VALIDATE_INPUT_VALUE } from '@/constans';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError, isAxiosError } from 'axios';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -29,26 +27,33 @@ export default function Signin() {
     setError,
     formState: { errors },
   } = useForm<SigninInput>({ mode: 'all' });
-  const mutation = useMutation({
-    mutationFn: (data: SigninInput) => signin(data),
-    onSuccess: () => {
-      router.push('/dashboard');
-      return <div>loading...</div>;
-    },
-    onError: (error: AxiosError<ErrorResponse>) => {
-      if (!isAxiosError(error)) return;
-      if (error.response?.data.message.includes('이메일')) {
-        setError('email', { message: error.response.data.message });
-      }
-      if (error.response?.data.message.includes('비밀번호')) {
-        setError('password', { message: error.response.data.message });
-      }
-    },
-  });
+  // const mutation = useMutation({
+  //   mutationFn: (data: SigninInput) => signin(data),
+  //   onSuccess: () => {
+  //     router.push('/dashboard');
+  //     return <div>loading...</div>;
+  //   },
+  //   onError: (error: AxiosError<ErrorResponse>) => {
+  //     if (!isAxiosError(error)) return;
+  //     if (error.response?.data.message.includes('이메일')) {
+  //       setError('email', { message: error.response.data.message });
+  //     }
+  //     if (error.response?.data.message.includes('비밀번호')) {
+  //       setError('password', { message: error.response.data.message });
+  //     }
+  //   },
+  // });
 
-  const onSubmit: SubmitHandler<SigninInput> = (data, e) => {
+  const onSubmit: SubmitHandler<SigninInput> = async (data, e) => {
     e?.preventDefault();
-    mutation.mutate(data);
+
+    // next auth에 signin 데이터 보내줌
+    const res = await signIn('credentials', {
+      email: data.email,
+      password: data.password,
+      callbackUrl: '/dashboard',
+      redirect: true,
+    });
   };
 
   return (

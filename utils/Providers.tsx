@@ -10,7 +10,13 @@ const queryClient = new QueryClient();
 export default function Providers({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
-      <ProgressBar height='4px' color='#3b82f6' startPosition={0.3} options={{ showSpinner: false }} shallowRouting />
+      <ProgressBar
+        height='4px'
+        color='#3b82f6'
+        startPosition={0.3}
+        options={{ showSpinner: false }}
+        shallowRouting={true}
+      />
       <QueryClientProvider client={queryClient}>
         <NextUIProvider>{children}</NextUIProvider>
         <ReactQueryDevtools initialIsOpen={false} />

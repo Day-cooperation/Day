@@ -27,7 +27,7 @@ export default function Dashboard() {
             <h2 className='text-slate-800 text-lg font-semibold'>목표 별 할 일</h2>
           </div>
           {isLoading ? (
-            <Spinner role='status' className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
+            <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
           ) : (
             <div className='lg:grid lg:grid-cols-2 gap-4 flex flex-col'>
               {goalListReseponse.goals.map((goal: Goal, index: number) => {

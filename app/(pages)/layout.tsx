@@ -1,20 +1,19 @@
 'use client';
 import '@/styles/globals.css';
 import SideMenu from '@/components/SideMenu/SideMenu';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import nProgress from 'nprogress';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     nProgress.done();
     return () => {
       nProgress.start();
     };
-  }, [pathName, searchParams]);
+  }, [pathName]);
   return (
     <>
       <div

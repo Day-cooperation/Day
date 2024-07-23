@@ -32,18 +32,18 @@ describe('todolist page', () => {
   });
 
   test('랜더링 초기 filter 는 All 이어야 한다,', () => {
-    expect(buttonAllElement).toHaveClass('bg-blue-500');
-    expect(buttonDoneElement).not.toHaveClass('bg-blue-500');
-    expect(buttonTodoElement).not.toHaveClass('bg-blue-500');
+    expect(buttonAllElement).toHaveAttribute('aria-pressed', 'true');
+    expect(buttonDoneElement).toHaveAttribute('aria-pressed', 'false');
+    expect(buttonTodoElement).toHaveAttribute('aria-pressed', 'false');
   });
 
   test('filter 의 Done 버튼을 누르면 Done:true 인 리스트만 보여야한다', async () => {
     fireEvent.click(buttonDoneElement);
 
     await waitFor(() => {
-      expect(buttonAllElement).not.toHaveClass('bg-blue-500');
+      expect(buttonAllElement).toHaveAttribute('aria-pressed', 'false');
     });
-    expect(buttonDoneElement).toHaveClass('bg-blue-500');
+    expect(buttonDoneElement).toHaveAttribute('aria-pressed', 'true');
 
     expect(screen.getByText(/first todo/i)).toBeInTheDocument();
     expect(screen.getByText(/Third todo/i)).toBeInTheDocument();

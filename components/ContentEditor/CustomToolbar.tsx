@@ -19,7 +19,7 @@ export const CustomToolbar = () => {
       <LinkUrlPopup dialogRef={linkPopupRef} onLinkUrlChange={(response) => setUrl(response)} />
       <div
         id='toolbar'
-        className='rounded-[21.5px] bg-white border-slate-200 absolute bottom-6 left-4 right-4 md:left-6 md:right-6 flex'
+        className='rounded-[21.5px] bg-white border-slate-200 absolute bottom-6 left-4 right-4 md:left-0 md:right-0 lg:left-0 lg:right-0 flex'
       >
         <div className='flex grow justify-between'>
           <div>

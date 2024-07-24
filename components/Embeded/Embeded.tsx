@@ -5,9 +5,10 @@ type EmbededProps = {
   embedUrl: string;
   dataYoutube: boolean;
   onClick: () => void;
+  className?: string;
 };
 
-export default function Embeded({ embedUrl, dataYoutube, onClick }: EmbededProps) {
+export default function Embeded({ embedUrl, dataYoutube, onClick, className }: EmbededProps) {
   const [formatUrl, setFormatUrl] = useState(embedUrl);
 
   //https:// 가 없으면 상대경로로 인식 하기 때문에 넣어줘야함.
@@ -20,7 +21,7 @@ export default function Embeded({ embedUrl, dataYoutube, onClick }: EmbededProps
   return (
     <div
       data-youtube={dataYoutube}
-      className='h-[425px] md:h-auto lg:flex lg:h-screen lg:min-w-[543px] lg:flex-col lg:justify-center bg-blue-50 group overflow-hidden lg:relative'
+      className={`h-[425px] md:h-auto lg:flex lg:h-screen lg:min-w-[543px] lg:flex-col lg:justify-center bg-blue-50 group overflow-hidden lg:relative ${className}`}
     >
       <div className='flex justify-end bg-white p-2 lg:absolute lg:top-0 lg:left-0 lg:right-0'>
         <button className='w-6 h-6 p-[5px]' onClick={onClick}>

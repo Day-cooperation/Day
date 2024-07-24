@@ -80,7 +80,7 @@ export default function SideMenu() {
   }, [pathName]);
 
   useEffect(() => {
-    setSideMenuOpen(isOpen);
+    setSideMenuOpen(isSideMenuOpen);
     const outsideClick = (e: MouseEvent) => {
       if (typeof window !== 'undefined') {
         if (isSideMenuOpen && !sideRef.current?.contains(e.target as Node) && window.innerWidth < 1024) {

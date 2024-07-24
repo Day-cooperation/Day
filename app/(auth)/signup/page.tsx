@@ -43,7 +43,6 @@ export default function Signup() {
       }
     },
   });
-
   const onSubmit: SubmitHandler<SignupInput> = (data, e) => {
     e?.preventDefault();
     delete data.passwordConfirm;

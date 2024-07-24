@@ -1,6 +1,7 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth';
 import { signin } from '@/api/auth';
+import { AxiosError } from 'axios';
 
 const handler = NextAuth({
   // Configure one or more authentication providers
@@ -19,7 +20,9 @@ const handler = NextAuth({
         const res = await signin({ email, password });
         if (res) {
           return res;
-        } else return null;
+        }
+
+        return null;
       },
     }),
   ],
@@ -33,12 +36,9 @@ const handler = NextAuth({
     },
   },
 
-  session: {
-    strategy: 'jwt',
-  },
-
   pages: {
     signIn: '/signin',
+    newUser: '/dashboard',
   },
 });
 

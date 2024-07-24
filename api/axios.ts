@@ -1,6 +1,5 @@
-import { useRefreshToken } from '@/hooks/useRefreshToken';
 import axios from 'axios';
-import { getSession, signIn, useSession } from 'next-auth/react';
+import { getSession, signIn } from 'next-auth/react';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 

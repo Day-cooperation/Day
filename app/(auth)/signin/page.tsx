@@ -13,10 +13,6 @@ type SigninInput = {
   password: string;
 };
 
-interface ErrorResponse {
-  message: string;
-}
-
 const { email, password } = VALIDATE_INPUT_VALUE;
 
 export default function Signin() {
@@ -51,9 +47,13 @@ export default function Signin() {
     const res = await signIn('credentials', {
       email: data.email,
       password: data.password,
-      callbackUrl: '/dashboard',
-      redirect: true,
+      redirect: false,
     });
+    if (res?.ok) router.push('dashboard');
+    if (!res?.ok) {
+      if (res?.error?.includes('이메일')) setError('email', { message: res?.error });
+      if (res?.error?.includes('비밀번호')) setError('password', { message: res?.error });
+    }
   };
 
   return (

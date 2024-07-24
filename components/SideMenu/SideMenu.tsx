@@ -121,7 +121,7 @@ export default function SideMenu() {
                   <button
                     type='button'
                     className='text-slate-400 text-xs font-normal md:text-left'
-                    onClick={() => signOut({ callbackUrl: '/signin' })}
+                    onClick={() => signOut()}
                   >
                     로그아웃
                   </button>

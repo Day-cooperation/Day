@@ -13,7 +13,13 @@ const queryClient = new QueryClient();
 
 export default function Providers({ children, session }: IProps) {
   return (
-    <SessionProvider session={session}>
+    <SessionProvider
+      session={session}
+      // Re-fetch session every 5 minutes
+      refetchInterval={5 * 60}
+      // Re-fetches session when window is focused
+      refetchOnWindowFocus={true}
+    >
       <QueryClientProvider client={queryClient}>
         <NextUIProvider>{children}</NextUIProvider>
         <ReactQueryDevtools initialIsOpen={false} />

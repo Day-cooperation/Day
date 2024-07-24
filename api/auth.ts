@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { instance } from './axios';
 
 interface Signin {
@@ -6,8 +7,14 @@ interface Signin {
 }
 
 export const signin = async (data: Signin) => {
-  const { data: response } = await instance.post('auth/login', data);
-  return response;
+  try {
+    const { data: response } = await instance.post('auth/login', data);
+    return response;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data.message);
+    }
+  }
 };
 
 interface Signup {

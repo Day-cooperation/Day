@@ -1,12 +1,15 @@
-'use client';
-
 import { Logo } from '@/assets/svgs';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
-export default function AuthLayout({
+export default async function AuthLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
+  if (session) redirect('/dashboard');
+
   return (
     <main className='fixed inset-0 h-screen p-4 bg-white flex flex-col justify-center items-center'>
       <div className='max-w-[640px] w-full  overflow-auto'>

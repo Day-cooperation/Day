@@ -7,7 +7,7 @@ export type User = {
 };
 
 export interface UserResponse {
-  accessToken: string
+  accessToken: string;
   refreshToken: string;
   user: {
     id: number;

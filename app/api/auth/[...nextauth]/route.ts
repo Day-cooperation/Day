@@ -1,27 +1,21 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth';
 import { signin } from '@/api/auth';
-import { AxiosError } from 'axios';
 
 const handler = NextAuth({
-  // Configure one or more authentication providers
+  // 로그인 타입
   providers: [
-    // ...add more providers here
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: 'Credentials',
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {},
       async authorize(credentials) {
         const { email, password } = credentials as any;
         const res = await signin({ email, password });
+        // res 성공할 시 세션에 res 저장
         if (res) {
           return res;
         }
-
+        // 실패시 null
         return null;
       },
     }),
@@ -30,15 +24,15 @@ const handler = NextAuth({
     async jwt({ token, user }) {
       return { ...token, ...user };
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       session.user = token as any;
       return session;
     },
   },
 
+  // custom page
   pages: {
     signIn: '/signin',
-    newUser: '/dashboard',
   },
 });
 

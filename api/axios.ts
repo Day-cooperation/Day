@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getSession, signIn } from 'next-auth/react';
+import { getSession, signOut } from 'next-auth/react';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -34,7 +34,7 @@ axiosAuth.interceptors.response.use(
         headers: { Authorization: session?.user.refreshToken },
       });
       if (session) session.user.accessToken = res.data.accessToken;
-      else signIn();
+      else signOut();
     }
     return Promise.reject(error);
   }

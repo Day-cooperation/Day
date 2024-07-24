@@ -23,22 +23,6 @@ export default function Signin() {
     setError,
     formState: { errors },
   } = useForm<SigninInput>({ mode: 'all' });
-  // const mutation = useMutation({
-  //   mutationFn: (data: SigninInput) => signin(data),
-  //   onSuccess: () => {
-  //     router.push('/dashboard');
-  //     return <div>loading...</div>;
-  //   },
-  //   onError: (error: AxiosError<ErrorResponse>) => {
-  //     if (!isAxiosError(error)) return;
-  //     if (error.response?.data.message.includes('이메일')) {
-  //       setError('email', { message: error.response.data.message });
-  //     }
-  //     if (error.response?.data.message.includes('비밀번호')) {
-  //       setError('password', { message: error.response.data.message });
-  //     }
-  //   },
-  // });
 
   const onSubmit: SubmitHandler<SigninInput> = async (data, e) => {
     e?.preventDefault();

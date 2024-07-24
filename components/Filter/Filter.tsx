@@ -17,6 +17,7 @@ export default function Filter({ handleClick }: { handleClick: (category: CATEGO
       {CATEGORY_LIST.map((category) => (
         <button
           aria-label={category}
+          aria-pressed={selectedCategory === category}
           key={category}
           className={`${selectedCategory === category ? 'border-blue-500 bg-blue-500 text-white' : 'text-slate-800 border-slate-200 bg-white'} duration-150 py-1 px-3 text-sm border-[1px] rounded-[17px]`}
           onClick={() => handleCategoryClick(category)}

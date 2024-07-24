@@ -34,6 +34,17 @@ const handler = NextAuth({
   pages: {
     signIn: '/signin',
   },
+  cookies: {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: true, // HTTPS를 사용하는 경우 true로 설정
+      },
+    },
+  },
 });
 
 export { handler as GET, handler as POST };

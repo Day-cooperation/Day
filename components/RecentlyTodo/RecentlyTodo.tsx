@@ -38,7 +38,7 @@ export default function RecentlyTodo() {
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
       <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} items={todo} />
-      <div className='relative w-full md:max-w-[588px] h-[250px] bg-white rounded-xl border-1 border-slate-100 px-6 py-4 flex flex-col gap-4'>
+      <div className='relative w-full md:max-w-[1152px] h-[250px] bg-white rounded-xl border-1 border-slate-100 px-6 py-4 flex flex-col gap-4'>
         <div className='flex justify-between'>
           <div className='flex items-center justify-center gap-2'>
             <div className='h-10 w-10 bg-blue-500 rounded-[15px] flex items-center justify-center'>

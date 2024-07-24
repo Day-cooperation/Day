@@ -14,6 +14,7 @@ export default function Providers({ children }: Readonly<{ children: React.React
         height='4px'
         color='#3b82f6'
         startPosition={0.3}
+        stopDelay={300}
         options={{ showSpinner: false }}
         shallowRouting={true}
       />

@@ -57,7 +57,8 @@ describe('note-w/e page', () => {
 
   test('noteId가 있는 경우 title, content (title,content는 필수) 랜더링 시 title은 "Title Test"를 보여주고 content는 "<p>Example Test Content<p>"를 보여주어야한다', async () => {
     useParams.mockReturnValue({ todoId: '1' });
-    await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));
+    await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
+
     const noteTitleEl = await screen.findByText(/title test/i);
     const contentEl = screen.getByText(/example content test/i);
     expect(noteTitleEl).toBeInTheDocument();
@@ -66,9 +67,9 @@ describe('note-w/e page', () => {
 
   test('임시 저장을 누르면 "임시 저장된 노트가 있어요. 저장된 노트를 불러오시겠어요?" 라는 문자열을 보여주고 localStorage에 저장한다', async () => {
     useParams.mockReturnValue({ todoId: '1' });
-    await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));
+    await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
 
-    const buttonEl = screen.getByRole('button', { name: '임시저장' });
+    const buttonEl = await screen.findByRole('button', { name: '임시저장' });
     await screen.findByText(/title test/i);
     fireEvent.click(buttonEl);
 
@@ -80,8 +81,9 @@ describe('note-w/e page', () => {
 
   test('"title" or "content"를 변경하고 노트 작성, 노트 수정을 누르면 todolist 페이지로 이동한다', async () => {
     useParams.mockReturnValue({ todoId: '1' });
-    await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));
-    const inputEl = screen.getByPlaceholderText('노트의 제목을 입력해주세요');
+    await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
+
+    const inputEl = await screen.findByPlaceholderText('노트의 제목을 입력해주세요');
 
     fireEvent.change(inputEl, { target: { value: 'new title' } });
     expect(inputEl.value).toEqual('new title');

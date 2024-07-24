@@ -293,7 +293,11 @@ export default function Note() {
                   <div className='rounded-md bg-slate-800 p-1'>
                     <NoteFlag className='w-4 h-4' />
                   </div>
-                  <h2 className='font-medium text-slate-800'>{todo?.goal?.title}</h2>
+                  {todo?.goal ? (
+                    <h2 className='font-medium text-slate-800'>{todo.goal.title}</h2>
+                  ) : (
+                    <h2 className='font-medium text-slate-300'>설정된 목표가 없어요.</h2>
+                  )}
                 </div>
                 <div className='flex gap-2 items-center mb-6'>
                   <span className='py-0.5, px-[3px] text-xs font-medium text-slate-700 bg-slate-100 rounded-[4px]'>

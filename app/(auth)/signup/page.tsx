@@ -2,11 +2,14 @@
 import { signup } from '@/api/auth';
 import Button from '@/components/Buttons/Button';
 import MixedInput from '@/components/Input/MixedInput';
+import ConfirmPopup from '@/components/Popup/ConfirmPopup';
 import { VALIDATE_INPUT_VALUE } from '@/constans';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type SignupInput = {
@@ -23,7 +26,11 @@ interface ErrorResponse {
 const { name, email, password, passwordConfirm } = VALIDATE_INPUT_VALUE;
 
 export default function Signup() {
-  const router = useRouter();
+  const confirmRef = useRef<HTMLDialogElement>(null);
+  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
+  const handleConfirmClick = () => {
+    signIn();
+  };
   const {
     register,
     setError,
@@ -34,8 +41,8 @@ export default function Signup() {
   const mutation = useMutation({
     mutationFn: (data: Omit<SignupInput, 'passwordConfirm'>) => signup(data),
     onSuccess: () => {
-      router.push('/dashboard');
-      <div>loading...</div>;
+      confirmRef.current?.showModal();
+      setConfirm({ message: '회원가입이 완료되었습니다.', setDeleteId: 0 });
     },
     onError: (error: AxiosError<ErrorResponse>) => {
       if (error.response?.data.message.includes('이메일')) {
@@ -43,7 +50,6 @@ export default function Signup() {
       }
     },
   });
-
   const onSubmit: SubmitHandler<SignupInput> = (data, e) => {
     e?.preventDefault();
     delete data.passwordConfirm;
@@ -52,6 +58,12 @@ export default function Signup() {
 
   return (
     <>
+      <ConfirmPopup
+        type='popup'
+        dialogRef={confirmRef}
+        confirmText={confirm.message}
+        onConfirmClick={handleConfirmClick}
+      />
       <form className='flex flex-col' onSubmit={handleSubmit(onSubmit)} method='post'>
         <label className='mb-6 font-semibold'>
           이름

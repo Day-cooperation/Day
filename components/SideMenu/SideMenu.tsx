@@ -1,18 +1,19 @@
 'use client';
 import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, Flag } from '@/assets/svgs/index';
 
-import Cookies from 'js-cookie';
 import { BaseSyntheticEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
 import Button from '../Buttons/Button';
 import { postRequest } from '@/api/api';
 import Modal from '../Modal/Modal';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import MixedInput from '../Input/MixedInput';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { useSideMenuOpen } from '@/stores/useSideMenuOpen';
+import { useDisclosure } from '@nextui-org/react';
+import { signOut } from 'next-auth/react';
 
 export default function SideMenu() {
   const queryClient = useQueryClient();
@@ -25,34 +26,29 @@ export default function SideMenu() {
       queryClient.invalidateQueries(queryKey.todo());
     },
   });
-  const [isOpen, setIsOpen] = useState(true);
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(true);
   const [isNewGoalInputActive, setIsNewGoalInputActive] = useState(false);
   const [goalInput, setGoalInput] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
   const [currentTab, setCurrentTab] = useState('DashBoard');
   const router = useRouter();
   const sideRef = useRef<HTMLDivElement>(null);
+  const pathName = usePathname();
 
   const { setIsOpen: setSideMenuOpen } = useSideMenuOpen();
 
   const toggleSideMenu = () => {
-    setIsOpen(!isOpen);
+    setIsSideMenuOpen(!isSideMenuOpen);
   };
 
   const handleMenuClick = (id?: number) => {
-    if (id) setCurrentTab('목표');
-    else setCurrentTab('대시보드');
-
     if (typeof window !== 'undefined') {
       if (window.innerWidth < 1024) {
         toggleSideMenu();
       }
     }
     if (id) router.push(`/goals/${id}`);
-  };
-
-  const handleNewTodoClick = () => {
-    setIsModalOpen(true);
   };
 
   const handleAddNewGoalClick = () => {
@@ -75,17 +71,19 @@ export default function SideMenu() {
     }
   };
 
-  const handleLogoutClick = () => {
-    Cookies.remove('accessToken');
-    Cookies.remove('refreshToken');
-    router.push('/signin');
-  };
+  useEffect(() => {
+    if (pathName) {
+      const newHeader = pathName.split('/')[1];
+      const headerUpper = newHeader.charAt(0).toUpperCase() + newHeader.slice(1);
+      setCurrentTab(headerUpper);
+    }
+  }, [pathName]);
 
   useEffect(() => {
-    setSideMenuOpen(isOpen);
+    setSideMenuOpen(isSideMenuOpen);
     const outsideClick = (e: MouseEvent) => {
       if (typeof window !== 'undefined') {
-        if (isOpen && !sideRef.current?.contains(e.target as Node) && window.innerWidth < 1024) {
+        if (isSideMenuOpen && !sideRef.current?.contains(e.target as Node) && window.innerWidth < 1024) {
           toggleSideMenu();
         }
       }
@@ -93,22 +91,23 @@ export default function SideMenu() {
     document.addEventListener('mousedown', outsideClick);
 
     return () => document.removeEventListener('mousedown', outsideClick);
-  }, [isOpen]);
+  }, [isSideMenuOpen]);
   return (
     <div>
-      <Modal modalType='create' isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      {isOpen ? (
+      <Modal modalType='create' isOpen={isOpen} onClose={onClose} />
+      {isSideMenuOpen ? (
         <>
           <div className='hidden z-[11] md:block lg:hidden fixed w-screen h-screen opacity-50 duration-150 bg-black '></div>
           <div
             ref={sideRef}
-            className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 border-r ${isOpen ? '' : 'hidden'}`}
+            className={`fixed z-[11] w-screen h-screen md:w-[280px] transition-all bg-white duration-150 ${isSideMenuOpen ? '' : 'hidden'} border-r`}
           >
             <div className='p-6 border-b'>
               <div className='flex justify-between mb-4 md:mb-[13px]'>
                 <Logo />
-                <button type='button' onClick={toggleSideMenu} className='hidden md:block hover:scale-105 duration-150'>
-                  <SideFoldButton />
+                <button type='button' onClick={toggleSideMenu} className='hover:scale-105 duration-150'>
+                  <SideFoldButton className='hidden md:block' />
+                  <Hamburger className='md:hidden' />
                 </button>
               </div>
 
@@ -122,7 +121,7 @@ export default function SideMenu() {
                   <button
                     type='button'
                     className='text-slate-400 text-xs font-normal md:text-left'
-                    onClick={handleLogoutClick}
+                    onClick={() => signOut()}
                   >
                     로그아웃
                   </button>
@@ -131,7 +130,7 @@ export default function SideMenu() {
 
               {/* 테블릿 ~ : 새 할 일 버튼 */}
               <div className='hidden md:block'>
-                <Button variant='solid' size='xl' className='h-[48px]' onClick={handleNewTodoClick}>
+                <Button variant='solid' size='xl' className='h-[48px]' onClick={onOpen}>
                   <div className='flex items-center'>
                     <Plus />
                     <span className='text-base font-semibold'>새 할 일</span>
@@ -151,7 +150,7 @@ export default function SideMenu() {
 
               {/* 모바일 : 새 할 일 버튼 */}
               <div className='md:hidden'>
-                <Button variant='solid' size='sm' onClick={handleNewTodoClick}>
+                <Button variant='solid' size='sm' onClick={onOpen}>
                   <div className='flex items-center justify-center'>
                     <Plus width={16} height={16} />
                     <span className='text-sm font-semibold'>새 할 일</span>
@@ -219,7 +218,7 @@ export default function SideMenu() {
         // 사이드 메뉴 접혔을 때
         <>
           {/* 모바일 */}
-          <div className='h-12 bg-white md:hidden flex items-center gap-4 px-4'>
+          <div className='h-12 bg-white md:hidden flex items-center gap-4 px-4 border-b'>
             <button type='button' onClick={toggleSideMenu}>
               <Hamburger />
             </button>

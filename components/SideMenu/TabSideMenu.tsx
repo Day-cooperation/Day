@@ -8,7 +8,7 @@ interface TabSideMenu {
 
 export default function TabSideMenu({ goalList, handleGoalClick }: TabSideMenu) {
   return (
-    <Listbox>
+    <Listbox aria-label='hidden'>
       {goalList?.map((goal) => (
         <ListboxItem key={goal.id} startContent='·' onClick={() => handleGoalClick(goal.id)}>
           {goal.title}

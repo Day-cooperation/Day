@@ -169,8 +169,9 @@ export default function Modal({ modalType, items, isOpen, onClose }: ModalProps)
         isOpen={isOpen}
         isDismissable={false}
         classNames={{
+          base: 'fixed inset-0 rounded-none mx-0 my-0 sm:mx-0 sm:my-0 md:flex md:flex-col md:relative z-50 w-full md:mx-1 md:my-1 max-w-md md:rounded-large max-w-full md:max-w-md overflow-y-auto',
           header: 'flex flex-col items-start',
-          closeButton: 'data-[focuc-visible=true]:!outline-none ',
+          closeButton: 'data-[focus-visible=true]:!outline-none ',
         }}
         onClose={handleConfirmModalClose}
       >

@@ -1,5 +1,5 @@
+import { AxiosError } from 'axios';
 import { instance } from './axios';
-import Cookies from 'js-cookie';
 
 interface Signin {
   email: string;
@@ -7,12 +7,14 @@ interface Signin {
 }
 
 export const signin = async (data: Signin) => {
-  const { data: response } = await instance.post('auth/login', data);
-  if (response.accessToken && typeof document !== 'undefined') {
-    Cookies.set('accessToken', response.accessToken);
-    Cookies.set('refreshToken', response.refreshToken);
+  try {
+    const { data: response } = await instance.post('auth/login', data);
+    return response;
+  } catch (e) {
+    if (e instanceof AxiosError) {
+      throw new Error(e.response?.data.message);
+    }
   }
-  return response;
 };
 
 interface Signup {
@@ -23,9 +25,5 @@ interface Signup {
 
 export const signup = async (data: Signup) => {
   const { data: response } = await instance.post('user', data);
-  if (response.accessToken && typeof document !== 'undefined') {
-    Cookies.set('accessToken', response.accessToken);
-    Cookies.set('refreshToken', response.refreshToken);
-  }
   return response;
 };

@@ -8,6 +8,7 @@ import NoteRead from '@/components/Note/NoteRead';
 import ConfirmPopup from '@/components/Popup/ConfirmPopup';
 import { useListTodo } from '@/hooks/useListTodo';
 import { Todo } from '@/types/Todo';
+import { Spinner } from '@nextui-org/react';
 import { useState } from 'react';
 
 export default function TodoList() {
@@ -40,10 +41,6 @@ export default function TodoList() {
     setTodoState(category);
   };
 
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
-
   return (
     <>
       <ConfirmPopup
@@ -55,7 +52,7 @@ export default function TodoList() {
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
       <Modal modalType={modalType} isOpen={isOpen} items={todo} onClose={onClose} />
-      <div className='w-full p-4 md:p-6 bg-slate-100 h-full'>
+      <div className='relative w-full p-4 md:p-6 bg-slate-100 h-full'>
         <div className='w-full max-w-[792px] flex flex-col gap-4 h-full'>
           <div className='flex justify-between'>
             <h1 className='text-lg font-semibold text-slate-900'>{pageTitle}</h1>
@@ -70,10 +67,15 @@ export default function TodoList() {
               할일 추가
             </button>
           </div>
-
-          <div className='flex flex-col gap-4 bg-white w-full h-[calc(100vh-124px)] md:h-full p-6 rounded-xl'>
-            <Filter handleClick={handleFilterClick} />
-            <ListTodo todos={todos} showGoal={true} onButtonClick={handleListPopupClick} />
+          <div className='flex flex-col gap-4 bg-white w-full min-h-[calc(100vh-130px)] md:min-h-[calc(100vh-92px)] p-6 rounded-xl'>
+            {isLoading ? (
+              <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
+            ) : (
+              <>
+                <Filter handleClick={handleFilterClick} />
+                <ListTodo todos={todos} showGoal={true} onButtonClick={handleListPopupClick} />
+              </>
+            )}
           </div>
         </div>
       </div>

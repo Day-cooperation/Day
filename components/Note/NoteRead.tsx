@@ -25,7 +25,7 @@ export default function NoteRead({ dialogRef, data }: NoteProps) {
     <dialog ref={dialogRef} className='bg-black/50 z-100'>
       <div
         data-embed={!!embedUrl}
-        className='fixed flex-col right-0 top-0 bg-white w-full lg:flex-row max-w-[512px] lg:max-w-[800px]  h-full data-[embed=true]:flex data-[embed=true]:lg:max-w-[1146.594px] lg:justify-end overflow-scroll '
+        className='group fixed data-[embed=true]:flex-col right-0 top-0 bg-white w-full data-[embed=true]:lg:flex-row max-w-[512px] lg:max-w-[800px] h-full data-[embed=true]:flex data-[embed=true]:lg:max-w-fit overflow-y-scroll'
       >
         {embedUrl && (
           <div className='bg-blue-50 flex flex-col lg:flex-row justify-center'>
@@ -36,7 +36,7 @@ export default function NoteRead({ dialogRef, data }: NoteProps) {
             />
           </div>
         )}
-        <div className='p-6'>
+        <div className='p-6 flex flex-col group-data-[embed=true]:lg:max-w-[800px] lg:min-w-[481px]'>
           <button className='p-[5px]' onClick={handleClickClose}>
             <Cancel className='w-[13px] h-[13px] mb-4' />
           </button>

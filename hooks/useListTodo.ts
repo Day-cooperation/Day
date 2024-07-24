@@ -15,8 +15,8 @@ export const useListTodo = (goalId?: number) => {
   const { data: goalResponse } = useGetQuery.goal(goalId ? goalId : undefined);
   const confirmRef = useRef<HTMLDialogElement>(null);
   const noteRef = useRef<HTMLDialogElement>(null);
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
   const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
+  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
   const [todo, setTodo] = useState();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const router = useRouter();
@@ -88,8 +88,7 @@ export const useListTodo = (goalId?: number) => {
     if (type === 'link') {
       let link = selecteItem.linkUrl;
       if (typeof window !== 'undefined') {
-        if (window.location.hostname.includes('localhost') || window.location.hostname.includes('127.0.0.1'))
-          if (!selecteItem.linkUrl.startsWith('http')) link = 'http://' + link;
+        if (!selecteItem.linkUrl.startsWith('http')) link = 'https://' + link;
 
         window.open(link);
       }

@@ -7,20 +7,19 @@ import { renderToString } from 'react-dom/server';
 import { EditorColor } from '@/assets/svgs';
 import './CustomQuill.css';
 import dynamic from 'next/dynamic';
+import { Spinner } from '@nextui-org/react';
 
 type ContentEditorProps = {
   value?: string;
   handleEditorChange: (content: string) => void;
-  linkUrlView: boolean;
-  temp: boolean;
 };
 
-const Editor = dynamic(() => import('react-quill'), {
-  loading: () => <p>Loading...</p>,
+const Editor = dynamic(() => import('react-quill-new'), {
+  loading: () => <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />,
   ssr: false,
 });
 
-export default function ContentEditor({ value, handleEditorChange, linkUrlView, temp }: ContentEditorProps) {
+export default function ContentEditor({ value, handleEditorChange }: ContentEditorProps) {
   useEffect(() => {
     const loadIcons = async () => {
       const Quill = (await import('react-quill')).default.Quill;
@@ -42,7 +41,7 @@ export default function ContentEditor({ value, handleEditorChange, linkUrlView, 
   }, []);
 
   return (
-    <div className='flex flex-col grow pb-[70px] overflow-y-auto'>
+    <div className='relative flex flex-col grow pb-[70px] overflow-y-auto'>
       <Editor
         theme='snow'
         modules={modules}

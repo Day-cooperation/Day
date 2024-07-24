@@ -15,8 +15,8 @@ export const useListTodo = (goalId?: number) => {
   const { data: goalResponse } = useGetQuery.goal(goalId ? goalId : undefined);
   const confirmRef = useRef<HTMLDialogElement>(null);
   const noteRef = useRef<HTMLDialogElement>(null);
-  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
   const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
+  const [modalType, setModalType] = useState<'create' | 'edit'>('create');
   const [todo, setTodo] = useState();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const router = useRouter();

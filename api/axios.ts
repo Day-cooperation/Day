@@ -26,15 +26,19 @@ axiosAuth.interceptors.response.use(
   (response) => response,
   async (error) => {
     const session = await getSession();
-
     const prevRequest = error?.config;
+    // accessToken 권한 없음
+    // refreshToken으로 accessToken 다시 발급
+    // 발급받은것 으로 session 다시 설정
     if (error?.response?.status === 401 && !prevRequest?.sent) {
-      prevRequest.sent = true;
-      const res = await instance.post('/auth/tokens', undefined, {
-        headers: { Authorization: session?.user.refreshToken },
-      });
-      if (session) session.user.accessToken = res.data.accessToken;
-      else signOut();
+      signOut();
+      // Todo: fix
+      // prevRequest.sent = true;
+      // const res = await instance.post('/auth/tokens', undefined, {
+      //   headers: { Authorization: session?.user.refreshToken },
+      // });
+      // if (session) session.user.accessToken = res.data.accessToken;
+      // else signOut();
     }
     return Promise.reject(error);
   }

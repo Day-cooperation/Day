@@ -15,7 +15,7 @@ describe('Dashboard Page', () => {
 
   test('Dashboard page 랜더링', async () => {
     customRender(<Dashboard />);
-    await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));
+    await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
 
     const todoList = screen.getAllByText(/First Todo/i);
     const goalList = screen.getAllByText(/First Goal/i);
@@ -38,14 +38,14 @@ describe('Dashboard Page', () => {
 
   test('모두 보기 속성 href /dashboard', async () => {
     customRender(<Dashboard />);
-    await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));
+    await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
 
     expect(screen.getByRole('link', { name: '모두 보기' })).toHaveAttribute('href', '/todolist');
   });
 
   test('Card Goal 3개만 보이기', async () => {
     customRender(<Dashboard />);
-    await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));
+    await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
 
     expect(screen.getByRole('heading', { name: 'First Goal' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Second Goal' })).toBeInTheDocument();
@@ -55,7 +55,7 @@ describe('Dashboard Page', () => {
 
   test('Card Goal 할일 추가 시 모달 띄우기', async () => {
     customRender(<Dashboard />);
-    await waitForElementToBeRemoved(() => screen.getAllByRole('heading', { name: /loading/i }));
+    await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
 
     const addTodoButton = screen.getAllByRole('button', { name: '할일 추가' })[0];
     fireEvent.click(addTodoButton);

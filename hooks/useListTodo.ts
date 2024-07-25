@@ -1,4 +1,4 @@
-import { deleteRequest, getRequest, patchRequest } from '@/api/api';
+import { deleteRequest, getRequest, patchRequest } from '@/lib/api/api';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { Goal } from '@/types/Goal';
 import { ListTodoButtons, Todo } from '@/types/Todo';

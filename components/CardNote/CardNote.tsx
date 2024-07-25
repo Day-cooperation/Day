@@ -6,7 +6,7 @@ import Popover from '../Popover/Popover';
 import { useRef, useState } from 'react';
 import { ListTodoButtons } from '@/types/Todo';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteRequest, getRequest } from '@/api/api';
+import { deleteRequest, getRequest } from '@/lib/api/api';
 import NoteRead from '@/components/Note/NoteRead';
 import { useRouter } from 'next/navigation';
 import { queryKey } from '@/queries/query';

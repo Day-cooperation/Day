@@ -1,6 +1,6 @@
 'use client';
 
-import { patchRequest, postRequest } from '@/api/api';
+import { patchRequest, postRequest } from '@/lib/api/api';
 import { Cancel, NoteFlag } from '@/assets/svgs';
 import Button from '@/components/Buttons/Button';
 import ContentEditor from '@/components/ContentEditor/ContentEditor';

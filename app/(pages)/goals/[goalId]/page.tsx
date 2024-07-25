@@ -1,6 +1,6 @@
 'use client';
 
-import { deleteRequest, patchRequest } from '@/api/api';
+import { deleteRequest, patchRequest } from '@/lib/api/api';
 import { ArrowRight, Flag, Plus } from '@/assets/svgs';
 import { NoteAndPen } from '@/assets/svgs/NoteAndPen';
 import MixedInput from '@/components/Input/MixedInput';

@@ -167,7 +167,7 @@ export default function Goal() {
             <ArrowRight />
           </Link>
 
-          <div className='flex flex-col lg:flex-row gap-6 '>
+          <div className='flex flex-col lg:grid gap-6 lg:grid-cols-2'>
             <div
               className={`flex flex-col lg:max-w-[588px] ${todoList.length > 4 ? '' : 'h-[238px]'} w-full bg-white px-6 py-4 rounded-xl gap-4`}
             >

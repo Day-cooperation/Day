@@ -10,7 +10,7 @@
 
 ![스크린샷](https://github.com/user-attachments/assets/7a86e05d-0620-4f04-8285-8e8176758307)
 
-**[Slid-todo 바로가기](https://slide-todo.vercel.app)**
+**[Slid Todo 바로가기](https://slide-todo.vercel.app)**
 
 </div>
 <br/>

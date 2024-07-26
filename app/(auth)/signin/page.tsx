@@ -88,7 +88,7 @@ export default function Signin() {
       </form>
       <div className='font-medium text-slate-800 text-center my-10'>
         <span>
-          솔리드 투 두가 처음이신가요?
+          슬리드 투 두가 처음이신가요?
           <Link className='underline text-[15px] font-medium text-[#3182f6] pl-1' href={'/signup'}>
             회원가입
           </Link>

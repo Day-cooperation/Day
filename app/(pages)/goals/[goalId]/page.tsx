@@ -58,7 +58,10 @@ export default function Goal() {
 
   const { mutate: updateGoalMutate } = useMutation({
     mutationFn: (input: string) => patchRequest({ url: `goals/${goalId}`, data: { title: input } }),
-    onSuccess: () => queryClient.invalidateQueries(queryKey.goal(Number(goalId))),
+    onSuccess: () => {
+      queryClient.invalidateQueries(queryKey.goal(Number(goalId)));
+      queryClient.invalidateQueries(queryKey.goal());
+    },
   });
 
   const handleAddTodo = () => {

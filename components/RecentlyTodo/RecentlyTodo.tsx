@@ -37,7 +37,7 @@ export default function RecentlyTodo() {
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
       <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} items={todo} />
-      <div className='relative w-full md:max-w-[588px] h-[250px] bg-white rounded-xl border-1 border-slate-100 px-6 py-4 flex flex-col gap-4'>
+      <div className='relative w-full h-[250px] bg-white rounded-xl border-1 border-slate-100 px-6 py-4 flex flex-col gap-4 max-w-[1200px]'>
         {isLoading ? (
           <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
         ) : (

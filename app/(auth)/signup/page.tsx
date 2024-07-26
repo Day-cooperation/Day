@@ -1,5 +1,5 @@
 'use client';
-import { signup } from '@/api/auth';
+import { signup } from '@/lib/api/auth';
 import Button from '@/components/Buttons/Button';
 import MixedInput from '@/components/Input/MixedInput';
 import ConfirmPopup from '@/components/Popup/ConfirmPopup';

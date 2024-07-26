@@ -1,6 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth';
-import { signin } from '@/api/auth';
+import { signin } from '@/lib/api/auth';
 
 const handler = NextAuth({
   // 로그인 타입
@@ -20,6 +20,7 @@ const handler = NextAuth({
       },
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       return { ...token, ...user };

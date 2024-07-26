@@ -8,9 +8,9 @@ import { NewTodo, Todo } from '@/types/Todo';
 import ModalFooter from './ModalFooter';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { convertTodoToFormdata } from '@/utils/convertTodoToFormdata';
-import { fileUpload } from '@/api/fileUpload';
+import { fileUpload } from '@/lib/api/fileUpload';
 import { Goal } from '@/types/Goal';
-import { patchRequest, postRequest } from '@/api/api';
+import { patchRequest, postRequest } from '@/lib/api/api';
 import { queryKey, useGetQuery } from '@/queries/query';
 
 type ModalProps = {

@@ -4,7 +4,7 @@ import { Home, LogoIcon, Hamburger, Profile, SideFoldButton, Logo, Plus, Flag } 
 import { BaseSyntheticEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import TabSideMenu from './TabSideMenu';
 import Button from '../Buttons/Button';
-import { postRequest } from '@/api/api';
+import { postRequest } from '@/lib/api/api';
 import Modal from '../Modal/Modal';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';

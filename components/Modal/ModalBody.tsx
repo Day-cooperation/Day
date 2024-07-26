@@ -36,7 +36,7 @@ export default function ModalBody({
         handleChange={(e: ChangeEvent<HTMLInputElement>, name) => {
           setData((prev) => ({ ...prev, [name]: e.target.value }));
         }}
-        props={{ placeholder: '할 일의 제목을 적어주세요' }}
+        props={{ placeholder: '할 일의 제목을 적어주세요', maxLength: 30 }}
       />
       <label className='font-semibold'>
         자료

@@ -2,7 +2,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import Signin from './page';
 import { customRender } from '@/test-utils/TestProvider';
-import { server } from '@/mocks/server';
+import { signIn } from 'next-auth/react';
 
 // 중요한 테스트는 실제 server but 그리 중요하지 않은것은 mock server
 // navigation 목
@@ -10,9 +10,11 @@ jest.mock('next/navigation');
 
 describe('Signin Page', () => {
   // 목함수 선언
+  const mockSignIn = jest.fn();
   const mockRouterPush = jest.fn();
   beforeEach(() => {
     // useRouter.push()할 때 mockRouterPush 호출
+    signIn.mockImplementation(mockSignIn);
     useRouter.mockReturnValue({ push: mockRouterPush });
     customRender(<Signin />);
   });
@@ -55,6 +57,8 @@ describe('Signin Page', () => {
 
     fireEvent.submit(screen.getByRole('button', { name: /로그인/ }));
 
+    mockSignIn.mockResolvedValue({ error: '가입되지 않은 이메일입니다.' });
+
     expect(await screen.findByText(/가입되지 않은 이메일입니다/)).toBeInTheDocument();
   });
 
@@ -64,6 +68,8 @@ describe('Signin Page', () => {
 
     fireEvent.submit(screen.getByRole('button', { name: /로그인/ }));
 
+    mockSignIn.mockResolvedValue({ error: '비밀번호가 올바르지 않습니다.' });
+
     expect(await screen.findByText(/비밀번호가 올바르지 않습니다/)).toBeInTheDocument();
   });
 
@@ -72,6 +78,7 @@ describe('Signin Page', () => {
     fireEvent.change(screen.getByLabelText(/비밀번호/), { target: { value: 'test1234' } });
 
     fireEvent.submit(screen.getByRole('button', { name: /로그인/ }));
+    mockSignIn.mockResolvedValue({ ok: true });
 
     await waitFor(() => {
       expect(mockRouterPush).toHaveBeenCalledWith('/dashboard');

@@ -8,7 +8,6 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -41,8 +40,8 @@ export default function Signup() {
   const mutation = useMutation({
     mutationFn: (data: Omit<SignupInput, 'passwordConfirm'>) => signup(data),
     onSuccess: () => {
-      confirmRef.current?.showModal();
       setConfirm({ message: '회원가입이 완료되었습니다.', setDeleteId: 0 });
+      confirmRef.current?.showModal();
     },
     onError: (error: AxiosError<ErrorResponse>) => {
       if (error.response?.data.message.includes('이메일')) {

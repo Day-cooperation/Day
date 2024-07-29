@@ -33,7 +33,7 @@ export default function Signin() {
       password: data.password,
       redirect: false,
     });
-    if (res?.ok) router.push('dashboard');
+    if (res?.ok) router.push('/dashboard');
     if (!res?.ok) {
       if (res?.error?.includes('이메일')) setError('email', { message: res?.error });
       if (res?.error?.includes('비밀번호')) setError('password', { message: res?.error });

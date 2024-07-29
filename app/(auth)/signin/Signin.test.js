@@ -5,15 +5,12 @@ import { customRender } from '@/test-utils/TestProvider';
 import { signIn } from 'next-auth/react';
 
 // 중요한 테스트는 실제 server but 그리 중요하지 않은것은 mock server
-// navigation 목
 jest.mock('next/navigation');
 
 describe('Signin Page', () => {
-  // 목함수 선언
   const mockSignIn = jest.fn();
   const mockRouterPush = jest.fn();
   beforeEach(() => {
-    // useRouter.push()할 때 mockRouterPush 호출
     signIn.mockImplementation(mockSignIn);
     useRouter.mockReturnValue({ push: mockRouterPush });
     customRender(<Signin />);

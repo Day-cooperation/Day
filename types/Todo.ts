@@ -23,7 +23,16 @@ export type Goal = {
   title: string;
 };
 
-export type ListTodoButtons = 'file' | 'link' | 'note write' | 'done' | 'note' | 'edit' | 'delete' | 'note read';
+export type ListTodoButtons =
+  | 'file'
+  | 'link'
+  | 'note write'
+  | 'done'
+  | 'note'
+  | 'edit'
+  | 'delete'
+  | 'note read'
+  | 'note delete';
 
 export type NewTodo = Pick<Todo, 'title' | 'linkUrl' | 'fileUrl' | 'done'> & {
   goalId?: number;

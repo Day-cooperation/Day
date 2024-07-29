@@ -58,6 +58,7 @@ export default function ListTodo({ todos = [], showGoal, displayTodoCount = 0, o
                   handlePopupClick={handleClick}
                   setOpenPopupId={setOpenPopupTodoId}
                   item={item}
+                  showNoteDelete={!!item.noteId}
                 />
               </div>
             </div>

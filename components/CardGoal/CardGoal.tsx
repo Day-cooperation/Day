@@ -63,7 +63,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
       <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} items={todo} />
 
       <div
-        className={`relative flex w-full p-6 flex-col ${isMoreFive() ? 'h-full' : 'h-[310px]'}  gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}
+        className={`relative flex w-full p-6 flex-col ${isMoreFive() ? 'h-full' : 'md:h-[304px]'}  gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}
       >
         {isLoading ? (
           <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
@@ -79,7 +79,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
               </div>
               <ProgressBar value={ProgressisLoading ? 0 : progressData?.progress} />
             </div>
-            <div className='grid grid-cols-2 gap-6 '>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-6 '>
               <ListTodoProgress
                 displayTodoCount={isMore ? 10 : 5}
                 subject='To do'

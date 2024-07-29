@@ -39,8 +39,6 @@ export default function Goal() {
     setModalType,
   } = useListTodo(Number(goalId));
 
-  const [confirmType, setConfirmType] = useState<'popup' | 'goal'>('popup');
-
   const router = useRouter();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
   const [goalTitle, setGoalTitle] = useState('');
@@ -88,18 +86,17 @@ export default function Goal() {
 
     if (type === 'delete') {
       if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
-      setConfirmType('goal');
+      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id, type: 'goal' });
       confirmRef.current.showModal();
     }
   };
 
   const handleConfirmClick = (answer: 'ok' | 'cancel') => {
     if (answer === 'ok') {
-      if (confirmType === 'goal') {
+      if (confirm.type === 'goal') {
         deleteGoalMutate(Number(goalId));
       } else {
-        handleDeleteConfirmClick(answer);
+        handleDeleteConfirmClick(answer, 'goal');
       }
     }
   };
@@ -113,7 +110,7 @@ export default function Goal() {
   return (
     <>
       <ConfirmPopup
-        type={confirmType}
+        type={confirm.type}
         dialogRef={confirmRef}
         confirmText={confirm.message}
         onConfirmClick={handleConfirmClick}

@@ -15,7 +15,7 @@ export const useListTodo = (goalId?: number) => {
   const { data: goalResponse } = useGetQuery.goal(goalId ? goalId : undefined);
   const confirmRef = useRef<HTMLDialogElement>(null);
   const noteRef = useRef<HTMLDialogElement>(null);
-  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
+  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0, type: '' });
   const [modalType, setModalType] = useState<'create' | 'edit'>('create');
   const [todo, setTodo] = useState();
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -50,7 +50,7 @@ export const useListTodo = (goalId?: number) => {
   const { mutate: deleteMutate } = useMutation({
     mutationFn: (id: number) => deleteRequest({ url: `todos/${id}` }),
     onSuccess: () => {
-      setConfirm({ message: '', setDeleteId: 0 });
+      setConfirm({ message: '', setDeleteId: 0, type: '' });
       if (goalId) {
         queryClient.invalidateQueries(queryKey.todo(goalId));
         queryClient.invalidateQueries(queryKey.progress(goalId));
@@ -60,7 +60,21 @@ export const useListTodo = (goalId?: number) => {
           queryClient.invalidateQueries(queryKey.progress(goal.id));
         });
       }
+    },
+  });
+
+  const { mutate: noteDeleteMutate } = useMutation({
+    mutationFn: (id: number) => deleteRequest({ url: `notes/${id}` }),
+    onSuccess: () => {
+      setConfirm({ message: '', setDeleteId: 0, type: '' });
       queryClient.invalidateQueries(queryKey.todo());
+      if (goalId) {
+        queryClient.invalidateQueries(queryKey.todo(goalId));
+      } else {
+        goalResponse?.goals.forEach((goal: Goal) => {
+          queryClient.invalidateQueries(queryKey.todo(goal.id));
+        });
+      }
     },
   });
 
@@ -71,7 +85,7 @@ export const useListTodo = (goalId?: number) => {
     }
     if (type === 'delete') {
       if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
+      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id, type: 'todo' });
       confirmRef.current.showModal();
     }
     if (type === 'edit') {
@@ -96,12 +110,21 @@ export const useListTodo = (goalId?: number) => {
     if (type === 'note write') {
       router.push(`/note/write/${id}`);
     }
+
+    if (type === 'note delete') {
+      if (!confirmRef.current) return;
+      setConfirm({ message: '정말로 노트를 삭제하시겠어요?', setDeleteId: id, type: 'note' });
+      confirmRef.current.showModal();
+    }
   };
 
-  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
-    if (answer === 'ok') {
+  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel', type: string) => {
+    if (answer === 'cancel') return;
+    if (type === 'todo') {
       deleteMutate(confirm.setDeleteId);
+      return;
     }
+    noteDeleteMutate(confirm.setDeleteId);
   };
 
   return {

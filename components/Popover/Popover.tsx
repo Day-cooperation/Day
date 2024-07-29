@@ -11,14 +11,35 @@ type PopoverProps = {
   item: Todo | Goal;
   openPopupId: number | null;
   handlePopupClick: (buttonType: ListTodoButtons, id: number) => void;
+  showNoteDelete?: boolean;
   setOpenPopupId: Dispatch<number | null>;
 };
 
-export default function Popover({ isGoal, item, openPopupId, handlePopupClick, setOpenPopupId }: PopoverProps) {
+function isTodo(item: Todo | Goal): item is Todo {
+  return (item as Todo).noteId !== undefined;
+}
+
+export default function Popover({
+  isGoal,
+  item,
+  openPopupId,
+  handlePopupClick,
+  showNoteDelete,
+  setOpenPopupId,
+}: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
 
-  const handleOptionClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, type: 'edit' | 'delete') => {
+  const handleOptionClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    type: 'edit' | 'delete' | 'note delete'
+  ) => {
     e.stopPropagation();
+
+    if (type === 'note delete' && isTodo(item) && item.noteId !== null) {
+      handlePopupClick(type, item.noteId);
+      setOpenPopupId(null);
+      return;
+    }
     handlePopupClick(type, item.id);
     setOpenPopupId(null);
   };
@@ -64,6 +85,14 @@ export default function Popover({ isGoal, item, openPopupId, handlePopupClick, s
           >
             삭제하기
           </button>
+          {showNoteDelete && (
+            <button
+              className='px-4 pt-1.5 rounded-lg pb-2 focus-visible:outline-none hover:bg-slate-200'
+              onClick={(e) => handleOptionClick(e, 'note delete')}
+            >
+              노트삭제
+            </button>
+          )}
         </div>
       </PopoverContent>
     </NextPopover>

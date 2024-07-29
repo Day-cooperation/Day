@@ -50,8 +50,8 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
       {noteList.map((item) => (
-        <button
-          className='bg-white p-6 w-full max-w-[792px] border-[1px] rounded-xl text-left'
+        <div
+          className='bg-white p-6 w-full max-w-[792px] border-[1px] rounded-xl text-left cursor-pointer'
           onClick={() => noteMutate(item.id)}
         >
           <div className='flex justify-between items-center mb-4'>
@@ -74,7 +74,7 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
               <span className='text-xs font-normal'>{item.todo.title}</span>
             </div>
           </div>
-        </button>
+        </div>
       ))}
     </>
   );

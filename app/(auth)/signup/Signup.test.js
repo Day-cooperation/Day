@@ -1,18 +1,10 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { useRouter } from 'next/navigation';
 import Signup from './page';
 import { customRender } from '@/test-utils/TestProvider';
 
-// navigation 목
-jest.mock('next/navigation');
-
 describe('Signup Page', () => {
   // 목함수 선언
-  const mockRouterPush = jest.fn();
   beforeEach(() => {
-    // useRouter.push()할 때 mockRouterPush 호출
-    useRouter.mockReturnValue({ push: mockRouterPush });
-
     customRender(<Signup />);
   });
 
@@ -51,15 +43,13 @@ describe('Signup Page', () => {
     expect(await screen.findByText('이미 사용 중인 이메일입니다.')).toBeInTheDocument();
   });
 
-  test('회원가입 성공 시 /dashboard로 리다이렉트', async () => {
+  test('회원가입 성공 시 문구 모달 띄움', async () => {
     fireEvent.change(screen.getByLabelText('이름'), { target: { value: 'test' } });
     fireEvent.change(screen.getByLabelText('이메일'), { target: { value: 'new@email.com' } });
     fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'qwer1234' } });
     fireEvent.change(screen.getByLabelText('비밀번호 확인'), { target: { value: 'qwer1234' } });
     fireEvent.submit(screen.getByRole('button', { name: '회원가입하기' }));
-
-    await waitFor(() => {
-      expect(mockRouterPush).toHaveBeenCalledWith('/dashboard');
-    });
+    
+    expect(await screen.findByText(/회원가입이 완료되었습니다/)).toBeInTheDocument();
   });
 });

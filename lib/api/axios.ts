@@ -12,7 +12,7 @@ export const axiosAuth = axios.create({
 });
 
 axiosAuth.interceptors.request.use(
-  async (config) => { 
+  async (config) => {
     const session = await getSession();
     if (session && !config.headers['Authorization']) {
       config.headers['Authorization'] = `Bearer ${session?.user?.accessToken}`;

@@ -3,7 +3,6 @@ import Signup from './page';
 import { customRender } from '@/test-utils/TestProvider';
 
 describe('Signup Page', () => {
-  // 목함수 선언
   beforeEach(() => {
     customRender(<Signup />);
   });

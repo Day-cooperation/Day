@@ -49,7 +49,7 @@ describe('Signup Page', () => {
     fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'qwer1234' } });
     fireEvent.change(screen.getByLabelText('비밀번호 확인'), { target: { value: 'qwer1234' } });
     fireEvent.submit(screen.getByRole('button', { name: '회원가입하기' }));
-    
+
     expect(await screen.findByText(/회원가입이 완료되었습니다/)).toBeInTheDocument();
   });
 });

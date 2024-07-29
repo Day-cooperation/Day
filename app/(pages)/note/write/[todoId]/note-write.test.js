@@ -27,8 +27,8 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 describe('note-w/e page', () => {
-  const mockPush = jest.fn();
-  useRouter.mockReturnValue({ push: mockPush });
+  const mockRouterBack = jest.fn();
+  useRouter.mockReturnValue({ back: mockRouterBack });
   beforeEach(() => {
     customRender(<Note />);
   });
@@ -79,7 +79,7 @@ describe('note-w/e page', () => {
     });
   });
 
-  test('"title" or "content"를 변경하고 노트 작성, 노트 수정을 누르면 todolist 페이지로 이동한다', async () => {
+  test('"title" or "content"를 변경하고 노트 작성, 노트 수정을 누르면 이전 페이지로 이동한다', async () => {
     useParams.mockReturnValue({ todoId: '1' });
     await waitForElementToBeRemoved(() => screen.getAllByLabelText(/loading/i));
 
@@ -93,7 +93,7 @@ describe('note-w/e page', () => {
     fireEvent.click(noteEditEl);
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith('/todolist');
+      expect(mockRouterBack).toHaveBeenCalled();
     });
   });
 });

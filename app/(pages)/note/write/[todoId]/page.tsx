@@ -21,6 +21,7 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { queryKey } from '@/queries/query';
 import { Spinner } from '@nextui-org/react';
+import { extractTextFromHtml } from '@/utils/extractTextFromHtml';
 
 const noti = () => toast(<ToastRender />);
 
@@ -320,7 +321,11 @@ export default function Note() {
                   <Counting isTitle={true} target={inputValue.title} className='absolute top-3 right-0 font-medium' />
                 </div>
                 <div className='flex flex-col '>
-                  <Counting isTitle={false} target={inputValue.content} className='mb-2 md:mb-3 font-medium' />
+                  <Counting
+                    isTitle={false}
+                    target={extractTextFromHtml(inputValue.content)}
+                    className='mb-2 md:mb-3 font-medium'
+                  />
                   {inputValue.linkUrl && (
                     <LinkBar linkUrl={inputValue.linkUrl} embededOpen={handleEmbedeOpen} cancelView />
                   )}

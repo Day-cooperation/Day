@@ -8,14 +8,12 @@ import { ListTodoButtons } from '@/types/Todo';
 import { useMutation } from '@tanstack/react-query';
 import { getRequest } from '@/lib/api/api';
 import NoteRead from '@/components/Note/NoteRead';
-import { useRouter } from 'next/navigation';
 import ConfirmPopup from '../Popup/ConfirmPopup';
 import { useListTodo } from '@/hooks/useListTodo';
 
 export default function CardNote({ noteList }: { noteList: Note[] }) {
-  const { confirm, setConfirm, confirmRef, handleDeleteConfirmClick } = useListTodo(noteList[0].goal.id);
+  const { confirm, confirmRef, handleListPopupClick, handleDeleteConfirmClick } = useListTodo(noteList[0].goal.id);
   const noteRef = useRef<HTMLDialogElement>(null);
-  const router = useRouter();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
 
   const { data: noteData, mutate: noteMutate } = useMutation({
@@ -28,15 +26,12 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
   });
 
   const handlePopupClick = (type: ListTodoButtons, id: number) => {
-    const todoId = noteList.find((note) => note.id === id)?.todo.id;
-    if (type === 'edit') {
-      router.push(`/note/write/${todoId}`);
-    }
     if (type === 'delete') {
-      if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 노트를 삭제하시겠어요?', setDeleteId: id, type: 'note' });
-      confirmRef.current.showModal();
+      handleListPopupClick('note delete', id);
+      return;
     }
+    const todoId = noteList.find((note) => note.id === id)?.todo.id;
+    handleListPopupClick('note write', Number(todoId));
   };
 
   const handleConfirmClick = (answer: 'ok' | 'cancel') => {

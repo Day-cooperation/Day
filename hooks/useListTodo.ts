@@ -70,7 +70,6 @@ export const useListTodo = (goalId?: number) => {
       queryClient.invalidateQueries(queryKey.todo());
       if (goalId) {
         queryClient.invalidateQueries(queryKey.todo(goalId));
-        console.log(goalId);
         queryClient.invalidateQueries(queryKey.note(goalId));
       } else {
         goalResponse?.goals.forEach((goal: Goal) => {

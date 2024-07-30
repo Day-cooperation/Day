@@ -18,15 +18,17 @@ type ModalProps = {
   items?: Todo;
   isOpen: boolean;
   onClose: () => void;
+  index?: number;
+  goalId?: number;
 };
 
 const INITIAL_DATA = { title: '', fileUrl: '', linkUrl: '', goalId: 0, done: false };
 
-export default function Modal({ modalType, items, isOpen, onClose }: ModalProps) {
+export default function Modal({ modalType, items, isOpen, onClose, index, goalId }: ModalProps) {
   const convertData = convertTodoToFormdata(items);
   const queryClient = useQueryClient();
   const [confirmValue, setConfirmText] = useState({ type: 'popup', text: '', description: '' });
-  const [data, setData] = useState<NewTodo>(convertData || INITIAL_DATA);
+  const [data, setData] = useState<NewTodo>(convertData);
   const [chips, setChips] = useState({ file: false, link: false });
   const confirmRef = useRef<HTMLDialogElement | null>(null);
   const linkUrlRef = useRef<HTMLDialogElement | null>(null);
@@ -155,6 +157,14 @@ export default function Modal({ modalType, items, isOpen, onClose }: ModalProps)
     setChips({ file: !!convertData.fileUrl, link: !!convertData.linkUrl });
   }, [items]);
 
+  useEffect(() => {
+    if (typeof index === 'number') {
+      setData((prev) => ({ ...prev, goalId: goalListResponse?.goals[index].id }));
+      return;
+    }
+    if (!goalId) return;
+    setData((prev) => ({ ...prev, goalId: goalId }));
+  }, [isOpen]);
   return (
     <>
       <ConfirmPopup

@@ -117,7 +117,7 @@ export default function Goal() {
         confirm
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
-      <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} items={todo} />
+      <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} goalId={goalResponse?.id} />
 
       <div className='p-4 md:p-6 flex flex-col gap-4 max-w-[1200px]'>
         <h2 className='text-slate-900 text-lg font-semibold '>목표</h2>

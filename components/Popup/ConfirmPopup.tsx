@@ -53,7 +53,7 @@ export default function ConfirmPopup({
 
   return (
     <dialog className='rounded-lg z-100' ref={dialogRef}>
-      <div className=' flex mx-[38px] md:w-[450px] lg:w-[402px] p-6' ref={divRef}>
+      <div className=' flex md:w-[402px] p-6' ref={divRef}>
         <div className='w-full flex flex-col justify-between gap-6'>
           <div className='flex justify-end'>
             <button

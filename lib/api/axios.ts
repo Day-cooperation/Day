@@ -11,9 +11,18 @@ export const axiosAuth = axios.create({
   baseURL: BASE_URL,
 });
 
+let cachedSession: any;
+
+const getCachedSession = async () => {
+  if (!cachedSession) {
+    cachedSession = await getSession();
+  }
+  return cachedSession;
+};
+
 axiosAuth.interceptors.request.use(
   async (config) => {
-    const session = await getSession();
+    const session = await getCachedSession();
     if (session && !config.headers['Authorization']) {
       config.headers['Authorization'] = `Bearer ${session?.user?.accessToken}`;
     }
@@ -26,11 +35,11 @@ axiosAuth.interceptors.response.use(
   (response) => response,
   async (error) => {
     const session = await getSession();
-    const prevRequest = error?.config;
+    // const prevRequest = error?.config;
     // accessToken 권한 없음
     // refreshToken으로 accessToken 다시 발급
     // 발급받은것 으로 session 다시 설정
-    if (error?.response?.status === 401 && !prevRequest?.sent) {
+    if (error?.response?.status === 401) {
       signOut();
       // Todo: fix
       // prevRequest.sent = true;

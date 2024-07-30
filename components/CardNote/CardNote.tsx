@@ -51,6 +51,7 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
       <NoteRead dialogRef={noteRef} data={noteData} />
       {noteList.map((item) => (
         <div
+          key={item.id}
           className='bg-white p-6 w-full max-w-[792px] border-[1px] rounded-xl text-left cursor-pointer'
           onClick={() => noteMutate(item.id)}
         >

@@ -11,10 +11,14 @@ export const axiosAuth = axios.create({
   baseURL: BASE_URL,
 });
 
-let cachedSession: any;
+let cachedSession: any = null;
 
 const getCachedSession = async () => {
-  if (!cachedSession) {
+  // 저장된 세션이 없거나 세션 만료시간 지나면 getSession 호출
+  if (cachedSession) {
+    if (new Date().getTime() > (cachedSession.user.accessTokenExpieryTime as number))
+      cachedSession = await getSession();
+  } else {
     cachedSession = await getSession();
   }
   return cachedSession;
@@ -34,21 +38,8 @@ axiosAuth.interceptors.request.use(
 axiosAuth.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const session = await getSession();
-    // const prevRequest = error?.config;
-    // accessToken 권한 없음
-    // refreshToken으로 accessToken 다시 발급
-    // 발급받은것 으로 session 다시 설정
-    if (error?.response?.status === 401) {
-      signOut();
-      // Todo: fix
-      // prevRequest.sent = true;
-      // const res = await instance.post('/auth/tokens', undefined, {
-      //   headers: { Authorization: session?.user.refreshToken },
-      // });
-      // if (session) session.user.accessToken = res.data.accessToken;
-      // else signOut();
-    }
+    // refreshToken 유효하지 않으면 signOut()
+    signOut();
     return Promise.reject(error);
   }
 );

@@ -5,26 +5,19 @@ import { Note } from '@/types/Note';
 import Popover from '../Popover/Popover';
 import { useRef, useState } from 'react';
 import { ListTodoButtons } from '@/types/Todo';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteRequest, getRequest } from '@/lib/api/api';
+import { useMutation } from '@tanstack/react-query';
+import { getRequest } from '@/lib/api/api';
 import NoteRead from '@/components/Note/NoteRead';
 import { useRouter } from 'next/navigation';
-import { queryKey } from '@/queries/query';
 import ConfirmPopup from '../Popup/ConfirmPopup';
+import { useListTodo } from '@/hooks/useListTodo';
 
 export default function CardNote({ noteList }: { noteList: Note[] }) {
-  const confirmRef = useRef<HTMLDialogElement>(null);
+  const { confirm, setConfirm, confirmRef, handleDeleteConfirmClick } = useListTodo(noteList[0].goal.id);
   const noteRef = useRef<HTMLDialogElement>(null);
-  const [confirm, setConfirm] = useState({ message: '', setDeleteId: 0 });
   const router = useRouter();
-  const queryClient = useQueryClient();
   const [popupOpen, setPopupOpen] = useState<number | null>(null);
-  const { mutate: deleteNoteMutate } = useMutation({
-    mutationFn: (noteId: number) => deleteRequest({ url: `notes/${noteId}` }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.note(noteList[0].goal.id));
-    },
-  });
+
   const { data: noteData, mutate: noteMutate } = useMutation({
     mutationKey: ['getNote'],
     mutationFn: (id: number) => getRequest({ url: `notes/${id}` }),
@@ -39,26 +32,25 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
     if (type === 'edit') {
       router.push(`/note/write/${todoId}`);
     }
-
     if (type === 'delete') {
       if (!confirmRef.current) return;
-      setConfirm({ message: '정말로 삭제하시겠어요?', setDeleteId: id });
+      setConfirm({ message: '정말로 노트를 삭제하시겠어요?', setDeleteId: id, type: 'note' });
       confirmRef.current.showModal();
     }
   };
 
-  const handleDeleteConfirmClick = (answer: 'ok' | 'cancel') => {
+  const handleConfirmClick = (answer: 'ok' | 'cancel') => {
     if (answer === 'ok') {
-      deleteNoteMutate(confirm.setDeleteId);
+      handleDeleteConfirmClick(answer, 'note');
     }
   };
   return (
     <>
       <ConfirmPopup
-        type='popup'
+        type={confirm.type}
         dialogRef={confirmRef}
         confirmText={confirm.message}
-        onConfirmClick={handleDeleteConfirmClick}
+        onConfirmClick={handleConfirmClick}
         confirm
       />
       <NoteRead dialogRef={noteRef} data={noteData} />

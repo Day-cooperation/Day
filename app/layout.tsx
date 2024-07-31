@@ -2,7 +2,6 @@ import Providers from '@/utils/Providers';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
 import { Metadata } from 'next';
-import Head from 'next/head';
 
 const pretendard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
@@ -11,6 +10,9 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: 'Day',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
@@ -20,9 +22,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko'>
-      <Head>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
       <body className={`${pretendard.variable} font-pretendard bg-slate-100`}>
         <Providers>{children}</Providers>
       </body>

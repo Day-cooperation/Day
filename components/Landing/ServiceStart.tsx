@@ -20,7 +20,6 @@ export default function ServiceStart() {
         <motion.button
           whileHover={{ scale: 1.1 }}
           className='duration-150 mt-8 py-2 px-8 text-2xl font-semibold rounded-[500px] bg-[#3cb643]'
-          disabled={!!opacity.get()}
           style={{ opacity }}
           onClick={() => router.push('/dashboard')}
         >

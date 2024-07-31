@@ -27,6 +27,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
     todoResponse,
     handleListPopupClick,
     onOpen,
+    todo,
     error,
     setModalType,
   } = useListTodo(goal.id);
@@ -52,14 +53,14 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
   return (
     <>
       <ConfirmPopup
-        type='popup'
+        type={confirm.type}
         dialogRef={confirmRef}
         confirmText={confirm.message}
         onConfirmClick={handleDeleteConfirmClick}
         confirm
       />
       <NoteRead dialogRef={noteRef} data={noteData} />
-      <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} index={index} />
+      <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} index={index} items={todo} />
 
       <div
         className={`relative flex w-full p-6 flex-col ${isMoreFive() ? 'h-full' : 'md:h-[304px]'}  gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}

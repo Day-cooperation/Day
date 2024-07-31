@@ -19,14 +19,13 @@ export default function ConfirmPopup({
   description,
   confirm = false,
   onConfirmClick,
-  type = 'popup',
+  type='popup',
 }: ConfirmPopupProps) {
   const divRef = useRef<HTMLDivElement | null>(null);
   const handlePopupClose = () => {
     if (!dialogRef.current) return;
     dialogRef.current.close();
   };
-
   useEffect(() => {
     const outSideClick = (e: MouseEvent) => {
       if (dialogRef.current?.open && !divRef.current?.contains(e.target as Node)) {

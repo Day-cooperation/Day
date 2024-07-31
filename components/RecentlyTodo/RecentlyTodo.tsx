@@ -29,7 +29,7 @@ export default function RecentlyTodo() {
   return (
     <>
       <ConfirmPopup
-        type='popup'
+        type={confirm.type}
         dialogRef={confirmRef}
         confirmText={confirm.message}
         onConfirmClick={handleDeleteConfirmClick}

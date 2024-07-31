@@ -15,9 +15,9 @@
 }
 
 .ql-editor {
-  @apply grow max-h-full !font-pretendard overflow-y-auto;
+  @apply grow max-h-full !font-pretendard overflow-y-auto !p-0 !text-base;
 }
 
 .ql-editor.ql-blank::before {
-  @apply !left-0 text-slate-400 text-base font-normal !font-pretendard;
+  @apply !left-0 !text-slate-400 !text-base !font-normal !font-pretendard !not-italic;
 }

@@ -1,14 +1,23 @@
 import { Cancel, Embeded } from '@/assets/svgs';
 import { useEmbedingUrlStore } from '@/stores/useEmbedingUrlStore';
+import { Dispatch, SetStateAction } from 'react';
 
 type LinkBarProps = {
   linkUrl: string;
   embededOpen: (url: string) => void;
+  setEmbedUrl?: Dispatch<SetStateAction<string | null>>;
   cancelView?: boolean;
 };
 
-export default function LinkBar({ linkUrl, embededOpen, cancelView }: LinkBarProps) {
+export default function LinkBar({ linkUrl, embededOpen, setEmbedUrl, cancelView }: LinkBarProps) {
   const { clearUrl } = useEmbedingUrlStore();
+
+  const handleCancelClick = () => {
+    clearUrl();
+    if (setEmbedUrl) {
+      setEmbedUrl(null);
+    }
+  };
   return (
     <div className='flex items-center justify-between bg-blue-50 rounded-[28px] mb-4'>
       <div className='flex items-center gap-[5px] overflow-hidden'>
@@ -22,7 +31,7 @@ export default function LinkBar({ linkUrl, embededOpen, cancelView }: LinkBarPro
           <button
             type='button'
             className='flex items-center justify-center rounded-full bg-slate-500 w-[18px] h-[18px] p-[3px]'
-            onClick={clearUrl}
+            onClick={handleCancelClick}
           >
             <Cancel strokeColor={'#F8FAFC'} />
           </button>

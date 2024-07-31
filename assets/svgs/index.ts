@@ -23,3 +23,4 @@ export * from './NoteFlag';
 export * from './Checked';
 export * from './EditorColor';
 export * from './Embeded';
+export * from './404';

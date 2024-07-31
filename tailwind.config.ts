@@ -10,6 +10,22 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      animation: {
+        'infinite-scroll-1': 'infinite-scroll-1 30s linear infinite',
+        'infinite-scroll-2': 'infinite-scroll-2 30s linear infinite',
+        'infinite-scroll-3': 'infinite-scroll-1 35s linear infinite',
+        'infinite-scroll-4': 'infinite-scroll-2 35s linear infinite',
+      },
+      keyframes: {
+        'infinite-scroll-1': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(calc(-100% - 2.5rem))' },
+        },
+        'infinite-scroll-2': {
+          '0%': { transform: 'translateX(calc(100% + 2.5rem))' },
+          '100%': { transform: 'translateX(0)' },
+        },
+      },
       fontFamily: {
         pretendard: ['var(--font-pretendard)'],
       },

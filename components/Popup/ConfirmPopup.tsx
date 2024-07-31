@@ -19,7 +19,7 @@ export default function ConfirmPopup({
   description,
   confirm = false,
   onConfirmClick,
-  type='popup',
+  type = 'popup',
 }: ConfirmPopupProps) {
   const divRef = useRef<HTMLDivElement | null>(null);
   const handlePopupClose = () => {

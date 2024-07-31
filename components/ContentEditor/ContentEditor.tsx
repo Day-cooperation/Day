@@ -22,9 +22,9 @@ const Editor = dynamic(() => import('react-quill-new'), {
 export default function ContentEditor({ value, handleEditorChange }: ContentEditorProps) {
   useEffect(() => {
     const loadIcons = async () => {
-      const Quill = (await import('react-quill')).default.Quill;
-      const icons = Quill.import('ui/icons');
-      icons['color'] = renderToString(<EditorColor className='w-[18px] h-[18px] active: border-none' />);
+      const Quill = (await import('react-quill-new')).default.Quill;
+      const icons: any = Quill.import('ui/icons');
+      icons['color'] = renderToString(<EditorColor className='w-[18px] h-[18px] active:border-none' />);
     };
     loadIcons();
   }, []);

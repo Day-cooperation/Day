@@ -22,6 +22,7 @@ import toast from 'react-hot-toast';
 import { queryKey } from '@/queries/query';
 import { Spinner } from '@nextui-org/react';
 import { extractTextFromHtml } from '@/utils/extractTextFromHtml';
+import { invalidateInput } from '@/utils/invalidateInput';
 
 const noti = () => toast(<ToastRender />);
 
@@ -90,22 +91,13 @@ export default function Note() {
 
   const { data: notes, isLoading: noteGetLoading } = useGetQuery.note(undefined, todo?.noteId, hasNote);
 
+  const note = { todoId: notes?.todo.id, title: notes?.title, content: notes?.content, linkUrl: notes?.linkUrl };
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue((prev) => ({ ...prev, title: e.target.value }));
-    if (e.target.value === notes?.title) {
-      setPostEnable(false);
-    } else {
-      setPostEnable(true);
-    }
   };
 
   const handleEditorChange = (content: string) => {
     setInputValue((prev) => ({ ...prev, content: content }));
-    if (content === notes?.content) {
-      setPostEnable(false);
-    } else {
-      setPostEnable(true);
-    }
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -156,11 +148,12 @@ export default function Note() {
       }));
 
       setUrl(savedData.linkUrl || '');
+      setEmbedUrl(savedData.linkUrl || '');
     }
   };
 
   const handleEmbedeOpen = (url: string) => {
-    setEmbedUrl(() => url);
+    setEmbedUrl(url);
   };
 
   const handleConfirm = (message: string, type: string) => {
@@ -187,11 +180,9 @@ export default function Note() {
 
   useEffect(() => {
     setInputValue((prev) => ({ ...prev, linkUrl: url }));
-    if (url === notes?.linkUrl) {
-      setPostEnable(false);
-      return;
+    if (embedUrl) {
+      setEmbedUrl(url);
     }
-    setPostEnable(true);
   }, [url]);
 
   useEffect(() => {
@@ -219,6 +210,14 @@ export default function Note() {
 
     setDisable((prev) => ({ ...prev, pullButton: false }));
   }, [todo, notes]);
+
+  useEffect(() => {
+    if (invalidateInput(note, inputValue)) {
+      setPostEnable(true);
+      return;
+    }
+    setPostEnable(false);
+  }, [inputValue.content, inputValue.linkUrl, inputValue.title]);
 
   return (
     <>
@@ -250,7 +249,7 @@ export default function Note() {
                     <Button
                       type='button'
                       onClick={() => handleDataSaveClick('push')}
-                      disabled={inputValue.title?.length === 0 || inputValue.content?.length === 0}
+                      disabled={inputValue.title?.length === 0 || extractTextFromHtml(inputValue.content).length === 0}
                       className='w-[84px] h-9 md:w-[102px] md:h-11'
                     >
                       임시저장
@@ -258,7 +257,11 @@ export default function Note() {
                     <Button
                       type='submit'
                       variant='solid'
-                      disabled={!postEnable}
+                      disabled={
+                        inputValue.title?.length === 0 ||
+                        extractTextFromHtml(inputValue.content).length === 0 ||
+                        !postEnable
+                      }
                       className='w-[84px] h-9 md:w-[102px] md:h-11'
                     >
                       {noteCompleteButtonText}
@@ -327,7 +330,12 @@ export default function Note() {
                     className='mb-2 md:mb-3 font-medium'
                   />
                   {inputValue.linkUrl && (
-                    <LinkBar linkUrl={inputValue.linkUrl} embededOpen={handleEmbedeOpen} cancelView />
+                    <LinkBar
+                      linkUrl={inputValue.linkUrl}
+                      embededOpen={handleEmbedeOpen}
+                      setEmbedUrl={setEmbedUrl}
+                      cancelView
+                    />
                   )}
                   <Toast />
                 </div>

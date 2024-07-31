@@ -15,9 +15,10 @@ export default function Embeded({ embedUrl, dataYoutube, onClick, className }: E
   useEffect(() => {
     if (!embedUrl.startsWith('https://')) {
       setFormatUrl(`https://${embedUrl}`);
+      return;
     }
-  }, []);
-
+    setFormatUrl(embedUrl);
+  }, [embedUrl]);
   return (
     <div
       data-youtube={dataYoutube}

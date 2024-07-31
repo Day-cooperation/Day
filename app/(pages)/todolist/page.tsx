@@ -57,7 +57,7 @@ export default function TodoList() {
           <div className='flex justify-between'>
             <h1 className='text-lg font-semibold text-slate-900'>{pageTitle}</h1>
             <button
-              className='flex gap-1 items-center justify-center text-sm font-semibold text-blue-500'
+              className='flex gap-1 items-center justify-center text-sm font-semibold text-green-500'
               onClick={() => {
                 onOpen();
                 setModalType('create');

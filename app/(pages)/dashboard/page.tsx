@@ -17,7 +17,7 @@ export default function Dashboard() {
         </div>
         <div className='w-full relative max-w-[1200px] bg-white rounded-xl py-4 px-6 min-h-[calc(100vh-612px)] md:min-h-[calc(100vh-362px)]'>
           <div className='flex justify-start gap-[6px] items-center mb-4'>
-            <div className='w-10 h-10 rounded-[15px] bg-[#F97316] flex items-center justify-center'>
+            <div className='w-10 h-10 rounded-[15px] bg-green-500 flex items-center justify-center'>
               <Flag fill='white' />
             </div>
             <h2 className='text-slate-800 text-lg font-semibold'>목표 별 할 일</h2>

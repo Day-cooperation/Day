@@ -126,7 +126,7 @@ export default function Goal() {
             <div className='flex max-w-[1200px] justify-between'>
               <div>
                 <div className='flex items-center gap-2'>
-                  <div className='p-2 bg-black rounded-[15px]'>
+                  <div className='p-2 bg-green-500 rounded-[15px]'>
                     <Flag fill='white' />
                   </div>
                   {isGoalTitleEdit ? (
@@ -159,7 +159,7 @@ export default function Goal() {
             </div>
           </div>
 
-          <Link href={`/notes/${goalId}`} className='bg-blue-100 rounded-xl flex justify-between px-6 py-4 '>
+          <Link href={`/notes/${goalId}`} className='bg-green-100 rounded-xl flex justify-between px-6 py-4 '>
             <div className='flex gap-[5px] items-center'>
               <NoteAndPen />
               <span className='text-slate-800 font-bold text-lg'>노트 모아보기</span>
@@ -173,7 +173,10 @@ export default function Goal() {
             >
               <div className='flex justify-between'>
                 <h3 className='text-slate-800 text-lg font-bold'>To do</h3>
-                <button className='flex items-center gap-1 text-sm font-semibold text-blue-500' onClick={handleAddTodo}>
+                <button
+                  className='flex items-center gap-1 text-sm font-semibold text-green-500'
+                  onClick={handleAddTodo}
+                >
                   <Plus strokeColor='currentColor' className='w-4 h-4' />
                   할일 추가
                 </button>

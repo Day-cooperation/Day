@@ -28,7 +28,7 @@ export default function NoteRead({ dialogRef, data }: NoteProps) {
         className='group fixed data-[embed=true]:flex-col right-0 top-0 bg-white w-full data-[embed=true]:lg:flex-row max-w-[512px] lg:max-w-[800px] h-full data-[embed=true]:flex data-[embed=true]:lg:max-w-fit overflow-y-scroll'
       >
         {embedUrl && (
-          <div className='bg-blue-50 flex flex-col lg:flex-row justify-center'>
+          <div className='bg-green-50 flex flex-col lg:flex-row justify-center'>
             <Embeded
               embedUrl={embedUrl}
               dataYoutube={embedUrl.includes('youtube')}

@@ -1,11 +1,19 @@
 import Providers from '@/utils/Providers';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
+import { Metadata } from 'next';
 
 const pretendard = localFont({
   src: '../assets/fonts/PretendardVariable.woff2',
   variable: '--font-pretendard',
 });
+
+export const metadata: Metadata = {
+  title: 'Day',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
 
 export default function RootLayout({
   children,

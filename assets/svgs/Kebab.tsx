@@ -7,8 +7,8 @@ export const Kebab = (props: SVGProps<SVGSVGElement>) => (
       cy='11.9999'
       r='0.525'
       transform='rotate(-90 11.941 11.9999)'
-      fill='#94A3B8'
-      stroke='#94A3B8'
+      fill='#3CB643'
+      stroke='#3CB643'
       strokeWidth='1.16667'
       strokeLinecap='round'
     />
@@ -17,8 +17,8 @@ export const Kebab = (props: SVGProps<SVGSVGElement>) => (
       cy='15.9667'
       r='0.525'
       transform='rotate(-90 11.941 15.9667)'
-      fill='#94A3B8'
-      stroke='#94A3B8'
+      fill='#3CB643'
+      stroke='#3CB643'
       strokeWidth='1.16667'
       strokeLinecap='round'
     />
@@ -27,8 +27,8 @@ export const Kebab = (props: SVGProps<SVGSVGElement>) => (
       cy='8.03335'
       r='0.525'
       transform='rotate(-90 11.941 8.03335)'
-      fill='#94A3B8'
-      stroke='#94A3B8'
+      fill='#3CB643'
+      stroke='#3CB643'
       strokeWidth='1.16667'
       strokeLinecap='round'
     />

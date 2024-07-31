@@ -26,7 +26,7 @@ type BaseInputProps = {
 };
 
 const style =
-  'bg-slate-50 border border-transparent data-[hover=true]:bg-slate-50 data-[hover=true]:border-blue-300 data-[focus=true]:border-blue-500 group-data-[focus=true]:bg-slate-50 group-data-[has-helper=true]:!bg-slate-50';
+  'bg-slate-50 border border-transparent data-[hover=true]:bg-slate-50 data-[hover=true]:border-green-300 data-[focus=true]:border-green-500 group-data-[focus=true]:bg-slate-50 group-data-[has-helper=true]:!bg-slate-50';
 
 export default function Selector({ size, label, placeholder, items = [], name, onChange, value }: BaseInputProps) {
   return (

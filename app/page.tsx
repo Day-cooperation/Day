@@ -38,7 +38,8 @@ export default function Home() {
       </MainMention>
       <MainMention>
         <div>
-          하루를 <span className='text-[#3CB643]'>Day</span>와<br /> 함께 하세요.
+          <span className='text-[#3CB643]'>Day</span>와 하루를
+          <br /> 함께 하세요.
         </div>
       </MainMention>
       <WaveText />

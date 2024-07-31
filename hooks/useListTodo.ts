@@ -60,6 +60,7 @@ export const useListTodo = (goalId?: number) => {
           queryClient.invalidateQueries(queryKey.progress(goal.id));
         });
       }
+      queryClient.invalidateQueries(queryKey.todo());
     },
   });
 
@@ -111,7 +112,6 @@ export const useListTodo = (goalId?: number) => {
     if (type === 'note write') {
       router.push(`/note/write/${id}`);
     }
-
     if (type === 'note delete') {
       if (!confirmRef.current) return;
       setConfirm({ message: '정말로 노트를 삭제하시겠어요?', setDeleteId: id, type: 'note' });
@@ -121,10 +121,12 @@ export const useListTodo = (goalId?: number) => {
 
   const handleDeleteConfirmClick = (answer: 'ok' | 'cancel', type: string) => {
     if (answer === 'cancel') return;
+    console.log(type);
     if (type === 'todo') {
       deleteMutate(confirm.setDeleteId);
       return;
     }
+
     noteDeleteMutate(confirm.setDeleteId);
   };
 

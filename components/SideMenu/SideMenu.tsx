@@ -179,7 +179,7 @@ export default function SideMenu() {
                   ) : (
                     <Button size='sm' onClick={handleAddNewGoalClick}>
                       <div className='flex items-center justify-center'>
-                        <Plus strokeColor='blue' width={16} height={16} />
+                        <Plus strokeColor='#3CB643' width={16} height={16} />
                         <span className='text-sm font-semibold'>새 목표</span>
                       </div>
                     </Button>
@@ -205,7 +205,7 @@ export default function SideMenu() {
                 ) : (
                   <Button size='xl' className='h-[48px]' onClick={handleAddNewGoalClick}>
                     <div className='flex items-center font-semibold'>
-                      <Plus strokeColor='blue' />
+                      <Plus strokeColor='#3CB643' />
                       <span className='text-base'>새 목표</span>
                     </div>
                   </Button>
@@ -226,8 +226,8 @@ export default function SideMenu() {
           </div>
           {/* 테블릿 이상 */}
           <div className='z-10 fixed hidden md:block w-[60px] duration-150 bg-white p-[15px] h-screen border-r'>
-            <div className='flex flex-col justify-between items-center gap-4'>
-              <LogoIcon />
+            <div className='flex flex-col justify-between items-center gap-4 bg-slate'>
+              <LogoIcon className='w-[22.5px] h-[22.5px]' />
               <button type='button' onClick={toggleSideMenu}>
                 <SideFoldButton className='rotate-180' />
               </button>

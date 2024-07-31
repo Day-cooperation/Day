@@ -44,7 +44,7 @@ export default function RecentlyTodo() {
           <>
             <div className='flex justify-between'>
               <div className='flex items-center justify-center gap-2'>
-                <div className='h-10 w-10 bg-blue-500 rounded-[15px] flex items-center justify-center'>
+                <div className='h-10 w-10 bg-green-500 rounded-[15px] flex items-center justify-center'>
                   <Rectangles />
                 </div>
                 <h2 className='text-slate-800 text-lg font-semibold'>최근 등록한 할 일</h2>

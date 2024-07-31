@@ -63,7 +63,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
       <Modal onClose={onClose} isOpen={isOpen} modalType={modalType} index={index} items={todo} />
 
       <div
-        className={`relative flex w-full p-6 flex-col ${isMoreFive() ? 'h-full' : 'md:h-[304px]'}  gap-4 justify-start bg-blue-50 rounded-[32px] ${index === 2 && 'col-span-2'}`}
+        className={`relative flex w-full p-6 flex-col ${isMoreFive() ? 'h-full' : 'md:h-[304px]'} hover:bg-[#F9FDF7] transition-colors gap-4 justify-start border-1 border-[#EAEAEA] rounded-[32px] ${index === 2 && 'col-span-2'}`}
       >
         {isLoading ? (
           <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
@@ -72,7 +72,10 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
             <div className='flex flex-col gap-2'>
               <div className='flex justify-between'>
                 <h1 className='text-lg font-bold'>{goal.title}</h1>
-                <button className='flex items-center gap-1 text-sm font-semibold text-blue-500' onClick={handleAddTodo}>
+                <button
+                  className='flex items-center gap-1 text-sm font-semibold text-green-500'
+                  onClick={handleAddTodo}
+                >
                   <Plus strokeColor='currentColor' className='w-4 h-4' />
                   할일 추가
                 </button>

@@ -80,7 +80,7 @@ export default function Plugin({ onCreateClick, isOpen, onClose }: PluginProps) 
       <ModalContent>
         <ModalHeader>
           <div className='py-2 px-[5px]'>
-            <Logo />
+            <Logo className='w-[280px] h-[35px] shrink-0' />
           </div>
         </ModalHeader>
         <ModalBody>

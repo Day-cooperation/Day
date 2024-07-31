@@ -19,7 +19,7 @@ export default function NoteList() {
         <>
           <h2 className='text-slate-900 text-lg font-semibold '>노트 모아보기</h2>
           <div className='flex items-center gap-2 py-[14px] px-6 bg-white rounded-xl border border-slate-100'>
-            <div className='p-[4.8px] bg-black rounded-lg'>
+            <div className='p-[4.8px] bg-green-500 rounded-lg'>
               <Flag fill='white' width={14} height={14} />
             </div>
             <span className='text-slate-800 text-sm font-semibold'>{goalResponse?.title}</span>

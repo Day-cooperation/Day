@@ -56,7 +56,7 @@ export default function CardNote({ noteList }: { noteList: Note[] }) {
           onClick={() => noteMutate(item.id)}
         >
           <div className='flex justify-between items-center mb-4'>
-            <div className='bg-blue-100 w-7 h-7 rounded-[8.4px] flex items-center justify-center'>
+            <div className='bg-green-100 w-7 h-7 rounded-[8.4px] flex items-center justify-center'>
               <NoteList />
             </div>
             <Popover

@@ -19,7 +19,7 @@ export default function LinkBar({ linkUrl, embededOpen, setEmbedUrl, cancelView 
     }
   };
   return (
-    <div className='flex items-center justify-between bg-blue-50 rounded-[28px] mb-4'>
+    <div className='flex items-center justify-between bg-green-50 rounded-[28px] mb-4'>
       <div className='flex items-center gap-[5px] overflow-hidden'>
         <button type='button' className='py-1 pl-1.5' onClick={() => embededOpen(linkUrl)}>
           <Embeded className='w-6 h-6' />

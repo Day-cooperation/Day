@@ -269,7 +269,7 @@ export default function Note() {
                   </div>
                 </div>
                 {!disable.pullButton && (
-                  <div className='flex items-center justify-between rounded-3xl bg-blue-50 px-3 py-2.5 md:py-4  md:pl-4 md:pr-3 mb-6'>
+                  <div className='flex items-center justify-between rounded-3xl bg-green-50 px-3 py-2.5 md:py-4  md:pl-4 md:pr-3 mb-6'>
                     <div className='flex lg:gap-4 items-center'>
                       <button
                         onClick={() => {
@@ -278,11 +278,11 @@ export default function Note() {
                         type='button'
                         className='shrink-0 rounded-full p-[3px] w-6 h-6 '
                       >
-                        <div className='bg-blue-500 rounded-full w-full h-full flex items-center justify-center'>
+                        <div className='bg-green-500 rounded-full w-full h-full flex items-center justify-center'>
                           <Cancel strokeColor='#F8FAFC' className='w-2.5 h-2.5 shrink-0' />
                         </div>
                       </button>
-                      <p className='px-3 text-sm font-semibold text-blue-500'>
+                      <p className='px-3 text-sm font-semibold text-green-500'>
                         임시 저장된 노트가 있어요. 저장된 노트를 불러오시겠어요?
                       </p>
                     </div>
@@ -298,7 +298,7 @@ export default function Note() {
                   </div>
                 )}
                 <div className='flex gap-1.5 mb-3'>
-                  <div className='rounded-md bg-slate-800 p-1'>
+                  <div className='rounded-md bg-green-500 p-1'>
                     <NoteFlag className='w-4 h-4' />
                   </div>
                   {todo?.goal ? (

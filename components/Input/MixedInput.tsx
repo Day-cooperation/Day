@@ -42,7 +42,7 @@ export default function MixedInput({
       classNames={{
         mainWrapper: size === 'large' ? 'w-[612px]' : size === 'full' ? 'w-full' : 'w-[343px]',
         inputWrapper:
-          'group-data-[has-helper=true]:border-danger-50 bg-slate-50 border border-transparent data-[hover=true]:bg-slate-50 data-[hover=true]:border-blue-300 data-[focus=true]:border-blue-500 group-data-[focus=true]:bg-slate-50 group-data-[has-helper=true]:!bg-slate-50',
+          'group-data-[has-helper=true]:border-danger-50 bg-slate-50 border border-transparent data-[hover=true]:bg-slate-50 data-[hover=true]:border-green-300 data-[focus=true]:border-green-500 group-data-[focus=true]:bg-slate-50 group-data-[has-helper=true]:!bg-slate-50',
         errorMessage: 'text-red-700',
         input: '!text-slate-800 caret-slate-800',
       }}

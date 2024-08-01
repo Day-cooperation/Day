@@ -15,7 +15,7 @@ export default function Dashboard() {
         <div className='w-full'>
           <RecentlyTodo />
         </div>
-        <div className='w-full relative max-w-[1200px] bg-white rounded-xl py-4 px-6 min-h-[calc(100vh-612px)] md:min-h-[calc(100vh-362px)]'>
+        <div className='w-full relative max-w-[1200px] bg-white rounded-xl py-4 px-6 min-h-[calc(100vh-344px)] md:min-h-[calc(100vh-362px)] flex flex-col'>
           <div className='flex justify-start gap-[6px] items-center mb-4'>
             <div className='w-10 h-10 rounded-[15px] bg-green-500 flex items-center justify-center'>
               <Flag fill='white' />
@@ -24,13 +24,15 @@ export default function Dashboard() {
           </div>
           {isLoading ? (
             <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
-          ) : (
+          ) : goalListReseponse.goals.length ? (
             <div className='lg:grid lg:grid-cols-2 gap-4 flex flex-col'>
               {goalListReseponse.goals.map((goal: Goal, index: number) => {
                 if (index >= 3) return;
                 return <CardGoal key={goal.id} goal={goal} index={index} />;
               })}
             </div>
+          ) : (
+            <div className=' text-sm text-slate-500 flex flex-1 justify-center items-center'>등록한 목표가 없어요</div>
           )}
         </div>
       </main>

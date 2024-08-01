@@ -20,5 +20,13 @@ export const VALIDATE_INPUT_VALUE = {
       length: '비밀번호가 8자 이상이 되도록 해 주세요.',
     },
   },
+  linkUrl: {
+    regexp:
+      /^(https?:\/\/)?((([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])*)\.)+[a-zA-Z]{2,}|((\d{1,3}\.){3}\d{1,3})(:\d+)?)(\/[-a-zA-Z\d%_.~+]*)*(\?[;&a-zA-Z\d%_.~+=-]*)?(\#[-a-zA-Z\d_]*)?$/,
+    message: {
+      required: '링크의 주소를 입력해주세요',
+      pattern: '잘못된 Url입니다.',
+    },
+  },
   passwordConfirm: { message: { required: '확인 패스워드를 입력해주세요', notMatch: '비밀번호가 일치하지 않습니다.' } },
 };

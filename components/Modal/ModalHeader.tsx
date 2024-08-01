@@ -14,7 +14,14 @@ export default function ModalHeader({ data, modalType, setData }: ModalHeaderPro
     <NextModalHeader>
       <h1>{modalType === 'create' ? '할 일 생성' : '할 일 수정'}</h1>
       {modalType === 'edit' && (
-        <Checkbox isSelected={data.done} onClick={() => setData((prev) => ({ ...prev, done: !prev.done }))}>
+        <Checkbox
+          isSelected={data.done}
+          onClick={() => setData((prev) => ({ ...prev, done: !prev.done }))}
+          classNames={{
+            wrapper: 'after:bg-green-500',
+            icon: 'bg-green-500',
+          }}
+        >
           {data.done ? 'Done' : 'To do'}
         </Checkbox>
       )}

@@ -12,7 +12,7 @@ export default function ServiceStart() {
   });
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
   // opacity에 따라 disabled 상태를 결정
-  const [isClickable, setIsClickable] = useState(true);
+  const [isClickable, setIsClickable] = useState(false);
 
   useEffect(() => {
     opacity.on('change', (value) => {

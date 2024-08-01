@@ -3,7 +3,7 @@
 import { EyeFilledIcon } from '@/assets/svgs/EyeFilledIcon';
 import { EyeSlashFilledIcon } from '@/assets/svgs/EyeSlashFilledIcon';
 import { Input, InputProps } from '@nextui-org/react';
-import { BaseSyntheticEvent, ChangeEvent, KeyboardEvent, KeyboardEventHandler, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
 
 type InputType = 'text' | 'href' | 'password';
 type Size = 'full' | 'large' | 'small';

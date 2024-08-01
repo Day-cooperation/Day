@@ -13,7 +13,7 @@ import MixedInput from '../Input/MixedInput';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { useSideMenuOpen } from '@/stores/useSideMenuOpen';
 import { useDisclosure } from '@nextui-org/react';
-import { signOut } from 'next-auth/react';
+import { useSignout } from '@/hooks/useSignout';
 
 export default function SideMenu() {
   const queryClient = useQueryClient();
@@ -123,7 +123,7 @@ export default function SideMenu() {
                   <button
                     type='button'
                     className='text-slate-400 text-xs font-normal md:text-left'
-                    onClick={() => signOut()}
+                    onClick={() => useSignout()}
                   >
                     로그아웃
                   </button>

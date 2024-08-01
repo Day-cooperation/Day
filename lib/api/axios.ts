@@ -1,5 +1,6 @@
+import { useSignout } from '@/hooks/useSignout';
 import axios from 'axios';
-import { getSession, signOut } from 'next-auth/react';
+import { getSession } from 'next-auth/react';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -48,7 +49,7 @@ axiosAuth.interceptors.response.use(
   (response) => response,
   async (error) => {
     // refreshToken 유효하지 않으면 signOut()
-    if (error.status === 401) signOut();
+    if (error.status === 401) useSignout();
     return Promise.reject(error);
   }
 );

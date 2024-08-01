@@ -34,16 +34,21 @@ export default function Modal({ modalType, items, isOpen, onClose, index, goalId
   const linkUrlRef = useRef<HTMLDialogElement | null>(null);
 
   const { data: goalListResponse } = useGetQuery.goal();
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ['post-file'],
     mutationFn: (file: FormData) => fileUpload(file),
     onSuccess: (response) => {
       setChips((prev) => ({ ...prev, file: true }));
       setData((prev) => ({ ...prev, fileUrl: response?.data.url }));
-      console.log('파일 업로드 성공' + response);
     },
-    onError: (error) => {
-      console.error('파일 업로드 오류:', error);
+    onError: () => {
+      setConfirmText({
+        type: 'error',
+        text: '파일 업로드 실패',
+        description: '파일 크기는 3MB 이하만 가능합니다.',
+      });
+
+      confirmRef.current?.showModal();
     },
   });
   const { mutate: newTodoMutate } = useMutation({
@@ -92,6 +97,7 @@ export default function Modal({ modalType, items, isOpen, onClose, index, goalId
 
   const onConfirmClick = (response: 'ok' | 'cancel', type: string) => {
     if (response === 'cancel') return;
+    if (type === 'error') return;
     if (response === 'ok' && type === 'modal') {
       onClose();
       if (modalType === 'create') {
@@ -195,6 +201,7 @@ export default function Modal({ modalType, items, isOpen, onClose, index, goalId
             fileName={data.fileUrl}
             items={goalListResponse?.goals ? goalListResponse?.goals : []}
             chips={chips}
+            isPending={isPending}
           />
           <ModalFooter data={data} handleConfirmPopupOpen={handleConfirmPopupOpen} />
         </ModalContent>

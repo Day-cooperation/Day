@@ -1,32 +1,42 @@
 'use client';
 
-import { ChangeEvent, FormEvent, RefObject, useEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 import MixedInput from '../Input/MixedInput';
 import Button from '../Buttons/Button';
 import { Cancel } from '@/assets/svgs';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { VALIDATE_INPUT_VALUE } from '@/constans';
 
 type LinkUrlPopupProps = {
   dialogRef: RefObject<HTMLDialogElement>;
   onLinkUrlChange: (response: string) => void;
 };
 
+type LinkInput = {
+  linkUrl: string;
+};
+
+const { linkUrl } = VALIDATE_INPUT_VALUE;
+
 export default function LinkUrlPopup({ dialogRef, onLinkUrlChange }: LinkUrlPopupProps) {
   const divRef = useRef<HTMLDivElement>(null);
-  const [linkUrl, setLinkUrl] = useState('');
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    reset,
+  } = useForm<LinkInput>({ mode: 'onSubmit', shouldFocusError: false });
 
   const handlePopupClose = () => {
+    reset();
     if (!dialogRef.current) return;
     dialogRef.current.close();
   };
 
-  const handleLinkUrlChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setLinkUrl(e.target.value);
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (linkUrl) {
-      onLinkUrlChange(linkUrl);
+  const onSubmit: SubmitHandler<LinkInput> = (data, e) => {
+    e?.preventDefault();
+    if (data.linkUrl) {
+      onLinkUrlChange(data.linkUrl);
       handlePopupClose();
     }
   };
@@ -68,23 +78,26 @@ export default function LinkUrlPopup({ dialogRef, onLinkUrlChange }: LinkUrlPopu
             <Cancel className='w-6 h-6 pt-[5px] pb-[6px] px-[5.5px]' />
           </button>
         </div>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-10'>
+        <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-10'>
           <label className='font-semibold'>
             링크
             <MixedInput
               type='href'
               size='full'
               name='linkUrl'
-              value={linkUrl}
+              errorMessage={errors.linkUrl?.message}
               props={{
                 labelPlacement: 'outside',
                 placeholder: '영상이나 글, 파일의 링크를 넣어주세요',
                 className: 'mt-3',
+                ...register('linkUrl', {
+                  required: linkUrl.message.required,
+                  pattern: { value: linkUrl.regexp, message: linkUrl.message.pattern },
+                }),
               }}
-              handleChange={handleLinkUrlChange}
             />
           </label>
-          <Button type='submit' size='xl' variant='solid' disabled={!linkUrl}>
+          <Button type='submit' size='xl' variant='solid'>
             확인
           </Button>
         </form>

@@ -15,7 +15,7 @@ export default function ServiceStart() {
   const [isClickable, setIsClickable] = useState(true);
 
   useEffect(() => {
-    opacity.onChange((value) => {
+    opacity.on('change', (value) => {
       setIsClickable(value !== 0);
     });
   }, [opacity]);

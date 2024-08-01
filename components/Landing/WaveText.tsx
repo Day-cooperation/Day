@@ -52,25 +52,25 @@ export default function WaveText() {
         </motion.div>
         <motion.div className='flex' style={{ opacity: hashOpacity }}>
           <div className='text-[50px] text-white flex flex-row gap-10 animate-infinite-scroll-1'>
-            {FIRST_HASHTAG_LIST.map((hashtag) => (
-              <span className=''>#{hashtag}</span>
+            {FIRST_HASHTAG_LIST.map((hashtag, index) => (
+              <span key={`${index}-1-hash`}>#{hashtag}</span>
             ))}
           </div>
           <div className='absolute text-[50px] text-white flex gap-10 animate-infinite-scroll-2'>
-            {FIRST_HASHTAG_LIST.map((hashtag) => (
-              <span>#{hashtag}</span>
+            {FIRST_HASHTAG_LIST.map((hashtag, index) => (
+              <span key={`${index}-2-hash`}>#{hashtag}</span>
             ))}
           </div>
         </motion.div>
         <motion.div className='flex ' style={{ opacity: hashOpacity }}>
           <div className='text-[50px] text-white flex gap-10 animate-infinite-scroll-3'>
-            {SECOND_HASHTAG_LIST.map((hashtag) => (
-              <span>#{hashtag}</span>
+            {SECOND_HASHTAG_LIST.map((hashtag, index) => (
+              <span key={`${index}-3-hash`}>#{hashtag}</span>
             ))}
           </div>
           <div className='absolute text-[50px] text-white flex gap-10 animate-infinite-scroll-4'>
-            {SECOND_HASHTAG_LIST.map((hashtag) => (
-              <span>#{hashtag}</span>
+            {SECOND_HASHTAG_LIST.map((hashtag, index) => (
+              <span key={`${index}-4-hash`}>#{hashtag}</span>
             ))}
           </div>
         </motion.div>

@@ -10,6 +10,11 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        green: {
+          500: '#3CB643',
+        },
+      },
       animation: {
         'infinite-scroll-1': 'infinite-scroll-1 30s linear infinite',
         'infinite-scroll-2': 'infinite-scroll-2 30s linear infinite',

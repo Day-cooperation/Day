@@ -206,7 +206,7 @@ export default function SideMenu() {
                     value={goalInput}
                     handleChange={handleInputChange}
                     handleKeyDown={handleKeydownInput}
-                    props={{ placeholder: '목표를 적고 엔터를 눌러주세요.' }}
+                    props={{ placeholder: '목표를 적고 엔터를 눌러주세요.', maxLength: 16 }}
                   ></MixedInput>
                 ) : (
                   <Button size='xl' className='h-[48px]' onClick={handleAddNewGoalClick}>

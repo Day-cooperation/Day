@@ -117,8 +117,12 @@ export default function SideMenu() {
                 <Profile className='h-8 w-8 md:h-16 md:w-16 shrink-0' />
                 <div className='flex md:flex-col md:gap-2 w-full justify-between items-end md:items-start'>
                   <div className='flex flex-col'>
-                    <span className='text-slate-800 text-xs md:text-sm font-semibold'>{userData?.name}</span>
-                    <span className='text-slate-600 text-xs md:text-sm font-medium'>{userData?.email}</span>
+                    <span className='text-slate-800 text-xs md:text-sm font-semibold overflow-hidden text-ellipsis md:max-w-[152px]'>
+                      {userData?.name}
+                    </span>
+                    <span className='text-slate-600 text-xs md:text-sm font-medium overflow-hidden text-ellipsis md:max-w-[152px]'>
+                      {userData?.email}
+                    </span>
                   </div>
                   <button
                     type='button'

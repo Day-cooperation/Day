@@ -1,5 +1,5 @@
 import { DayLogo } from '@/assets/svgs/DayLogo';
-import { useScroll, useTransform, motion } from 'framer-motion';
+import { useScroll, useTransform, motion, useMotionValueEvent } from 'framer-motion';
 import { useRef } from 'react';
 
 const FIRST_HASHTAG_LIST = [
@@ -36,14 +36,18 @@ const SECOND_HASHTAG_LIST = [
 ];
 export default function WaveText() {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress, scrollY } = useScroll({
     target: ref,
-    // 'target viewport'
-    offset: ['center start', 'start center'],
+    // 'center일 때 start center일 때 end'
+    offset: ['start center', 'end center'],
   });
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 1, 1, 0]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.3]);
   const hashOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
+  // useMotionValueEvent(scrollYProgress, 'change', () => {
+  //   console.log(1, scrollYProgress);
+  //   console.log(2, scrollY);
+  // });
   return (
     <div ref={ref} className='h-screen'>
       <div className='text-nowrap fixed inset-0 flex flex-col justify-center items-center'>

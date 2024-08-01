@@ -14,7 +14,7 @@ export default function MainMention({ children }: { children: React.ReactNode })
     <motion.div ref={ref} className='relative h-screen'>
       <motion.h2
         style={{ opacity }}
-        className='fixed inset-0 flex justify-center items-center text-center text-[#fff] text-[86px] font-bold'
+        className='fixed inset-0 flex justify-center items-center text-center text-[#fff] text-[43px] md:text-[86px] font-bold'
       >
         {children}
       </motion.h2>

@@ -56,7 +56,7 @@ export default function Home() {
         whileInView={{ opacity: 0 }}
         className='relative flex justify-center items-center '
       >
-        <ArrowBounceDown className='fixed bottom-0 animate-bounce' />
+        <ArrowBounceDown className='fixed bottom-0 animate-bounce w-[70px] h-[70px] md:w-[106px] md:h-[106px]' />
       </motion.div>
     </main>
   );

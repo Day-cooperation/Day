@@ -104,7 +104,9 @@ export default function SideMenu() {
           >
             <div className='p-6 border-b'>
               <div className='flex justify-between mb-4 md:mb-[13px]'>
-                <Logo />
+                <Link href='/'>
+                  <Logo />
+                </Link>
                 <button type='button' onClick={toggleSideMenu} className='hover:scale-105 duration-150'>
                   <SideFoldButton className='hidden md:block' />
                   <Hamburger className='md:hidden' />
@@ -227,7 +229,9 @@ export default function SideMenu() {
           {/* 테블릿 이상 */}
           <div className='z-10 fixed hidden md:block w-[60px] duration-150 bg-white p-[15px] h-screen border-r'>
             <div className='flex flex-col justify-between items-center gap-4 bg-slate'>
-              <LogoIcon className='w-[22.5px] h-[22.5px]' />
+              <Link href='/'>
+                <LogoIcon className='w-[22.5px] h-[22.5px]' />
+              </Link>
               <button type='button' onClick={toggleSideMenu}>
                 <SideFoldButton className='rotate-180' />
               </button>

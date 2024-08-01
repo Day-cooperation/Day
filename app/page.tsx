@@ -5,19 +5,25 @@ import MainMention from '@/components/Landing/MainMention';
 import ServiceStart from '@/components/Landing/ServiceStart';
 import WaveText from '@/components/Landing/WaveText';
 import { motion } from 'framer-motion';
-import { signIn } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const router = useRouter();
+  const user = useSession();
+
   return (
     <main className='bg-[#111] flex flex-col'>
       <header className='fixed z-10 left-0 right-0 flex justify-around py-2'>
         <DayLogo />
         <div className='text-[#FFF] flex items-center gap-4'>
-          <button onClick={() => signIn()}>signin</button>
+          <button onClick={() => signIn()}>{user.data ? '이용하기' : 'Sign in'}</button>
           <span>|</span>
-          <button onClick={() => router.push('/signup')}>signup</button>
+          {user.data ? (
+            <button onClick={() => signOut()}>Logout</button>
+          ) : (
+            <button onClick={() => router.push('/signup')}>Sign up</button>
+          )}
         </div>
       </header>
 

@@ -16,18 +16,30 @@ const config: Config = {
         },
       },
       animation: {
-        'infinite-scroll-1': 'infinite-scroll-1 30s linear infinite',
-        'infinite-scroll-2': 'infinite-scroll-2 30s linear infinite',
-        'infinite-scroll-3': 'infinite-scroll-1 35s linear infinite',
-        'infinite-scroll-4': 'infinite-scroll-2 35s linear infinite',
+        'infinite-scroll-1': 'infinite-scroll-1 35s linear infinite',
+        'infinite-scroll-2': 'infinite-scroll-2 35s linear infinite',
+        'infinite-scroll-3': 'infinite-scroll-1 40s linear infinite',
+        'infinite-scroll-4': 'infinite-scroll-2 40s linear infinite',
+        'md-infinite-scroll-1': 'md-infinite-scroll-1 35s linear infinite',
+        'md-infinite-scroll-2': 'md-infinite-scroll-2 35s linear infinite',
+        'md-infinite-scroll-3': 'md-infinite-scroll-1 40s linear infinite',
+        'md-infinite-scroll-4': 'md-infinite-scroll-2 40s linear infinite',
       },
       keyframes: {
+        'md-infinite-scroll-1': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(calc(-100% - 2.5rem)) ' },
+        },
         'infinite-scroll-1': {
           '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(calc(-100% - 2.5rem))' },
+          '100%': { transform: 'translateX(calc(-100% - 16px)) ' },
+        },
+        'md-infinite-scroll-2': {
+          '0%': { transform: 'translateX(calc(100% + 2.5rem))' },
+          '100%': { transform: 'translateX(0)' },
         },
         'infinite-scroll-2': {
-          '0%': { transform: 'translateX(calc(100% + 2.5rem))' },
+          '0%': { transform: 'translateX(calc(100% + 16px))' },
           '100%': { transform: 'translateX(0)' },
         },
       },

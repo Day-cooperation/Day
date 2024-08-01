@@ -44,35 +44,31 @@ export default function WaveText() {
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0.3]);
   const hashOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
-  // useMotionValueEvent(scrollYProgress, 'change', () => {
-  //   console.log(1, scrollYProgress);
-  //   console.log(2, scrollY);
-  // });
   return (
     <div ref={ref} className='h-screen'>
       <div className='text-nowrap fixed inset-0 flex flex-col justify-center items-center'>
         <motion.div style={{ opacity }}>
-          <DayLogo width={1194} height={394} />
+          <DayLogo className='w-[500px] h-[180px] md:w-[1200px] md:h-[400px]' />
         </motion.div>
         <motion.div className='flex' style={{ opacity: hashOpacity }}>
-          <div className='text-[50px] text-white flex flex-row gap-10 animate-infinite-scroll-1'>
+          <div className='text-[28px] md:text-[50px] text-white flex gap-4 animate-infinite-scroll-1 md:gap-10 md:animate-md-infinite-scroll-1'>
             {FIRST_HASHTAG_LIST.map((hashtag, index) => (
               <span key={`${index}-1-hash`}>#{hashtag}</span>
             ))}
           </div>
-          <div className='absolute text-[50px] text-white flex gap-10 animate-infinite-scroll-2'>
+          <div className='text-[28px] absolute md:text-[50px] text-white flex gap-4 animate-infinite-scroll-2 md:gap-10 md:animate-md-infinite-scroll-2'>
             {FIRST_HASHTAG_LIST.map((hashtag, index) => (
               <span key={`${index}-2-hash`}>#{hashtag}</span>
             ))}
           </div>
         </motion.div>
         <motion.div className='flex ' style={{ opacity: hashOpacity }}>
-          <div className='text-[50px] text-white flex gap-10 animate-infinite-scroll-3'>
+          <div className='text-[28px] md:text-[50px] text-white flex gap-4 animate-infinite-scroll-3 md:gap-10 md:animate-md-infinite-scroll-3'>
             {SECOND_HASHTAG_LIST.map((hashtag, index) => (
               <span key={`${index}-3-hash`}>#{hashtag}</span>
             ))}
           </div>
-          <div className='absolute text-[50px] text-white flex gap-10 animate-infinite-scroll-4'>
+          <div className='text-[28px] absolute md:text-[50px] text-white flex gap-4 animate-infinite-scroll-4 md:gap-10 md:animate-md-infinite-scroll-4'>
             {SECOND_HASHTAG_LIST.map((hashtag, index) => (
               <span key={`${index}-4-hash`}>#{hashtag}</span>
             ))}

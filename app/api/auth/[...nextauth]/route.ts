@@ -77,7 +77,7 @@ const handler = NextAuth({
   // custom page
   pages: {
     signIn: '/signin',
-    error: '/error',
+    error: '/not-found',
   },
 
   session: {

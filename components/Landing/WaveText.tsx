@@ -38,14 +38,14 @@ export default function WaveText() {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    // 'target scrollposition'
+    // 'target viewport'
     offset: ['center start', 'start center'],
   });
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 1, 1, 0]);
   const hashOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   return (
-    <div ref={ref} className='h-screen '>
+    <div ref={ref} className='h-screen'>
       <div className='text-nowrap fixed inset-0 flex flex-col justify-center items-center'>
         <motion.div style={{ opacity }}>
           <DayLogo width={1194} height={394} />

@@ -1,4 +1,4 @@
-import { ModalBody as NextModalBody } from '@nextui-org/react';
+import { ModalBody as NextModalBody, Spinner } from '@nextui-org/react';
 import MixedInput from '../Input/MixedInput';
 import { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import Chip from '../Chip/Chip';
@@ -15,6 +15,7 @@ type ModalBodyProps = {
   fileName?: string;
   items: Goal[] | [];
   chips: { file: boolean; link: boolean };
+  isPending: boolean;
 };
 
 export default function ModalBody({
@@ -25,6 +26,7 @@ export default function ModalBody({
   fileName,
   items,
   chips,
+  isPending,
 }: ModalBodyProps) {
   return (
     <NextModalBody>
@@ -48,8 +50,14 @@ export default function ModalBody({
           <span>{fileName}</span>
         ) : (
           <>
-            <Plus strokeColor='#94A3B8' />
-            <span className='text-slate-400 text-nowrap'>파일을 업로드해주세요</span>
+            {isPending ? (
+              <Spinner />
+            ) : (
+              <>
+                <Plus strokeColor='#94A3B8' />
+                <span className='text-slate-400 text-nowrap'>파일을 업로드해주세요</span>
+              </>
+            )}
           </>
         )}
       </label>

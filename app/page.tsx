@@ -18,35 +18,47 @@ export default function Home() {
       <header className='fixed z-10 left-0 right-0 flex justify-around py-2'>
         <DayLogo />
         <div className='text-[#FFF] flex items-center gap-4'>
-          <button onClick={() => signIn()}>{user.data ? '이용하기' : 'Sign in'}</button>
+          <button onClick={() => signIn()} className='hover:opacity-50 p-2 duration-150'>
+            {user.data ? '이용하기' : 'Sign in'}
+          </button>
           <span>|</span>
           {user.data ? (
-            <button onClick={() => useSignout()}>Logout</button>
+            <button onClick={() => useSignout()} className='hover:opacity-50 p-2 duration-150'>
+              Logout
+            </button>
           ) : (
-            <button onClick={() => router.push('/signup')}>Sign up</button>
+            <button onClick={() => router.push('/signup')} className='hover:opacity-50 p-2 duration-150'>
+              Sign up
+            </button>
           )}
         </div>
       </header>
 
       <MainMention>
         <div>
-          <span className='text-[#3CB643]'>목표</span>를 정해놓고
+          <span className='text-green-500'>목표</span>를 정해놓고
           <br />
           까먹으신다구요?
         </div>
       </MainMention>
       <MainMention>
         <div>
-          계획의 모든것
-          <br /> <span className='text-[#3CB643]'>Day</span>에서
-          <br />
-          쉽고 빠르게
+          <span className='text-green-500'>목표</span>를 만들고
+          <br /> <span className='text-green-500'>할 일</span>을 채우세요
         </div>
       </MainMention>
       <MainMention>
         <div>
-          <span className='text-[#3CB643]'>Day</span>와 하루를
-          <br /> 함께 하세요.
+          <span className='text-green-500'>노트</span>를 활용해
+          <br /> <span className='text-green-500'>내용</span>을 기록하세요
+        </div>
+      </MainMention>
+      <MainMention>
+        <div>
+          계획의 모든것
+          <br /> <span className='text-green-500'>Day</span>에서
+          <br />
+          쉽고 빠르게
         </div>
       </MainMention>
       <WaveText />

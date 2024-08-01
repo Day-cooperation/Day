@@ -4,8 +4,9 @@ import { DayLogo } from '@/assets/svgs/DayLogo';
 import MainMention from '@/components/Landing/MainMention';
 import ServiceStart from '@/components/Landing/ServiceStart';
 import WaveText from '@/components/Landing/WaveText';
+import { useSignout } from '@/hooks/useSignout';
 import { motion } from 'framer-motion';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
@@ -20,7 +21,7 @@ export default function Home() {
           <button onClick={() => signIn()}>{user.data ? '이용하기' : 'Sign in'}</button>
           <span>|</span>
           {user.data ? (
-            <button onClick={() => signOut()}>Logout</button>
+            <button onClick={() => useSignout()}>Logout</button>
           ) : (
             <button onClick={() => router.push('/signup')}>Sign up</button>
           )}

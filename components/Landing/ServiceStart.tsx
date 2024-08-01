@@ -1,4 +1,5 @@
 import { useScroll, useTransform, motion } from 'framer-motion';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 
@@ -21,7 +22,7 @@ export default function ServiceStart() {
           whileHover={{ scale: 1.1 }}
           className='duration-150 mt-8 py-2 px-8 text-2xl font-semibold rounded-[500px] bg-[#3cb643]'
           style={{ opacity }}
-          onClick={() => router.push('/dashboard')}
+          onClick={() => signIn()}
         >
           서비스 이용하기
         </motion.button>

@@ -10,7 +10,7 @@
 
 ![alt text](image.png)
 
-**[Day 바로가기](https://slide-todo.vercel.app)**
+**[Day 바로가기](https://daaay.vercel.app)**
 
 </div>
 <br/>

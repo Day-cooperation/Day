@@ -1,6 +1,6 @@
 <div align=center>
 
-<h1>Slide Todo</h1>
+<h1>Day</h1>
 
 <h3>다양한 콘텐츠를 할일로 등록하고 진행상황을 한눈에
  확인하세요!
@@ -8,9 +8,9 @@
 
 <br/>
 
-![스크린샷](https://github.com/user-attachments/assets/7a86e05d-0620-4f04-8285-8e8176758307)
+![alt text](image.png)
 
-**[Slid Todo 바로가기](https://slide-todo.vercel.app)**
+**[Day 바로가기](https://slide-todo.vercel.app)**
 
 </div>
 <br/>
@@ -35,12 +35,6 @@
       <td align="center">
         <a href="">DE_이은송</a>
       </td>
-      <td align="center">
-        <a href="">BE_전선웅</a>
-      </td>
-      <td align="center">
-        <a href="">BE_고현우</a>
-      </td>
     </tr>
 
   </tbody>
@@ -60,8 +54,8 @@
 ![axios](https://img.shields.io/badge/axios-671ddf?&style=for-the-badge&logo=axios&logoColor=white)
 ![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=for-the-badge&logo=react%20query&logoColor=white)
 <img src="https://img.shields.io/badge/NEXTUI-000000?style=for-the-badge&logo=NEXTUI&logoColor=white">
-<img src="https://img.shields.io/badge/NextAuth-000000?style=for-the-badge" />
-<img src="https://img.shields.io/badge/react-quill-000000?style=for-the-badge" />
+<img src="https://img.shields.io/badge/NextAuth-ffff00?style=for-the-badge" />
+<img src="https://img.shields.io/badge/reactquill-0000f?style=for-the-badge" />
 
 ### 테스트
 

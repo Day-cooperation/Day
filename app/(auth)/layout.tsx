@@ -2,6 +2,10 @@ import { Logo } from '@/assets/svgs';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 
+export const metadata = {
+  title: 'auth',
+};
+
 export default async function AuthLayout({
   children,
 }: Readonly<{

@@ -4,7 +4,6 @@ import SideMenu from '@/components/SideMenu/SideMenu';
 import { usePathname } from 'next/navigation';
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathName = usePathname();
-
   return (
     <div
       data-path={pathName.includes('note/write')}

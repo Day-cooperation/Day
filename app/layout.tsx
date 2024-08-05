@@ -11,10 +11,14 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Day',
+  title: {
+    template: '%s | Day',
+    default: 'Day',
+  },
   icons: {
     icon: '/favicon.ico',
   },
+  description: 'create purpose and achieve it!',
 };
 
 export default function RootLayout({

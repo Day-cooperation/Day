@@ -49,7 +49,7 @@ axiosAuth.interceptors.response.use(
   (response) => response,
   async (error) => {
     // refreshToken 유효하지 않으면 signOut()
-    if (error.status === 401) useSignout();
+    if (error.response.status === 401) useSignout();
     return Promise.reject(error);
   }
 );

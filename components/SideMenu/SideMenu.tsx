@@ -16,6 +16,8 @@ import { useDisclosure } from '@nextui-org/react';
 import { useSignout } from '@/hooks/useSignout';
 
 export default function SideMenu() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isBottom, setIsBottom] = useState(false);
   const queryClient = useQueryClient();
   const { data: userData } = useGetQuery.user();
   const { data } = useGetQuery.goal();
@@ -70,6 +72,25 @@ export default function SideMenu() {
       setIsNewGoalInputActive(!isNewGoalInputActive);
     }
   };
+
+  useEffect(() => {
+    const checkIsBottom = () => {
+      if (scrollRef.current) {
+        setIsBottom(scrollRef.current.scrollHeight - scrollRef.current.scrollTop <= 315);
+      }
+    };
+
+    if (scrollRef.current) {
+      checkIsBottom();
+      scrollRef.current.addEventListener('scroll', checkIsBottom);
+    }
+
+    return () => {
+      if (scrollRef.current) {
+        scrollRef.current.removeEventListener('scroll', checkIsBottom);
+      }
+    };
+  }, [scrollRef.current]);
 
   useEffect(() => {
     if (pathName) {
@@ -192,10 +213,15 @@ export default function SideMenu() {
                   )}
                 </div>
               </div>
-              <div className='relative max-h-[calc(100vh-283px)] md:max-h-[calc(100vh-450px)] overflow-y-auto mb-6'>
+              <div
+                ref={scrollRef}
+                className='relative max-h-[calc(100vh-283px)] md:max-h-[calc(100vh-450px)] overflow-y-auto mb-6'
+              >
                 <TabSideMenu goalList={data?.goals} handleGoalClick={handleMenuClick} />
               </div>
-              <div className='absolute bottom-[70px] w-full h-12 bg-gradient-to-b from-white/50 to-white/100 pointer-events-none' />
+              <div
+                className={`${isBottom ? 'hidden' : 'absolute'} bottom-[70px] w-full h-12 bg-gradient-to-b from-white/50 to-white/100 pointer-events-none`}
+              />
               {/* 테블릿 ~ : 목표 버튼  */}
               <div className='hidden md:block'>
                 {isNewGoalInputActive ? (

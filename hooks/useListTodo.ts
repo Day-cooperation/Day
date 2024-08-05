@@ -1,7 +1,7 @@
 import { deleteRequest, getRequest, patchRequest } from '@/lib/api/api';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { Goal } from '@/types/Goal';
-import { ListTodoButtons, Todo } from '@/types/Todo';
+import { ListTodoButtons, Todo, Todos } from '@/types/Todo';
 import { fileDownload } from '@/utils/fileDownload';
 import { useDisclosure } from '@nextui-org/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -33,7 +33,48 @@ export const useListTodo = (goalId?: number) => {
 
   const { mutate: updateTodoMutate } = useMutation({
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
-    onSuccess: () => {
+    onMutate: (value) => {
+      if (goalId) {
+        queryClient.cancelQueries(queryKey.todo(goalId));
+        queryClient.cancelQueries(queryKey.progress(goalId));
+        queryClient.setQueryData(queryKey.todo(goalId).queryKey, (prevItem: Todos | undefined) => ({
+          ...prevItem,
+          todos: prevItem?.todos.map((item) =>
+            item.id === Number(value.data.id) ? { ...item, done: !item.done } : item
+          ),
+        }));
+      } else {
+        if (!value.path) {
+          goalResponse.goals.forEach((goal: Goal) => {
+            queryClient.cancelQueries(queryKey.todo(goal.id));
+            queryClient.cancelQueries(queryKey.progress(goal.id));
+            queryClient.setQueryData(queryKey.todo(goal.id).queryKey, (prevItem: Todos | undefined) => ({
+              ...prevItem,
+              todos: prevItem?.todos.map((item) =>
+                item.id === Number(value.data.id) ? { ...item, done: !item.done } : item
+              ),
+            }));
+          });
+        }
+      }
+
+      queryClient.cancelQueries(queryKey.todo());
+
+      const prevQuery = queryClient.getQueryData<Todo[]>(queryKey.todo().queryKey);
+
+      queryClient.setQueryData(queryKey.todo().queryKey, (prevItem: Todos) => ({
+        ...prevItem,
+        todos: prevItem.todos.map((item) => (item.id === Number(value.data.id) ? { ...item, done: !item.done } : item)),
+      }));
+
+      return { prevQuery };
+    },
+    onError: (err, value, context) => {
+      if (context?.prevQuery) {
+        queryClient.setQueryData(goalId ? queryKey.todo(goalId).queryKey : queryKey.todo().queryKey, context.prevQuery);
+      }
+    },
+    onSettled: () => {
       if (goalId) {
         queryClient.invalidateQueries(queryKey.todo(goalId));
         queryClient.invalidateQueries(queryKey.progress(goalId));

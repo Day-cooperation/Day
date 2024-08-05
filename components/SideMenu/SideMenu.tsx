@@ -166,9 +166,9 @@ export default function SideMenu() {
             </div>
             <div className='px-6 flex flex-col'>
               <div className='flex justify-between items-center py-3 md:py-[18px]'>
-                <div className='flex gap-2 '>
+                <div className='flex gap-2 shrink-0'>
                   <Flag />
-                  <h2>목표</h2>
+                  <h2 >목표</h2>
                 </div>
                 {/* 모바일 : 목표 버튼  */}
                 <div className='md:hidden'>

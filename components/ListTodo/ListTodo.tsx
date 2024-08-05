@@ -27,7 +27,7 @@ export default function ListTodo({ todos = [], showGoal, displayTodoCount = 0, o
         {todoList.map((item) => (
           <Checkbox
             classNames={{
-              base: 'flex max-w-full w-full justify-between items-start group p-0 m-0',
+              base: 'flex max-w-full w-full justify-between items-center group p-0 m-0',
               label: 'w-full pl-2 min-w-0',
               wrapper: 'w-[18px] h-[18px] m-0 after:bg-green-500',
               icon: 'bg-green-500',

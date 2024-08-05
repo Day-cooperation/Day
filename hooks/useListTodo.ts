@@ -162,7 +162,6 @@ export const useListTodo = (goalId?: number) => {
 
   const handleDeleteConfirmClick = (answer: 'ok' | 'cancel', type: string) => {
     if (answer === 'cancel') return;
-    console.log(type);
     if (type === 'todo') {
       deleteMutate(confirm.setDeleteId);
       return;

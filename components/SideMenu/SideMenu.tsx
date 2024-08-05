@@ -164,11 +164,11 @@ export default function SideMenu() {
                 </Button>
               </div>
             </div>
-            <div className='px-6 flex flex-col'>
+            <div className='relative px-6 flex flex-col overflow-hidden'>
               <div className='flex justify-between items-center py-3 md:py-[18px]'>
                 <div className='flex gap-2 shrink-0'>
                   <Flag />
-                  <h2 >목표</h2>
+                  <h2>목표</h2>
                 </div>
                 {/* 모바일 : 목표 버튼  */}
                 <div className='md:hidden'>
@@ -192,10 +192,10 @@ export default function SideMenu() {
                   )}
                 </div>
               </div>
-              <div className='relative max-h-[calc(100vh-283px)] md:max-h-[calc(100vh-430px)] overflow-y-auto'>
+              <div className='relative max-h-[calc(100vh-283px)] md:max-h-[calc(100vh-450px)] overflow-y-auto mb-6'>
                 <TabSideMenu goalList={data?.goals} handleGoalClick={handleMenuClick} />
-                <div className='sticky bottom-0 w-full h-12 bg-gradient-to-b from-white/50 to-white/100 pointer-events-none' />
               </div>
+              <div className='absolute bottom-[70px] w-full h-12 bg-gradient-to-b from-white/50 to-white/100 pointer-events-none' />
               {/* 테블릿 ~ : 목표 버튼  */}
               <div className='hidden md:block'>
                 {isNewGoalInputActive ? (

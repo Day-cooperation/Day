@@ -5,8 +5,14 @@ import { useState } from 'react';
 type CATEGORY = 'All' | 'To do' | 'Done';
 const CATEGORY_LIST: CATEGORY[] = ['All', 'To do', 'Done'];
 
-export default function Filter({ handleClick }: { handleClick: (category: CATEGORY) => void }) {
-  const [selectedCategory, setSelectedCategory] = useState<CATEGORY>('All');
+export default function Filter({
+  handleClick,
+  selectedItem,
+}: {
+  handleClick: (category: CATEGORY) => void;
+  selectedItem: CATEGORY;
+}) {
+  const [selectedCategory, setSelectedCategory] = useState<CATEGORY>(selectedItem);
 
   const handleCategoryClick = (category: CATEGORY) => {
     setSelectedCategory(category);

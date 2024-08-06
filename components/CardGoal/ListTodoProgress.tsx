@@ -2,7 +2,7 @@ import { ListTodoButtons, Todo } from '@/types/Todo';
 import ListTodo from '../ListTodo/ListTodo';
 
 type ListTodoProgressProps = {
-  itemList: Todo[];
+  itemList?: Todo[];
   subject: 'To do' | 'Done';
   textValue: string;
   onUpdateList: (buttonType: ListTodoButtons, id: number) => void;

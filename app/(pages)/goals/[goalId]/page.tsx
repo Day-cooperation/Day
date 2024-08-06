@@ -101,8 +101,8 @@ export default function Goal() {
     }
   };
 
-  const todoList = todoResponse?.todos.filter((todo: Todo) => todo.done === false) || [];
-  const doneList = todoResponse?.todos.filter((todo: Todo) => todo.done === true) || [];
+  const todoList = todoResponse?.pages.flatMap((page) => page.todos).filter((todo: Todo) => todo.done === false) || [];
+  const doneList = todoResponse?.pages.flatMap((page) => page.todos).filter((todo: Todo) => todo.done === true) || [];
 
   useEffect(() => {
     setGoalTitle(goalResponse?.title);

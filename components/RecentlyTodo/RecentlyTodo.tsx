@@ -26,6 +26,8 @@ export default function RecentlyTodo() {
     handleListPopupClick,
   } = useListTodo();
 
+  const todoList = todoResponse?.pages.flatMap((page) => page.todos);
+
   return (
     <>
       <ConfirmPopup
@@ -54,9 +56,9 @@ export default function RecentlyTodo() {
                 <ArrowRight />
               </Link>
             </div>
-            {todoResponse?.todos.length ? (
+            {todoList?.length ? (
               <div className='h-[154px] overflow-y-auto pt-1'>
-                <ListTodo showGoal todos={todoResponse?.todos} onButtonClick={handleListPopupClick}></ListTodo>
+                <ListTodo showGoal todos={todoList} onButtonClick={handleListPopupClick}></ListTodo>
               </div>
             ) : (
               <div className='flex items-center justify-center text-sm text-slate-500 flex-1'>

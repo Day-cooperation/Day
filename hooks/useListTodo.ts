@@ -1,17 +1,25 @@
 import { deleteRequest, getRequest, patchRequest } from '@/lib/api/api';
 import { queryKey, useGetQuery } from '@/queries/query';
 import { Goal } from '@/types/Goal';
-import { ListTodoButtons, Todo, Todos } from '@/types/Todo';
+import { ListTodoButtons, PrevTodos, Todo } from '@/types/Todo';
 import { fileDownload } from '@/utils/fileDownload';
 import { useDisclosure } from '@nextui-org/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
-export const useListTodo = (goalId?: number) => {
+export const useListTodo = (goalId?: number, category: 'All' | 'To do' | 'Done' = 'All') => {
   const queryClient = useQueryClient();
 
-  const { data: todoResponse, isLoading, error } = useGetQuery.todo(goalId);
+  const {
+    data: todoResponse,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetQuery.todo(goalId, category === 'All' ? undefined : category === 'To do' ? false : true, category);
+
   const { data: goalResponse } = useGetQuery.goal(goalId ? goalId : undefined);
   const confirmRef = useRef<HTMLDialogElement>(null);
   const noteRef = useRef<HTMLDialogElement>(null);
@@ -35,37 +43,48 @@ export const useListTodo = (goalId?: number) => {
     mutationFn: ({ path, data }: { path: string; data: Todo }) => patchRequest({ url: `todos/${path}`, data }),
     onMutate: (value) => {
       if (goalId) {
-        queryClient.cancelQueries(queryKey.todo(goalId));
-        queryClient.cancelQueries(queryKey.progress(goalId));
-        queryClient.setQueryData(queryKey.todo(goalId).queryKey, (prevItem: Todos | undefined) => ({
-          ...prevItem,
-          todos: prevItem?.todos.map((item) =>
-            item.id === Number(value.data.id) ? { ...item, done: !item.done } : item
-          ),
-        }));
+        queryClient.cancelQueries(queryKey.todo(goalId, category));
+        queryClient.setQueryData(queryKey.todo(goalId, category).queryKey, (prevItem: PrevTodos | undefined) => {
+          return {
+            ...prevItem,
+            pages: prevItem?.pages.map((page) => ({
+              ...page,
+              nextCursor: page.nextCursor,
+              todos: page.todos.map((item) => (item.id === value.data.id ? { ...item, done: !item.done } : item)),
+            })),
+          };
+        });
       } else {
         if (!value.path) {
           goalResponse.goals.forEach((goal: Goal) => {
-            queryClient.cancelQueries(queryKey.todo(goal.id));
-            queryClient.cancelQueries(queryKey.progress(goal.id));
-            queryClient.setQueryData(queryKey.todo(goal.id).queryKey, (prevItem: Todos | undefined) => ({
-              ...prevItem,
-              todos: prevItem?.todos.map((item) =>
-                item.id === Number(value.data.id) ? { ...item, done: !item.done } : item
-              ),
-            }));
+            queryClient.cancelQueries(queryKey.todo(goal.id, category));
+            queryClient.setQueryData(queryKey.todo(goal.id, category).queryKey, (prevItem: PrevTodos | undefined) => {
+              return {
+                ...prevItem,
+                pages: prevItem?.pages.map((page) => ({
+                  ...page,
+                  nextCursor: page.nextCursor,
+                  todos: page.todos.map((item) => (item.id === value.data.id ? { ...item, done: !item.done } : item)),
+                })),
+              };
+            });
           });
         }
       }
 
-      queryClient.cancelQueries(queryKey.todo());
+      queryClient.cancelQueries(queryKey.todo(undefined, category));
+      const prevQuery = queryClient.getQueryData<Todo[]>(queryKey.todo(undefined, category).queryKey);
 
-      const prevQuery = queryClient.getQueryData<Todo[]>(queryKey.todo().queryKey);
-
-      queryClient.setQueryData(queryKey.todo().queryKey, (prevItem: Todos) => ({
-        ...prevItem,
-        todos: prevItem.todos.map((item) => (item.id === Number(value.data.id) ? { ...item, done: !item.done } : item)),
-      }));
+      queryClient.setQueryData(queryKey.todo(undefined, category).queryKey, (prevItem: PrevTodos) => {
+        return {
+          ...prevItem,
+          pages: prevItem.pages.map((page) => ({
+            ...page,
+            nextCursor: page.nextCursor,
+            todos: page.todos.map((item) => (item.id === value.data.id ? { ...item, done: !item.done } : item)),
+          })),
+        };
+      });
 
       return { prevQuery };
     },
@@ -76,15 +95,17 @@ export const useListTodo = (goalId?: number) => {
     },
     onSettled: () => {
       if (goalId) {
-        queryClient.invalidateQueries(queryKey.todo(goalId));
+        queryClient.invalidateQueries(queryKey.todo(goalId, category));
         queryClient.invalidateQueries(queryKey.progress(goalId));
+        return;
       } else {
         goalResponse?.goals.forEach((goal: Goal) => {
-          queryClient.invalidateQueries(queryKey.todo(goal.id));
+          queryClient.invalidateQueries(queryKey.todo(goal.id, category));
           queryClient.invalidateQueries(queryKey.progress(goal.id));
+          return;
         });
       }
-      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todoAll);
     },
   });
 
@@ -93,15 +114,15 @@ export const useListTodo = (goalId?: number) => {
     onSuccess: () => {
       setConfirm({ message: '', setDeleteId: 0, type: '' });
       if (goalId) {
-        queryClient.invalidateQueries(queryKey.todo(goalId));
+        queryClient.invalidateQueries(queryKey.todo(goalId, category));
         queryClient.invalidateQueries(queryKey.progress(goalId));
       } else {
         goalResponse?.goals.forEach((goal: Goal) => {
-          queryClient.invalidateQueries(queryKey.todo(goal.id));
+          queryClient.invalidateQueries(queryKey.todo(goal.id, category));
           queryClient.invalidateQueries(queryKey.progress(goal.id));
         });
       }
-      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todo(undefined, category));
     },
   });
 
@@ -109,9 +130,9 @@ export const useListTodo = (goalId?: number) => {
     mutationFn: (id: number) => deleteRequest({ url: `notes/${id}` }),
     onSuccess: () => {
       setConfirm({ message: '', setDeleteId: 0, type: '' });
-      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todo(undefined, category));
       if (goalId) {
-        queryClient.invalidateQueries(queryKey.todo(goalId));
+        queryClient.invalidateQueries(queryKey.todo(goalId, category));
         queryClient.invalidateQueries(queryKey.note(goalId));
       } else {
         goalResponse?.goals.forEach((goal: Goal) => {
@@ -122,7 +143,7 @@ export const useListTodo = (goalId?: number) => {
   });
 
   const handleListPopupClick = (type: ListTodoButtons, id: number) => {
-    const selecteItem = todoResponse?.todos.find((todo: Todo) => todo.id === id);
+    const selecteItem = todoResponse?.pages.flatMap((page) => page.todos).find((todo: Todo) => todo.id === id);
     if (type === 'done') {
       updateTodoMutate({ path: String(selecteItem.id), data: { ...selecteItem, done: !selecteItem.done } });
     }
@@ -172,6 +193,7 @@ export const useListTodo = (goalId?: number) => {
 
   return {
     isLoading,
+    isFetchingNextPage,
     confirmRef,
     confirm,
     setConfirm,
@@ -188,5 +210,7 @@ export const useListTodo = (goalId?: number) => {
     setModalType,
     error,
     queryClient,
+    hasNextPage,
+    fetchNextPage,
   };
 };

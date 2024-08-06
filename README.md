@@ -197,8 +197,8 @@ function Home () {}
 
 ### React-quill document 접근 에러
 
-<b>Situation</b>: content Editor를 react-quill로 정하고 적용을 다 하고 나서 'use client'를 명시해 두었는데도 서버측에서 document에 접근 할 수 없다는 에러가 발생<br />
-<b>Problem</b>: 'use client'는 완전한 서버측 접근을 막을 순 없다는 것이 문제였고 Next.js 13 이상의 App Router에서는 클라이언트 측에서만 사용되어야 하는 라이브러리를 동적으로 import 해야 한다는걸 확인.
+<b>Situation</b>: content Editor를 react-quill로 정하고 적용을 다 하고 나서 'use client'를 명시해 두었는데도 서버측에서 document에 접근 할 수 없다는 에러가 발생     
+<b>Problem</b>: 'use client'는 완전한 서버측 접근을 막을 순 없다는 것이 문제였고 Next.js 13 이상의 App Router에서는 클라이언트 측에서만 사용되어야 하는 라이브러리를 동적으로 import 해야 한다는걸 확인.    
 <b>Action</b>:dynamic import를 써서 ssr:false옵션을 주어 클라이언트 측에서만 랜더링 되게 하여 에러를 제거.
 
 ## 📢 회고

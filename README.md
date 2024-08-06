@@ -188,12 +188,15 @@ function Home () {}
 <b>Problem</b>: api 요청이 있을 때마다 같은 내용이 담겨있는 getSession 요청을 매번 불필요하게 하는 문제 발견  
 <b>Action</b>: getSession에 대한 응답을 localStorage에 저장하고 localStorage에 담긴 token의 유효성을 검사하여 통과하지 못할 때만 getSession요청 다시 보내도록 로직을 수정
 
-### <a href='https://calm-starfish-862.notion.site/nprogress-bar-84a05edfe96d491b8a20d01987a72ea7?pvs=4'> Nprogess-bar 관련 이슈 보기
+### React-quill document 접근 에러
 
-  </a>
-
-### <a href='https://calm-starfish-862.notion.site/React-quill-d4d3ba4dfbb14ad08ff28c99567844c3?pvs=4'>React-Quill 관련 이슈 보기 </a>
+<b>Situation</b>: content Editor를 react-quill로 정하고 적용을 다 하고 나서 'use client'를 명시해 두었는데도 서버측에서 document에 접근 할 수 없다는 에러가 발생<br />
+<b>Problem</b>: 'use client'는 완전한 서버측 접근을 막을 순 없다는 것이 문제였고 Next.js 13 이상의 App Router에서는 클라이언트 측에서만 사용되어야 하는 라이브러리를 동적으로 import 해야 한다는걸 확인.
+<b>Action</b>:dynamic import를 써서 ssr:false옵션을 주어 클라이언트 측에서만 랜더링 되게 하여 에러를 제거.
 
 ## 회고
 
 <b>최무현</b> : 새로운 기술을 도입할 때 내가 원하는 코드가 차려져 있는 글을 찾느라 시간을 많이 허비했는데, 나중에 알고 보니 공식문서에 내가 원하는것이 다 들어있었다. 내가 구현하고자 하는 내용에 딱 맞는 글을 찾는 것도 좋지만 공식문서나 흩어져 있는 정보 사이에서 내게 필요한 정보를 잘 빼오는 능력이 중요하단것을 느낄 수 있었다
+
+<b>고성선</b> : nextUi를 썼는데 기존 스타일링을 벗기는데에 시간을 많이써서 상당히 힘들었고, 둘이서 이 프로젝트를 시작 했을 때 정해진 시간에 다 할 수 있을 지 의문이었는데, 생각보다
+뚝딱뚝딱 한거같아서 뿌듯하다. 이슈들도 많았는데 정리를 바로바로 하지 않아서 많이 못남기거같아 아쉽다.

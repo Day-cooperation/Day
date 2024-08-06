@@ -7,11 +7,12 @@ import Modal from '@/components/Modal/Modal';
 import NoteRead from '@/components/Note/NoteRead';
 import ConfirmPopup from '@/components/Popup/ConfirmPopup';
 import { useListTodo } from '@/hooks/useListTodo';
-import { Todo } from '@/types/Todo';
 import { Spinner } from '@nextui-org/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function TodoList() {
+  const [todoState, setTodoState] = useState<'All' | 'To do' | 'Done'>('All');
+
   const {
     isLoading,
     confirmRef,
@@ -27,15 +28,19 @@ export default function TodoList() {
     handleListPopupClick,
     onOpen,
     setModalType,
-  } = useListTodo();
-
-  const [todoState, setTodoState] = useState('All');
+    hasNextPage,
+    fetchNextPage,
+    todoNotDoneList,
+    todoDoneList,
+  } = useListTodo(undefined, todoState);
 
   const todos =
     todoState === 'All'
-      ? todoResponse?.todos
-      : todoResponse?.todos.filter((item: Todo) => item.done === (todoState === 'To do' ? false : true));
-  const pageTitle = `${todoState === 'All' ? '모든 할 일' : todoState === 'To do' ? '할 일' : '완료한 일'}(${todos?.length || 0})`;
+      ? todoResponse?.pages.flatMap((page) => page.todos)
+      : todoState === 'To do'
+        ? todoNotDoneList?.pages.flatMap((page) => page.todos)
+        : todoDoneList?.pages.flatMap((page) => page.todos);
+  const pageTitle = `${todoState === 'All' ? '모든 할 일' : todoState === 'To do' ? '할 일' : '완료한 일'}(${todoState === 'All' ? todoResponse?.pages[0].totalCount || 0 : todoState === 'To do' ? todoNotDoneList?.pages[0].totalCount || 0 : todoDoneList?.pages[0].totalCount || 0})`;
 
   const handleFilterClick = (category: 'All' | 'To do' | 'Done') => {
     setTodoState(category);
@@ -75,6 +80,15 @@ export default function TodoList() {
                 <Filter handleClick={handleFilterClick} />
                 <ListTodo todos={todos} showGoal={true} onButtonClick={handleListPopupClick} />
               </>
+            )}
+            {hasNextPage && (
+              <button
+                onClick={() => {
+                  fetchNextPage();
+                }}
+              >
+                더 불러오기
+              </button>
             )}
           </div>
         </div>

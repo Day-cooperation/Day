@@ -1,5 +1,5 @@
 import { getRequest } from '@/lib/api/api';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 // query key
 export const queryKey = {
@@ -7,7 +7,7 @@ export const queryKey = {
   goal: (goalId?: number) => ({
     queryKey: ['goalList', goalId],
   }),
-  todo: (goalId?: number) => ({ queryKey: ['todoList', goalId] }),
+  todo: (goalId?: number, category?: 'All' | 'To do' | 'Done') => ({ queryKey: ['todoList', goalId, category] }),
   progress: (goalId?: number) => ({ queryKey: ['progress', goalId] }),
   note: (goalId?: number, noteId?: number) => ({ queryKey: ['noteList', goalId, noteId] }),
 };
@@ -26,10 +26,18 @@ export const useGetQuery = {
       ...queryKey.goal(goalId),
       queryFn: () => getRequest({ url: `goals${goalId ? '/' + goalId : ''}` }),
     }),
-  todo: (goalId?: number) =>
-    useQuery({
-      ...queryKey.todo(goalId),
-      queryFn: () => getRequest({ url: 'todos', params: { goalId } }),
+  todo: (goalId?: number, done?: boolean, enabled?: boolean, category?: 'All' | 'To do' | 'Done') =>
+    useInfiniteQuery({
+      ...queryKey.todo(goalId, category),
+      queryFn: ({ pageParam = null }) => getRequest({ url: 'todos', params: { goalId, cursor: pageParam, done } }),
+      getNextPageParam: (lastPage) => {
+        if (lastPage.totalCount === 20) {
+          return null;
+        }
+        return lastPage.nextCursor || null;
+      },
+      initialPageParam: null,
+      enabled,
     }),
   progress: (goalId?: number) =>
     useQuery({

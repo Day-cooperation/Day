@@ -35,8 +35,8 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
 
   const { data: progressData, isLoading: ProgressisLoading } = useGetQuery.progress(goal.id);
 
-  const todoList = todoResponse?.todos.filter((todo: Todo) => todo.done === false);
-  const doneList = todoResponse?.todos.filter((todo: Todo) => todo.done === true);
+  const todoList = todoResponse?.pages.flatMap((page) => page.todos).filter((todo: Todo) => todo.done === false);
+  const doneList = todoResponse?.pages.flatMap((page) => page.todos).filter((todo: Todo) => todo.done === true);
 
   const handleMoreClick = () => {
     setIsMore(!isMore);
@@ -47,7 +47,11 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
     onOpen();
   };
 
-  const isMoreFive = () => todoList?.length > 5 || doneList?.length > 5;
+  const isMoreFive = () => {
+    if (todoList === undefined) return;
+    if (doneList === undefined) return;
+    return todoList?.length > 5 || doneList?.length > 5;
+  };
   if (error) return <h2>Error loading data</h2>;
 
   return (
@@ -98,7 +102,7 @@ export default function CardGoal({ goal, index }: { goal: Goal; index: number })
                 textValue={'아직 다 한 일이 없어요'}
               />
             </div>
-            {(todoList.length > 5 || doneList.length > 5) && (
+            {isMoreFive() && (
               <div className='flex justify-center min-h-0'>
                 <button
                   className='flex items-center justify-center text-xs font-semibold py-1 gap-2 bg-white pr-[21px] pl-[36px] rounded-2xl'

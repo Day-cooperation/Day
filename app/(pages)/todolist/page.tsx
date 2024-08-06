@@ -9,11 +9,16 @@ import ConfirmPopup from '@/components/Popup/ConfirmPopup';
 import { useListTodo } from '@/hooks/useListTodo';
 import { Todo } from '@/types/Todo';
 import { Spinner } from '@nextui-org/react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function TodoList() {
+  const [todoState, setTodoState] = useState<'All' | 'To do' | 'Done'>('All');
+  const [todoList, setTodoList] = useState<Todo[]>([]);
+  const loadMoreRef = useRef(null);
+
   const {
     isLoading,
+    isFetchingNextPage,
     confirmRef,
     confirm,
     handleDeleteConfirmClick,
@@ -27,20 +32,36 @@ export default function TodoList() {
     handleListPopupClick,
     onOpen,
     setModalType,
-  } = useListTodo();
+    hasNextPage,
+    fetchNextPage,
+  } = useListTodo(undefined, todoState);
 
-  const [todoState, setTodoState] = useState('All');
-
-  const todos =
-    todoState === 'All'
-      ? todoResponse?.todos
-      : todoResponse?.todos.filter((item: Todo) => item.done === (todoState === 'To do' ? false : true));
-  const pageTitle = `${todoState === 'All' ? '모든 할 일' : todoState === 'To do' ? '할 일' : '완료한 일'}(${todos?.length || 0})`;
+  const pageTitle = `${todoState === 'All' ? '모든 할 일' : todoState === 'To do' ? '할 일' : '완료한 일'}(${todoResponse?.pages[0].totalCount || 0})`;
 
   const handleFilterClick = (category: 'All' | 'To do' | 'Done') => {
     setTodoState(category);
   };
 
+  useEffect(() => {
+    setTodoList(todoResponse?.pages.flatMap((page) => page.todos) || []);
+  }, [todoState, todoResponse]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.7 }
+    );
+    if (!loadMoreRef.current) return;
+    observer.observe(loadMoreRef.current);
+    return () => {
+      if (!loadMoreRef.current) return;
+      observer.unobserve(loadMoreRef.current);
+    };
+  }, [hasNextPage, fetchNextPage]);
   return (
     <>
       <ConfirmPopup
@@ -72,10 +93,11 @@ export default function TodoList() {
               <Spinner className='absolute top-[calc(50%-16px)] left-[calc(50%-16px)]' />
             ) : (
               <>
-                <Filter handleClick={handleFilterClick} />
-                <ListTodo todos={todos} showGoal={true} onButtonClick={handleListPopupClick} />
+                <Filter handleClick={handleFilterClick} selectedItem={todoState} />
+                <ListTodo todos={todoList} showGoal={true} onButtonClick={handleListPopupClick} />
               </>
             )}
+            {hasNextPage && isFetchingNextPage ? <Spinner /> : <div ref={loadMoreRef} />}
           </div>
         </div>
       </div>

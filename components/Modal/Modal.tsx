@@ -55,7 +55,7 @@ export default function Modal({ modalType, items, isOpen, onClose, index, goalId
     mutationKey: ['post-newTodo'],
     mutationFn: (todoPostData: NewTodo) => postRequest({ url: 'todos', data: todoPostData }),
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todoAll);
       goalListResponse?.goals?.forEach((goal: Goal) => {
         queryClient.invalidateQueries(queryKey.todo(goal.id));
         queryClient.invalidateQueries(queryKey.progress(goal.id));
@@ -69,7 +69,7 @@ export default function Modal({ modalType, items, isOpen, onClose, index, goalId
     mutationKey: ['postEditTodo'],
     mutationFn: (todoPostData: NewTodo) => patchRequest({ url: `todos/${items?.id}`, data: todoPostData }),
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todoAll);
       goalListResponse?.goals?.forEach((goal: Goal) => {
         queryClient.invalidateQueries(queryKey.todo(goal.id));
         queryClient.invalidateQueries(queryKey.progress(goal.id));

@@ -8,7 +8,7 @@ import { Goal } from '@/assets/svgs';
 import Popover from '../Popover/Popover';
 
 type ListTodoProps = {
-  todos: Todo[];
+  todos?: Todo[];
   onButtonClick: (buttonType: ListTodoButtons, id: number) => void;
   showGoal?: boolean;
   displayTodoCount?: number;

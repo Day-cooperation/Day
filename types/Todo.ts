@@ -1,3 +1,8 @@
+export type PrevTodos = {
+  pageParams: [];
+  pages: Todos[];
+};
+
 export type Todos = {
   totalCount: number;
   nextCursor: number;

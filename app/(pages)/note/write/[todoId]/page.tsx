@@ -59,13 +59,13 @@ export default function Note() {
 
   const router = useRouter();
 
-  const { isLoading, data: todos } = useGetQuery.todo();
+  const { isLoading, data: todos } = useGetQuery.todo(undefined, undefined, 'All');
 
   const { mutate: createNote } = useMutation({
     mutationKey: ['postNote'],
     mutationFn: (noteValue: InputValueTypes) => postRequest({ url: `notes`, data: noteValue }),
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todoAll);
       setInputValue(INITIAL_VALUE);
       clearUrl();
       router.back();
@@ -76,14 +76,14 @@ export default function Note() {
     mutationKey: ['patchNote'],
     mutationFn: (noteValue: InputValueTypes) => patchRequest({ url: `notes/${todo.noteId}`, data: noteValue }),
     onSuccess: () => {
-      queryClient.invalidateQueries(queryKey.todo());
+      queryClient.invalidateQueries(queryKey.todoAll);
       setInputValue(INITIAL_VALUE);
       clearUrl();
       router.back();
     },
   });
 
-  const todo = todos?.todos.find((item: Todo) => Number(todoId) === item.id);
+  const todo = todos?.pages.flatMap((page) => page.todos).find((item: Todo) => Number(todoId) === item.id);
 
   const noteHeader = hasNote ? '노트 수정' : '노트 작성';
 

@@ -23,22 +23,10 @@
 
 ## 👥 팀원 소개
 
-<table>
-  <tbody>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/seongseonko">팀장 FE_고성선</a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/chlangus">FE_최무현</a>
-      </td>
-      <td align="center">
-        <a href="">DE_이은송</a>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+|                                                                                        팀장 FE\_고성선                                                                                         |                                                                            팀원 FE\_최무현                                                                            |  팀원 DE\_이은송  |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :---------------: |
+|                                                                                         **담당 부분**                                                                                          |
+| - 프로젝트 초기 세팅 <br> - 할일 생성/수정 모달 <br> - 회원가입/로그인 페이지 <br> - 할일 목록 페이지 <br> - 노트 쓰기/수정 페이지 <br> - 노트 링크 임베디드 <br> - Spinner <br> - progressbar | - Axios 설정 <br> - Next Auth 인증 토큰 관리 <br> - GNB <br> - 랜딩 페이지<br> - 대시보드 페이지 <br> - 목표 상세 페이지 <br> - 노트 모아보기 페이지 <br> - jest 설정 | - 전체적인 디자인 |
 
 <br/>
 
@@ -194,15 +182,18 @@ function Home () {}
 
 ## 트러블 슈팅
 
-<ul>
-  <li>
-  <a href='https://calm-starfish-862.notion.site/nprogress-bar-84a05edfe96d491b8a20d01987a72ea7?pvs=4'>
-  Nprogess-bar 관련 이슈 보기
+### axios interceptor 중복된 네트워크 요청
+
+<b>Situation</b>: Axios interceptor를 사용해 api 콜이 있을 때 마다 nextAuth의 getSession함수를 호출하고, 응답을 request header에 담아 보내도록 로직을 작성  
+<b>Problem</b>: api 요청이 있을 때마다 같은 내용이 담겨있는 getSession 요청을 매번 불필요하게 하는 문제 발견  
+<b>Action</b>: getSession에 대한 응답을 localStorage에 저장하고 localStorage에 담긴 token의 유효성을 검사하여 통과하지 못할 때만 getSession요청 다시 보내도록 로직을 수정
+
+### <a href='https://calm-starfish-862.notion.site/nprogress-bar-84a05edfe96d491b8a20d01987a72ea7?pvs=4'> Nprogess-bar 관련 이슈 보기
+
   </a>
-  </li>
-  <li>
-    <a href='https://calm-starfish-862.notion.site/React-quill-d4d3ba4dfbb14ad08ff28c99567844c3?pvs=4'>
-    React-Quill 관련 이슈 보기
-    </a>
-  </li>
-</ul>
+
+### <a href='https://calm-starfish-862.notion.site/React-quill-d4d3ba4dfbb14ad08ff28c99567844c3?pvs=4'>React-Quill 관련 이슈 보기 </a>
+
+## 회고
+
+<b>최무현</b> : 새로운 기술을 도입할 때 내가 원하는 코드가 차려져 있는 글을 찾느라 시간을 많이 허비했는데, 나중에 알고 보니 공식문서에 내가 원하는것이 다 들어있었다. 내가 구현하고자 하는 내용에 딱 맞는 글을 찾는 것도 좋지만 공식문서나 흩어져 있는 정보 사이에서 내게 필요한 정보를 잘 빼오는 능력이 중요하단것을 느낄 수 있었다
